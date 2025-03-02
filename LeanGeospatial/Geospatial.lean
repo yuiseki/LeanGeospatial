@@ -9,15 +9,15 @@ namespace Geospatial
 
   /-- 2次元の点の定義 -/
   structure Point2D where
-    x : Real
-    y : Real
+    x : ℝ
+    y : ℝ
 
   -- Point2D型のInhabitedインスタンスを定義
   instance : Inhabited Point2D where
     default := { x := 0, y := 0 }
 
   /-- 2点間のユークリッド距離を定義 -/
-  noncomputable def distance (p q : Point2D) : Real :=
+  noncomputable def distance (p q : Point2D) : ℝ :=
     Real.sqrt ((p.x - q.x) ^ 2 + (p.y - q.y) ^ 2)
 
   /-- 2点の中点を返す -/
