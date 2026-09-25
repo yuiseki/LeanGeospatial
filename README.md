@@ -41,6 +41,8 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/CompositionTable/Cells.lean` | Generated: the 64 cells, one theorem each |
 | `LeanGeospatial/Connected.lean` | The plane is connected; boundaries and exteriors are nonempty where expected |
 | `LeanGeospatial/DE9IM.lean` | DE-9IM patterns with `T`, `F`, `*`, read from 9-character strings |
+| `LeanGeospatial/Geometry.lean` | Points, line strings and areas with Simple Features interior, boundary, exterior |
+| `LeanGeospatial/DE9IM/Dimension.lean` | DE-9IM cell values `F`, `0`, `1`, `2` and dimensioned patterns |
 | `LeanGeospatial/GeoSPARQL/Spec.lean` | GeoSPARQL 1.1 Tables 2, 4, 5, 6, 8, transcribed for comparison |
 | `LeanGeospatial/GeoSPARQL/AreaArea.lean` | The tables compared with the semantics, for areas |
 | `LeanGeospatial/GeoSPARQL/Counterexamples.lean` | Areas where the Table 8 patterns fail |
@@ -53,6 +55,7 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |
+| `LeanGeospatial/Examples/DimensionalCells.lean` | One `II` cell of each value |
 | `LeanGeospatial/Examples/Validator.lean` | The validator's three cases, with what each verdict proves |
 | `LeanGeospatial/Examples/Axioms.lean` | Axiom audit of the main theorems |
 
@@ -207,6 +210,34 @@ Disagreements between the tables themselves, kept as printed:
 Tables 4 and 8 agree, and their `TPPi` and `NTPPi` patterns are the
 transposes of `TPP` and `NTPP`. The Egenhofer column of Table 5 is not
 checked.
+
+## Points, lines and areas
+
+Mathlib's `interior` and `frontier` are right for areas but not for points
+and lines: in the plane a point has empty interior and is its own frontier
+(`point_frontier`). `Geometry.lean` gives each geometry the strata Simple
+Features uses:
+
+| Geometry | Interior | Boundary | Exterior |
+| --- | --- | --- | --- |
+| Point `p` | `{p}` | `∅` | everything else |
+| LineString | the line minus its boundary | its two end points, `∅` if closed | everything off the line |
+| Area | topological interior | topological boundary | topological exterior |
+
+`Geometry.existsUnique_stratum`: for every geometry, each point of the plane
+is in exactly one stratum. For areas the strata are the ones used above, so
+the Area/Area results are unchanged (`Geometry.cell_area_area`,
+`Pattern.toDim_matches_area`). Multi geometries are not covered yet.
+
+`DE9IM/Dimension.lean` gives a cell one of the values `F`, `0`, `1`, `2`,
+without a dimension theory for arbitrary sets: `2` if the cell contains an
+open set, `1` if it contains an arc but no open set, `0` if it is nonempty
+with neither, `F` if it is empty. For the finite unions of points, arcs and
+regions that occur as cells of these geometries, that is their dimension.
+Every cell has exactly one value (`existsUnique_describes`). Patterns may use
+`T F * 0 1 2`. `Examples/DimensionalCells.lean` shows one `II` cell of each
+value, including two segments crossing in a point (`0`) and two collinear
+segments overlapping in a segment (`1`).
 
 ## Validator
 

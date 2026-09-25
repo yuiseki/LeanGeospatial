@@ -13,6 +13,7 @@ import LeanGeospatial.CompositionTable.Cells
 import LeanGeospatial.Examples.PublishedTable
 import LeanGeospatial.Examples.Validator
 import LeanGeospatial.GeoSPARQL.Counterexamples
+import LeanGeospatial.Examples.DimensionalCells
 
 /-!
 # Axiom audit
@@ -366,3 +367,43 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.GeoSPARQL.Counterexamples.eq_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.GeoSPARQL.Counterexamples.eq_counterexample
+
+/-- info: 'Geospatial.Geometry.existsUnique_stratum' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Geometry.existsUnique_stratum
+
+/-- info: 'Geospatial.point_boundary_ne_frontier' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.point_boundary_ne_frontier
+
+/-- info: 'Geospatial.DE9IM.existsUnique_describes' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.existsUnique_describes
+
+/-- info: 'Geospatial.DE9IM.Pattern.toDim_matches_area' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.Pattern.toDim_matches_area
+
+/-- info: 'Geospatial.DE9IM.point_cell_value' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.point_cell_value
+
+/-- info: 'Geospatial.DE9IM.area_II_value' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.area_II_value
+
+/-- info: 'Geospatial.Examples.DimensionalCells.crossing_II' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.DimensionalCells.crossing_II
+
+/-- info: 'Geospatial.Examples.DimensionalCells.collinear_II' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.DimensionalCells.collinear_II
+
+/-- info: 'Geospatial.Examples.DimensionalCells.squares_II' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.DimensionalCells.squares_II
+
+/-- info: 'Geospatial.Examples.DimensionalCells.point_point_II' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.DimensionalCells.point_point_II

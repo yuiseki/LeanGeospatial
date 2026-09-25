@@ -16,3 +16,5 @@ import LeanGeospatial.DE9IM
 import LeanGeospatial.GeoSPARQL.Spec
 import LeanGeospatial.GeoSPARQL.AreaArea
 import LeanGeospatial.GeoSPARQL.Counterexamples
+import LeanGeospatial.Geometry
+import LeanGeospatial.DE9IM.Dimension
