@@ -15,6 +15,7 @@ import LeanGeospatial.Examples.Validator
 import LeanGeospatial.GeoSPARQL.Counterexamples
 import LeanGeospatial.Examples.DimensionalCells
 import LeanGeospatial.GeoSPARQL.Table2.Counterexamples
+import LeanGeospatial.SFA.Compare
 
 /-!
 # Axiom audit
@@ -508,3 +509,71 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.GeoSPARQL.Table2.univ_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.GeoSPARQL.Table2.univ_counterexample
+
+/-- info: 'Geospatial.SFA.interior_eq_carrier_diff_boundary' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.interior_eq_carrier_diff_boundary
+
+/-- info: 'Geospatial.SFA.exterior_eq_compl' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.exterior_eq_compl
+
+/-- info: 'Geospatial.SFA.equals_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.equals_iff
+
+/-- info: 'Geospatial.SFA.intersects_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.intersects_iff
+
+/-- info: 'Geospatial.SFA.touches_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.touches_iff
+
+/-- info: 'Geospatial.SFA.overlaps_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.overlaps_iff
+
+/-- info: 'Geospatial.SFA.within_of_sf' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.within_of_sf
+
+/-- info: 'Geospatial.SFA.crosses_of_sf' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.crosses_of_sf
+
+/-- info: 'Geospatial.SFA.crosses_line_area_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.crosses_line_area_iff
+
+/-- info: 'Geospatial.SFA.within_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.within_counterexample
+
+/-- info: 'Geospatial.SFA.crosses_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.crosses_counterexample
+
+/-- info: 'Geospatial.SFA.sfa_equals_inconsistent' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.sfa_equals_inconsistent
+
+/-- info: 'Geospatial.SFA.sfa_within_inconsistent' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.sfa_within_inconsistent
+
+/-- info: 'Geospatial.SFA.sfa_crosses_inconsistent' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.sfa_crosses_inconsistent
+
+/-- info: 'Geospatial.SFA.crosses_line_area_patterns' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.crosses_line_area_patterns
+
+/-- info: 'Geospatial.SFA.equals_iff_jtsEquals' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.equals_iff_jtsEquals
+
+/-- info: 'Geospatial.SFA.sfaEquals_iff_jtsEquals_and' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.sfaEquals_iff_jtsEquals_and

@@ -25,3 +25,5 @@ import LeanGeospatial.GeoSPARQL.Table2.Spec
 import LeanGeospatial.GeoSPARQL.Table2.Generic
 import LeanGeospatial.GeoSPARQL.Table2.Kinds
 import LeanGeospatial.GeoSPARQL.Table2.Counterexamples
+import LeanGeospatial.SFA.Spec
+import LeanGeospatial.SFA.Compare

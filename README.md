@@ -47,6 +47,8 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/DE9IM/Values.lean` | Which cell values points, lines and areas allow |
 | `LeanGeospatial/SimpleFeatures.lean` | The eight Simple Features relations, defined from point sets |
 | `LeanGeospatial/GeoSPARQL/Table2/*.lean` | GeoSPARQL 1.1 Table 2 against those definitions |
+| `LeanGeospatial/SFA/Spec.lean` | OGC SFA 1.2.1 clause 6.1.15, transcribed for comparison |
+| `LeanGeospatial/SFA/Compare.lean` | SFA against LeanGeospatial, against itself, and against GeoSPARQL |
 | `LeanGeospatial/GeoSPARQL/Spec.lean` | GeoSPARQL 1.1 Tables 2, 4, 5, 6, 8, transcribed for comparison |
 | `LeanGeospatial/GeoSPARQL/AreaArea.lean` | The tables compared with the semantics, for areas |
 | `LeanGeospatial/GeoSPARQL/Counterexamples.lean` | Areas where the Table 8 patterns fail |
@@ -284,6 +286,46 @@ Not yet verified, because they need multi geometries:
 - MultiPolygon validity rules (areas here may already have several parts,
   but are not checked against them);
 - geometry collections of mixed dimension.
+
+## Against OGC Simple Feature Access 1.2.1
+
+`SFA/Spec.lean` transcribes clause 6.1.15 of OGC 06-103r4 (version 1.2.1).
+For each named predicate SFA gives a statement about point sets and a DE-9IM
+pattern, and claims they are equivalent. Both are transcribed separately.
+
+The strata of `Geometry.lean` are SFA's (6.1.15.1): a point has no boundary,
+a non-closed curve's boundary is its end points, a closed curve has none,
+the interior is the geometry minus its boundary, the exterior is the rest.
+
+LeanGeospatial's definitions against SFA's point-set statements, and SFA's
+statements against SFA's own patterns:
+
+| Relation | LeanGeospatial vs SFA statement | SFA statement vs SFA pattern |
+| --- | --- | --- |
+| Equals | same | disagree: a point equals itself, `TFFFTFFFT` fails (points have no boundary) |
+| Disjoint | same | agree |
+| Intersects | same | (no pattern) |
+| Touches | same | agree |
+| Within | LeanGeospatial also asks `I(a) ∩ I(b) ≠ ∅` | disagree: a point on a square's edge satisfies the statement, not `T*F**F***` |
+| Contains | as Within | as Within |
+| Overlaps | same | agree |
+| Crosses | LeanGeospatial keeps the dimension condition SFA 1.2.1 dropped | disagree for L/L: collinear overlapping segments satisfy the statement, not `0********` |
+
+So where LeanGeospatial differs from SFA's statements, it sides with SFA's
+patterns, and SFA's statements and patterns contradict each other. GEOS sides
+with the patterns in all three cases. SFA's `II ≠ ∅` in Crosses is needed:
+without it, disjoint geometries would cross.
+
+SFA's patterns against GeoSPARQL Table 2: the same strings for equals,
+touches, within, overlaps and L/L crosses. GeoSPARQL differs in two places:
+`disjoint` (ten characters instead of `FF*FF****`), and P/L, P/A, L/A crosses
+(`T*T***T**` instead of `T*T******`, which agree for single geometries).
+
+Equals: `T*F**FFF*`, the pattern JTS uses, is `a ⊆ b ∧ b ⊆ a ∧ II ≠ ∅` and
+exactly `Equals` for nonempty geometries (`equals_iff_jtsEquals`).
+`TFFFTFFFT` adds `IB = ∅`, `BI = ∅`, `BB ≠ ∅`, `EE ≠ ∅`
+(`sfaEquals_iff_jtsEquals_and`); these fail for points, closed rings, lines
+that double back and the whole plane.
 
 ## Validator
 
