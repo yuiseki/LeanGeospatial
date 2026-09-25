@@ -11,3 +11,8 @@ import LeanGeospatial.CompositionTable
 import LeanGeospatial.CompositionTable.Cells
 import LeanGeospatial.Validator
 import LeanGeospatial.ValidatorText
+import LeanGeospatial.Connected
+import LeanGeospatial.DE9IM
+import LeanGeospatial.GeoSPARQL.Spec
+import LeanGeospatial.GeoSPARQL.AreaArea
+import LeanGeospatial.GeoSPARQL.Counterexamples

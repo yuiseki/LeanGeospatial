@@ -39,6 +39,11 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/CompositionTable/Complete.lean` | Generated: every entry of `table` realised |
 | `LeanGeospatial/CompositionTable.lean` | `compose_eq_table : r ⋄ s = table r s` |
 | `LeanGeospatial/CompositionTable/Cells.lean` | Generated: the 64 cells, one theorem each |
+| `LeanGeospatial/Connected.lean` | The plane is connected; boundaries and exteriors are nonempty where expected |
+| `LeanGeospatial/DE9IM.lean` | DE-9IM patterns with `T`, `F`, `*`, read from 9-character strings |
+| `LeanGeospatial/GeoSPARQL/Spec.lean` | GeoSPARQL 1.1 Tables 2, 4, 5, 6, 8, transcribed for comparison |
+| `LeanGeospatial/GeoSPARQL/AreaArea.lean` | The tables compared with the semantics, for areas |
+| `LeanGeospatial/GeoSPARQL/Counterexamples.lean` | Areas where the Table 8 patterns fail |
 | `LeanGeospatial/Validator.lean` | An RCC8 validator whose verdicts are backed by theorems |
 | `LeanGeospatial/ValidatorText.lean` | The validator's plain-text input format |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
@@ -153,6 +158,55 @@ This is the meaning of an entry in the RCC8 composition table. No table is
 assumed: each entry has to be proved from the definitions, in both
 directions. Showing `t ∈ r ⋄ s` needs three concrete areas; showing
 `t ∉ r ⋄ s` needs an argument that works for all areas.
+
+## GeoSPARQL 1.1, areas only
+
+`DE9IM.lean` gives patterns a meaning from the nine cells: `T` nonempty, `F`
+empty, `*` anything (dimensions `0`, `1`, `2` are not supported yet). A
+pattern is a record with one field per cell; `Pattern.ofString?` reads the
+9-character notation and rejects anything else.
+
+`GeoSPARQL/Spec.lean` transcribes Tables 2, 4, 5, 6 and 8 of OGC 22-047r1.
+They are data for comparison only. For nonempty areas, LeanGeospatial proves:
+
+| Table 8 pattern | Pattern ⇒ relation | Relation ⇒ pattern |
+| --- | --- | --- |
+| `EQ` `TFFFTFFFT` | yes | yes, unless the area is the whole plane |
+| `DC` `FFTFFTTTT` | yes | yes |
+| `EC` `FFTFTTTTT` | yes | no: a square and a frame around it |
+| `PO` `TTTTTTTTT` | yes | no: two two-part areas sharing a part |
+| `TPP` `TFFTTFTTT` | yes | no: a square and the square plus another |
+| `NTPP` `TFFTFFTTT` | yes | yes, unless the larger area is the whole plane |
+| `TPPi` `TTTFTTFFT` | yes | no: as `TPP` |
+| `NTPPi` `TTTFFTFFT` | yes | yes, unless the larger area is the whole plane |
+
+The fully specified patterns fit bounded areas with a connected interior and
+no holes; polygons with holes and multi-polygons break four of them. GEOS
+gives the same matrices for the bounded counterexamples.
+
+| Table 5 row | Holds for nonempty areas |
+| --- | --- |
+| equals ↔ `EQ` | yes |
+| disjoint ↔ `DC` | yes |
+| intersects ↔ ¬`DC` | yes |
+| touches ↔ `EC` | yes |
+| within ↔ `TPP` ∨ `NTPP` | no, `EQ` is missing: `Within ↔ TPP ∨ NTPP ∨ EQ` |
+| contains ↔ `TPPi` ∨ `NTPPi` | no, `EQ` is missing |
+| overlaps ↔ `PO` | yes |
+
+Disagreements between the tables themselves, kept as printed:
+
+- Table 2 prints `disjoint` as `(FF**FF****)`, ten characters; Tables 3 and 6
+  have `FF*FF****`.
+- Table 6 gives `geof:sfIntersects` the `sfTouches` rows; Table 2 gives
+  `sfIntersects` `(T******** *T******* ***T***** ****T****)`. The Table 6 rows
+  describe `EC`, not ¬`DC`.
+- Table 5 has within = `NTPP` + `TPP`, but Table 2's `sfWithin` pattern
+  `T*F**F***` also matches equal areas. The same holds for contains.
+
+Tables 4 and 8 agree, and their `TPPi` and `NTPPi` patterns are the
+transposes of `TPP` and `NTPP`. The Egenhofer column of Table 5 is not
+checked.
 
 ## Validator
 
@@ -350,5 +404,6 @@ Other things that are not modelled yet:
 
 ## Out of scope for now
 
-DE-9IM dimensions and matrices, points and lines
-with their OGC boundary, GeoSPARQL, coordinate reference systems and GIS I/O.
+DE-9IM dimensions (`0`, `1`, `2`), points and lines with their OGC boundary,
+`crosses`, the Egenhofer relations, GeoSPARQL beyond areas, coordinate
+reference systems and GIS I/O.

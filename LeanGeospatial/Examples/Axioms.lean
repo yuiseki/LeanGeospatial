@@ -12,6 +12,7 @@ import LeanGeospatial.Composition
 import LeanGeospatial.CompositionTable.Cells
 import LeanGeospatial.Examples.PublishedTable
 import LeanGeospatial.Examples.Validator
+import LeanGeospatial.GeoSPARQL.Counterexamples
 
 /-!
 # Axiom audit
@@ -301,3 +302,67 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.Validator.inconsistent_has_no_model' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.Validator.inconsistent_has_no_model
+
+/-- info: 'Geospatial.GeoSPARQL.holds_of_rcc8Pattern' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.holds_of_rcc8Pattern
+
+/-- info: 'Geospatial.GeoSPARQL.rcc8Pattern_of_dc' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.rcc8Pattern_of_dc
+
+/-- info: 'Geospatial.GeoSPARQL.rcc8Pattern_of_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.rcc8Pattern_of_eq
+
+/-- info: 'Geospatial.GeoSPARQL.rcc8Pattern_of_ntpp' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.rcc8Pattern_of_ntpp
+
+/-- info: 'Geospatial.GeoSPARQL.rcc8Pattern_of_ntppi' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.rcc8Pattern_of_ntppi
+
+/-- info: 'Geospatial.GeoSPARQL.table5_row' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.table5_row
+
+/-- info: 'Geospatial.GeoSPARQL.table5_within_row_fails' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.table5_within_row_fails
+
+/-- info: 'Geospatial.GeoSPARQL.table5_contains_row_fails' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.table5_contains_row_fails
+
+/-- info: 'Geospatial.GeoSPARQL.sf_intersects_pattern' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.sf_intersects_pattern
+
+/-- info: 'Geospatial.GeoSPARQL.sf_intersects_table6_pattern' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.sf_intersects_table6_pattern
+
+/-- info: 'Geospatial.GeoSPARQL.sf_within_pattern' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.sf_within_pattern
+
+/-- info: 'Geospatial.GeoSPARQL.sf_overlaps_pattern' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.sf_overlaps_pattern
+
+/-- info: 'Geospatial.GeoSPARQL.Counterexamples.ec_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Counterexamples.ec_counterexample
+
+/-- info: 'Geospatial.GeoSPARQL.Counterexamples.po_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Counterexamples.po_counterexample
+
+/-- info: 'Geospatial.GeoSPARQL.Counterexamples.tpp_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Counterexamples.tpp_counterexample
+
+/-- info: 'Geospatial.GeoSPARQL.Counterexamples.eq_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Counterexamples.eq_counterexample
