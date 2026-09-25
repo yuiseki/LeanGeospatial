@@ -4,3 +4,4 @@ import LeanGeospatial.Polygon
 import LeanGeospatial.Topology
 import LeanGeospatial.RegularClosed
 import LeanGeospatial.NineIntersection
+import LeanGeospatial.RCC8

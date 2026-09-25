@@ -31,11 +31,13 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/Topology.lean` | The plane's topology, `boundary`, `Touches`, interior and boundary of a `Rect` |
 | `LeanGeospatial/RegularClosed.lean` | `RegularClosedRegion`, the type of areas |
 | `LeanGeospatial/NineIntersection.lean` | `exterior`, the three-part split, the nine cells, relations as cell conditions |
+| `LeanGeospatial/RCC8.lean` | The eight RCC8 base relations and the proof that exactly one holds |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
 | `LeanGeospatial/Examples/Measurement.lean` | Distance and area on concrete coordinates |
 | `LeanGeospatial/Examples/Touches.lean` | Two squares that touch, and two that overlap; their shared edge is not an area |
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
+| `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/Axioms.lean` | Axiom audit of the main theorems |
 
 ## The model
@@ -108,6 +110,25 @@ The relations are still defined by the set operations above. The cell
 conditions are theorems derived from those definitions, not a second set of
 definitions.
 
+## RCC8
+
+The eight base relations of the Region Connection Calculus, for areas, are
+defined from the relations above (`a`, `b` are the point sets of `A`, `B`):
+
+| Relation | Definition |
+| --- | --- |
+| `DC A B` | `Disjoint a b` |
+| `EC A B` | `Touches a b` |
+| `PO A B` | the interiors intersect, `¬ Within a b`, `¬ Within b a` |
+| `EQ A B` | `a = b` |
+| `TPP A B` | `Within a b`, `a ≠ b`, `¬ Within a (interior b)` |
+| `NTPP A B` | `Within a (interior b)`, `a ≠ b` |
+| `TPPi A B`, `NTPPi A B` | `TPP B A`, `NTPP B A` |
+
+`NTPP` includes `a ≠ b` because the whole plane is an area that lies within
+its own interior; without it the plane would be both `EQ` and `NTPP` with
+itself.
+
 ## What Lean proves
 
 These hold for every region, whatever its shape or source:
@@ -171,6 +192,23 @@ hypothesis is needed:
 Without the `II` condition, `Within` on closed regions is exactly
 `IE` and `BE` empty (`within_iff_cells_of_isClosed`).
 
+For RCC8, with `A` and `B` nonempty areas:
+
+- `existsUnique_relation`: exactly one of the eight relations holds. It is
+  split into `jointly_exhaustive` and `pairwise_disjoint`.
+- `dc_iff_disjoint` and `ec_iff_touches`: `DC` is `Disjoint`, `EC` is
+  `Touches`. `tppi_iff_tpp` and `ntppi_iff_ntpp`: the inverses are the
+  converses, and `Relation.holds_converse` states this for all eight.
+- `po_iff_cells`: `PO` means `II`, `IE` and `EI` are all nonempty. It rests on
+  `not_within_iff_IE_nonempty`: an area fails to lie within `B` exactly when
+  some interior point of it is exterior to `B`.
+- `Examples/RCC8.lean` proves one relation for each of the eight on squares,
+  for example that a corner square is `TPP` of the big square and nothing else.
+
+The proof of uniqueness goes through `classify`, a decision tree over
+"connected, interiors meet, equal, within, within the interior". It is a
+proof device only; the relations are the definitions in the table.
+
 With concrete coordinates it also proves numeric facts, for example that the
 distance from `(0,0)` to `(10,10)` is `10 * √2` and that the 10 × 10 square has
 shoelace area `100`.
@@ -205,4 +243,5 @@ Other things that are not modelled yet:
 
 ## Out of scope for now
 
-DE-9IM, RCC8, GeoSPARQL, coordinate reference systems and GIS I/O.
+The RCC8 composition table, DE-9IM dimensions and matrices, points and lines
+with their OGC boundary, GeoSPARQL, coordinate reference systems and GIS I/O.

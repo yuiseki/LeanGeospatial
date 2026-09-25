@@ -6,6 +6,8 @@ import LeanGeospatial.Examples.Touches
 import LeanGeospatial.RegularClosed
 import LeanGeospatial.NineIntersection
 import LeanGeospatial.Examples.NineIntersection
+import LeanGeospatial.RCC8
+import LeanGeospatial.Examples.RCC8
 
 /-!
 # Axiom audit
@@ -151,3 +153,39 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.NineIntersection.segment_within_but_II_empty' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.NineIntersection.segment_within_but_II_empty
+
+/-- info: 'Geospatial.RCC8.existsUnique_relation' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.existsUnique_relation
+
+/-- info: 'Geospatial.RCC8.pairwise_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.pairwise_disjoint
+
+/-- info: 'Geospatial.RCC8.jointly_exhaustive' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.jointly_exhaustive
+
+/-- info: 'Geospatial.RCC8.Relation.holds_converse' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Relation.holds_converse
+
+/-- info: 'Geospatial.RCC8.po_iff_cells' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.po_iff_cells
+
+/-- info: 'Geospatial.RCC8.not_within_iff_IE_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.not_within_iff_IE_nonempty
+
+/-- info: 'Geospatial.Examples.RCC8.T_A_only_tpp' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.RCC8.T_A_only_tpp
+
+/-- info: 'Geospatial.Examples.RCC8.N_A_ntpp' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.RCC8.N_A_ntpp
+
+/-- info: 'Geospatial.Examples.RCC8.A_C_only_po' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.RCC8.A_C_only_po
