@@ -32,6 +32,7 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/RegularClosed.lean` | `RegularClosedRegion`, the type of areas |
 | `LeanGeospatial/NineIntersection.lean` | `exterior`, the three-part split, the nine cells, relations as cell conditions |
 | `LeanGeospatial/RCC8.lean` | The eight RCC8 base relations and the proof that exactly one holds |
+| `LeanGeospatial/Composition.lean` | Weak composition of RCC8 relations, defined and proved from the relations |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
 | `LeanGeospatial/Examples/Measurement.lean` | Distance and area on concrete coordinates |
@@ -129,6 +130,17 @@ defined from the relations above (`a`, `b` are the point sets of `A`, `B`):
 its own interior; without it the plane would be both `EQ` and `NTPP` with
 itself.
 
+## Weak composition
+
+```lean
+r ⋄ s = {t | ∃ A B C nonempty areas, r A B ∧ s B C ∧ t A C}
+```
+
+This is the meaning of an entry in the RCC8 composition table. No table is
+assumed: each entry has to be proved from the definitions, in both
+directions. Showing `t ∈ r ⋄ s` needs three concrete areas; showing
+`t ∉ r ⋄ s` needs an argument that works for all areas.
+
 ## What Lean proves
 
 These hold for every region, whatever its shape or source:
@@ -209,6 +221,19 @@ The proof of uniqueness goes through `classify`, a decision tree over
 "connected, interiors meet, equal, within, within the interior". It is a
 proof device only; the relations are the definitions in the table.
 
+For weak composition:
+
+- `mem_compose_converse` and `compose_converse`: the converse of `r ⋄ s` is
+  `s˘ ⋄ r˘`.
+- `eq_compose` and `compose_eq`: `EQ ⋄ r = {r} = r ⋄ EQ`. This needs every
+  relation to occur between some pair of nonempty areas
+  (`Relation.realizable`, witnessed by the squares of `Examples/RCC8.lean`).
+- `ntpp_compose_ntpp`: `NTPP ⋄ NTPP = {NTPP}`. One direction is
+  `ntpp_trans`, the other is three nested squares. `ntppi_compose_ntppi`
+  follows from the converse law.
+
+The full 8 × 8 table is not attempted yet.
+
 With concrete coordinates it also proves numeric facts, for example that the
 distance from `(0,0)` to `(10,10)` is `10 * √2` and that the 10 × 10 square has
 shoelace area `100`.
@@ -243,5 +268,5 @@ Other things that are not modelled yet:
 
 ## Out of scope for now
 
-The RCC8 composition table, DE-9IM dimensions and matrices, points and lines
+The full RCC8 composition table, DE-9IM dimensions and matrices, points and lines
 with their OGC boundary, GeoSPARQL, coordinate reference systems and GIS I/O.

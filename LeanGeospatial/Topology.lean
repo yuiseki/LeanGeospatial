@@ -158,6 +158,27 @@ theorem boundary_toRegion (r : Rect) :
     boundary r.toRegion = r.toRegion \ r.openRegion := by
   rw [boundary_eq, closure_toRegion, interior_toRegion]
 
+/-- A rectangle lies within the interior of another when its bounds lie
+strictly inside the other's. -/
+theorem within_interior_of_bounds {r s : Rect}
+    (hx₁ : s.xmin < r.xmin) (hx₂ : r.xmax < s.xmax)
+    (hy₁ : s.ymin < r.ymin) (hy₂ : r.ymax < s.ymax) :
+    Within r.toRegion (interior s.toRegion) := by
+  rw [interior_toRegion]
+  rintro p ⟨h₁, h₂, h₃, h₄⟩
+  exact ⟨hx₁.trans_le h₁, h₂.trans_lt hx₂, hy₁.trans_le h₃, h₄.trans_lt hy₂⟩
+
+/-- Two rectangles differ when the second's lower-left corner lies outside
+the first. -/
+theorem toRegion_ne_of_xmin_lt {r s : Rect} (hx : s.xmin < r.xmin)
+    (hsx : s.xmin ≤ s.xmax) (hsy : s.ymin ≤ s.ymax) :
+    r.toRegion ≠ s.toRegion := by
+  intro h
+  have hp : (⟨s.xmin, s.ymin⟩ : Point2D) ∈ s.toRegion :=
+    ⟨le_refl _, hsx, le_refl _, hsy⟩
+  rw [← h] at hp
+  exact absurd hp.1 (not_le.mpr hx)
+
 end Rect
 
 end Geospatial

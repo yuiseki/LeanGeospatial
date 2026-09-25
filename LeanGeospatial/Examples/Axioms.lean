@@ -8,6 +8,7 @@ import LeanGeospatial.NineIntersection
 import LeanGeospatial.Examples.NineIntersection
 import LeanGeospatial.RCC8
 import LeanGeospatial.Examples.RCC8
+import LeanGeospatial.Composition
 
 /-!
 # Axiom audit
@@ -189,3 +190,35 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.RCC8.A_C_only_po' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.RCC8.A_C_only_po
+
+/-- info: 'Geospatial.RCC8.mem_compose_converse' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.mem_compose_converse
+
+/-- info: 'Geospatial.RCC8.compose_converse' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.compose_converse
+
+/-- info: 'Geospatial.RCC8.Relation.realizable' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Relation.realizable
+
+/-- info: 'Geospatial.RCC8.eq_compose' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.eq_compose
+
+/-- info: 'Geospatial.RCC8.compose_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.compose_eq
+
+/-- info: 'Geospatial.RCC8.ntpp_trans' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.ntpp_trans
+
+/-- info: 'Geospatial.RCC8.ntpp_compose_ntpp' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.ntpp_compose_ntpp
+
+/-- info: 'Geospatial.RCC8.ntppi_compose_ntppi' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.ntppi_compose_ntppi
