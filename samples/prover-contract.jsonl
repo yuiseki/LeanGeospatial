@@ -1,0 +1,15 @@
+{"id":"string-id","matrix":"FF2F11212","claim":"touches"}
+{"id":42,"matrix":"FF2F11212","claim":"touches"}
+{"matrix":"FF2F11212","claim":"touches"}
+
+{"id":"before-bad","matrix":"FF2F11212","claim":"intersects"}
+{"id":"bad",
+{"id":"after-bad","matrix":"FF2F11212","claim":"disjoint"}
+{"id":"case-insensitive","facts":[{"a":"A","relation":"ntpp","b":"B"},{"a":"B","relation":"NtPp","b":"C"}],"query":{"a":"A","b":"C"}}
+{"id":"converse-fact","facts":[{"a":"B","relation":"NTPPi","b":"A"},{"a":"B","relation":"NTPP","b":"C"}],"query":{"a":"A","b":"C"}}
+{"id":"sf-alias","matrix":"FF2F11212","claim":"SFTOUCHES"}
+{"id":"lowercase-matrix","matrix":"ff2f11212","claim":"touches"}
+{"id":"pattern-not-matrix","matrix":"FF*F11212","claim":"touches"}
+{"id":"missing-claim","matrix":"FF2F11212"}
+{"id":"missing-query","facts":[]}
+{"id":"crlf","matrix":"FF2F11212","claim":"within"}

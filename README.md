@@ -406,6 +406,60 @@ proved; it only builds the `Graph` or `Matrix9` handed to the proved
 functions. CI runs `samples/prover.jsonl` and compares with
 `samples/prover.expected.jsonl`.
 
+### External contract
+
+Input: one JSON object per line, UTF-8. Blank lines are skipped. A line with
+a `matrix` key is a DE-9IM request, any other line an RCC8 request. Unknown
+keys are ignored.
+
+| Request | Fields |
+| --- | --- |
+| RCC8 | `id` (any JSON, optional), `facts` (array of `{"a": string, "relation": string, "b": string}`), `query` (`{"a": string, "b": string}`) |
+| DE-9IM | `id` (optional), `matrix` (exactly 9 characters of `F 0 1 2`, as GEOS prints), `claim` (string) |
+
+RCC8 relation names: `DC EC PO EQ TPP NTPP TPPi NTPPi`, any letter case. DE-9IM
+claims: `disjoint intersects touches within contains`, any letter case, with
+or without an `sf` prefix.
+
+Output: one JSON object per non-blank input line, in input order. `id` is the
+request's `id`, or `null` if absent or if the line is not valid JSON. Key
+order carries no meaning.
+
+| `status` | Extra field | Meaning |
+| --- | --- | --- |
+| `entailed` | `relation` (RCC8) or `claim` (DE-9IM) | RCC8: every model of the facts has this relation between `a` and `b`. DE-9IM: every geometry pair with this matrix satisfies the claim |
+| `possible` | `relations` (fixed order `DC EC PO EQ TPP NTPP TPPi NTPPi`) | every model has one of these; not a claim that each occurs |
+| `contradictory` | | the facts have no model |
+| `refuted` | `claim` | DE-9IM: no geometry pair with this matrix satisfies the claim |
+| `error` | `error` (message) | the line was not processed; nothing is claimed |
+
+If the facts have no model, `entailed` and `possible` answers are vacuously
+true; the checker does not always detect such facts (below).
+
+Each line is answered on its own: a bad line gives an `error` line and the
+next line is processed normally. The exit code is 0 whenever input was read
+to the end, even if every line was an error; errors are only reported in the
+output. Callers should match answers by `id` or by position among non-blank
+lines.
+
+Reproducibility: responses carry no version. To reproduce, pin the
+LeanGeospatial commit, which fixes `lean-toolchain` (Lean) and
+`lake-manifest.json` (Mathlib). `lakefile.toml`'s `version` is not updated
+per change.
+
+Known limits of the current checker, kept as they are:
+
+- a fact stated directly between the queried pair only rules the answer
+  `contradictory` or not; it does not narrow `possible` (a stated `A NTPP B`
+  queried as `A`, `B` gives `possible` with all eight);
+- two different facts for the same pair are not compared: the first one is
+  used;
+- a line with both `facts` and `matrix` is read as a DE-9IM request;
+- some error messages come from the JSON library and are terse
+  (`String expected` for a missing `claim`).
+
+`samples/prover-contract.jsonl` exercises this contract in CI.
+
 ## What Lean proves
 
 These hold for every region, whatever its shape or source:

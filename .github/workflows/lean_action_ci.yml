@@ -34,3 +34,8 @@ jobs:
         run: |
           lake build lean-geospatial-prover
           .lake/build/bin/lean-geospatial-prover < samples/prover.jsonl | diff - samples/prover.expected.jsonl
+      - name: Prover contract (one answer per non-blank line, exit code 0)
+        run: |
+          .lake/build/bin/lean-geospatial-prover < samples/prover-contract.jsonl > contract.out
+          test "$(grep -c . samples/prover-contract.jsonl)" -eq "$(wc -l < contract.out)"
+          diff contract.out samples/prover-contract.expected.jsonl

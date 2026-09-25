@@ -1,0 +1,14 @@
+{"status":"entailed","id":"string-id","claim":"touches"}
+{"status":"entailed","id":42,"claim":"touches"}
+{"status":"entailed","id":null,"claim":"touches"}
+{"status":"entailed","id":"before-bad","claim":"intersects"}
+{"status":"error","id":null,"error":"malformed JSON: offset 12: unexpected end of input"}
+{"status":"refuted","id":"after-bad","claim":"disjoint"}
+{"status":"entailed","relation":"NTPP","id":"case-insensitive"}
+{"status":"entailed","relation":"NTPP","id":"converse-fact"}
+{"status":"entailed","id":"sf-alias","claim":"touches"}
+{"status":"error","id":"lowercase-matrix","error":"not a DE-9IM matrix (9 characters of F 0 1 2): ff2f11212"}
+{"status":"error","id":"pattern-not-matrix","error":"not a DE-9IM matrix (9 characters of F 0 1 2): FF*F11212"}
+{"status":"error","id":"missing-claim","error":"String expected"}
+{"status":"error","id":"missing-query","error":"property not found: query"}
+{"status":"refuted","id":"crlf","claim":"within"}
