@@ -1,9 +1,10 @@
 name = "lean-geospatial"
 version = "0.1.0"
-defaultTargets = ["lean-geospatial"]
+defaultTargets = ["LeanGeospatial", "lean-geospatial"]
 
 [[lean_lib]]
 name = "LeanGeospatial"
+globs = ["LeanGeospatial.*"]
 
 [[lean_exe]]
 name = "lean-geospatial"

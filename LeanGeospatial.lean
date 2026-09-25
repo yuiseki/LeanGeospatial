@@ -1,2 +1,3 @@
-import LeanGeospatial.Basic
-import LeanGeospatial.Geospatial
+import LeanGeospatial.Point
+import LeanGeospatial.Region
+import LeanGeospatial.Polygon
