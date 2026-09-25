@@ -1,0 +1,3 @@
+samples/inconsistent.txt: BuildingA → BlockC: contradictory
+samples/nested.txt: DistrictA → ProvinceC: entailed NTPP
+samples/touching.txt: ParcelA → ParcelC: possible {DC, EC, PO, EQ, TPP, TPPi}

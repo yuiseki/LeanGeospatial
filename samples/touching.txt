@@ -1,0 +1,4 @@
+# Case 2: several relations remain.
+ParcelA EC RoadB
+RoadB EC ParcelC
+? ParcelA ParcelC

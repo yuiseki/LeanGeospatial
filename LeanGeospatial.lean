@@ -9,3 +9,5 @@ import LeanGeospatial.RCC8Witnesses
 import LeanGeospatial.Composition
 import LeanGeospatial.CompositionTable
 import LeanGeospatial.CompositionTable.Cells
+import LeanGeospatial.Validator
+import LeanGeospatial.ValidatorText

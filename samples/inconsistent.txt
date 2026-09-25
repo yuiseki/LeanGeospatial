@@ -1,0 +1,5 @@
+# Case 3: the facts contradict each other.
+BuildingA NTPP LotB
+LotB NTPP BlockC
+BuildingA DC BlockC
+? BuildingA BlockC

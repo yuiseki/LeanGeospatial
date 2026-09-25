@@ -26,3 +26,7 @@ jobs:
         run: |
           python3 scripts/gen_rcc8_table.py
           git diff --exit-code
+      - name: Validator samples give the expected verdicts
+        run: |
+          lake build lean-geospatial
+          .lake/build/bin/lean-geospatial samples/*.txt | diff - samples/expected.out

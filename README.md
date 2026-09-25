@@ -39,6 +39,8 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/CompositionTable/Complete.lean` | Generated: every entry of `table` realised |
 | `LeanGeospatial/CompositionTable.lean` | `compose_eq_table : r ⋄ s = table r s` |
 | `LeanGeospatial/CompositionTable/Cells.lean` | Generated: the 64 cells, one theorem each |
+| `LeanGeospatial/Validator.lean` | An RCC8 validator whose verdicts are backed by theorems |
+| `LeanGeospatial/ValidatorText.lean` | The validator's plain-text input format |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
 | `LeanGeospatial/Examples/Measurement.lean` | Distance and area on concrete coordinates |
@@ -46,6 +48,7 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |
+| `LeanGeospatial/Examples/Validator.lean` | The validator's three cases, with what each verdict proves |
 | `LeanGeospatial/Examples/Axioms.lean` | Axiom audit of the main theorems |
 
 The library under `LeanGeospatial/` never imports `LeanGeospatial/Examples/`;
@@ -150,6 +153,37 @@ This is the meaning of an entry in the RCC8 composition table. No table is
 assumed: each entry has to be proved from the definitions, in both
 directions. Showing `t ∈ r ⋄ s` needs three concrete areas; showing
 `t ∉ r ⋄ s` needs an argument that works for all areas.
+
+## Validator
+
+A proof of concept: given stated RCC8 relations between features, check a
+pair of features against the composition table.
+
+```
+$ lake exe lean-geospatial samples/*.txt
+samples/inconsistent.txt: BuildingA → BlockC: contradictory
+samples/nested.txt: DistrictA → ProvinceC: entailed NTPP
+samples/touching.txt: ParcelA → ParcelC: possible {DC, EC, PO, EQ, TPP, TPPi}
+```
+
+An input file has one fact per line (`DistrictA NTPP CityB`), queries
+(`? DistrictA ProvinceC`) and `#` comments. For a pair `A`, `C` the validator
+intersects `table r s` over every feature `B` with known `A r B` and `B s C`
+(using converses for facts stated the other way), then answers:
+
+- entailed `t`: only `t` is left, so every model has `A t C`
+  (`Graph.check_entailed`).
+- possible `S`: several relations are left; every model has one of them
+  (`Graph.check_possible`). For a single triangle each of them also occurs
+  (`triangle_realizes`); with more features, other facts may rule out more.
+- contradictory: nothing is left, or the stated `A`–`C` relation is not among
+  what is left, so no model exists (`Graph.check_contradictory`).
+
+A model gives every feature a nonempty area making every fact true. The
+three verdict theorems rest on the soundness half of the composition table
+and on "exactly one relation holds". `Examples/Validator.lean` proves the
+three sample cases as theorems; CI also runs the command on `samples/` and
+compares with `samples/expected.out`.
 
 ## What Lean proves
 

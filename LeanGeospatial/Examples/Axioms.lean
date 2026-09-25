@@ -11,6 +11,7 @@ import LeanGeospatial.Examples.RCC8
 import LeanGeospatial.Composition
 import LeanGeospatial.CompositionTable.Cells
 import LeanGeospatial.Examples.PublishedTable
+import LeanGeospatial.Examples.Validator
 
 /-!
 # Axiom audit
@@ -268,3 +269,35 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.PublishedTable.table_eq_published' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.PublishedTable.table_eq_published
+
+/-- info: 'Geospatial.RCC8.Graph.check_contradictory' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Graph.check_contradictory
+
+/-- info: 'Geospatial.RCC8.Graph.check_entailed' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Graph.check_entailed
+
+/-- info: 'Geospatial.RCC8.Graph.check_possible' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Graph.check_possible
+
+/-- info: 'Geospatial.RCC8.triangle_realizes' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.triangle_realizes
+
+/-- info: 'Geospatial.Examples.Validator.nested_entails' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Validator.nested_entails
+
+/-- info: 'Geospatial.Examples.Validator.touching_possible' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Validator.touching_possible
+
+/-- info: 'Geospatial.Examples.Validator.touching_each_occurs' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Validator.touching_each_occurs
+
+/-- info: 'Geospatial.Examples.Validator.inconsistent_has_no_model' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Validator.inconsistent_has_no_model

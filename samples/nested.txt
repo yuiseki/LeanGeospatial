@@ -1,0 +1,4 @@
+# Case 1: the relation is forced.
+DistrictA NTPP CityB
+CityB NTPP ProvinceC
+? DistrictA ProvinceC
