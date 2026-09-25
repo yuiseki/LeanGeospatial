@@ -3,6 +3,7 @@ import LeanGeospatial.Examples.Administrative
 import LeanGeospatial.Examples.Intersects
 import LeanGeospatial.Examples.Measurement
 import LeanGeospatial.Examples.Touches
+import LeanGeospatial.RegularClosed
 
 /-!
 # Axiom audit
@@ -80,3 +81,31 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.Touches.intersects_not_imp_touches' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.Touches.intersects_not_imp_touches
+
+/-- info: 'Geospatial.RegularClosedRegion.inter_subset_boundary_of_touches' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RegularClosedRegion.inter_subset_boundary_of_touches
+
+/-- info: 'Geospatial.RegularClosedRegion.union' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RegularClosedRegion.union
+
+/-- info: 'Geospatial.Touches.not_exists_regularClosed_inter' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Touches.not_exists_regularClosed_inter
+
+/-- info: 'Geospatial.Rect.closure_interior_toRegion' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Rect.closure_interior_toRegion
+
+/-- info: 'Geospatial.Rect.segment_not_regularClosed' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Rect.segment_not_regularClosed
+
+/-- info: 'Geospatial.Examples.Touches.A_inter_B_subset_boundaries' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Touches.A_inter_B_subset_boundaries
+
+/-- info: 'Geospatial.Examples.Touches.shared_edge_not_area' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Touches.shared_edge_not_area

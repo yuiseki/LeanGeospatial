@@ -1,4 +1,4 @@
-import LeanGeospatial.Topology
+import LeanGeospatial.RegularClosed
 
 /-!
 # Touches versus Intersects
@@ -60,22 +60,25 @@ theorem edgePoint_on_both_boundaries :
     squareA, squareB, edgePoint, Set.mem_setOf_eq]
   norm_num
 
-/-- The same fact from the general lemma: squares are the closure of their
-interior, so any shared point of touching squares is on both boundaries. -/
+/-- Squares A and B as areas. Building them needs only positive width and
+height. -/
+def areaA : RegularClosedRegion :=
+  squareA.toRegularClosed (by norm_num [squareA]) (by norm_num [squareA])
+def areaB : RegularClosedRegion :=
+  squareB.toRegularClosed (by norm_num [squareB]) (by norm_num [squareB])
+
+theorem areaA_touches_areaB : Touches (areaA : Region) areaB := A_touches_B
+
+/-- The same fact from the general theorem. Because A and B are areas, no
+`closure (interior _) = _` hypothesis has to be supplied. -/
 theorem A_inter_B_subset_boundaries :
-    squareA.toRegion ∩ squareB.toRegion ⊆
-      boundary squareA.toRegion ∩ boundary squareB.toRegion := by
-  have hA : closure (interior squareA.toRegion) = squareA.toRegion := by
-    rw [Rect.interior_toRegion, Rect.openRegion_eq_preimage,
-      ← Point2D.homeomorphProd.preimage_closure, closure_prod_eq,
-      closure_Ioo (by norm_num [squareA]), closure_Ioo (by norm_num [squareA]),
-      ← Rect.toRegion_eq_preimage]
-  have hB : closure (interior squareB.toRegion) = squareB.toRegion := by
-    rw [Rect.interior_toRegion, Rect.openRegion_eq_preimage,
-      ← Point2D.homeomorphProd.preimage_closure, closure_prod_eq,
-      closure_Ioo (by norm_num [squareB]), closure_Ioo (by norm_num [squareB]),
-      ← Rect.toRegion_eq_preimage]
-  exact A_touches_B.inter_subset_boundary hA hB
+    (areaA : Region) ∩ areaB ⊆ boundary (areaA : Region) ∩ boundary (areaB : Region) :=
+  areaA.inter_subset_boundary_of_touches areaB areaA_touches_areaB
+
+/-- The shared edge of A and B is a `Region` but not an area. -/
+theorem shared_edge_not_area :
+    ¬ ∃ C : RegularClosedRegion, (C : Region) = (areaA : Region) ∩ areaB :=
+  areaA_touches_areaB.not_exists_regularClosed_inter
 
 /-- `(3/2, 1)` is inside both A and C. -/
 def overlapPoint : Point2D := ⟨3 / 2, 1⟩

@@ -95,7 +95,8 @@ theorem touches_iff_of_intersects (h : Intersects A B) :
 
 /-- For regions that are the closure of their interior (no dangling lines or
 isolated points), every shared point of touching regions lies on both
-boundaries. -/
+boundaries. For areas, use `RegularClosedRegion.inter_subset_boundary_of_touches`,
+which needs no hypotheses. -/
 theorem Touches.inter_subset_boundary
     (hA : closure (interior A) = A) (hB : closure (interior B) = B)
     (h : Touches A B) :

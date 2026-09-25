@@ -29,10 +29,11 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/Region.lean` | `Region`, the four relations and their laws |
 | `LeanGeospatial/Polygon.lean` | `Polygon` (vertex data, shoelace area), `Rect` (a shape with a defined region) |
 | `LeanGeospatial/Topology.lean` | The plane's topology, `boundary`, `Touches`, interior and boundary of a `Rect` |
+| `LeanGeospatial/RegularClosed.lean` | `RegularClosedRegion`, the type of areas |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
 | `LeanGeospatial/Examples/Measurement.lean` | Distance and area on concrete coordinates |
-| `LeanGeospatial/Examples/Touches.lean` | Two squares that touch, and two that overlap |
+| `LeanGeospatial/Examples/Touches.lean` | Two squares that touch, and two that overlap; their shared edge is not an area |
 | `LeanGeospatial/Examples/Axioms.lean` | Axiom audit of the main theorems |
 
 ## The model
@@ -70,6 +71,23 @@ Mathlib's, not new definitions:
 interior point. It separates "shares an edge" from "overlaps", which
 `Intersects` alone cannot.
 
+## Areas: regular closed regions
+
+`Region` is any set of points, including a single point, a line, or a square
+with a stray line attached. A geographic area (a district, a parcel, a lake)
+should be none of those. The type
+
+```lean
+structure RegularClosedRegion where
+  carrier : Region
+  closure_interior_eq' : closure (interior carrier) = carrier
+```
+
+holds exactly the regions that are the closure of their own interior. Every
+value carries that proof, so theorems about areas do not ask for it again.
+`RegularClosedRegion` is a `SetLike`, so an area can be used wherever a
+`Region` is expected, but not the other way round.
+
 ## What Lean proves
 
 These hold for every region, whatever its shape or source:
@@ -97,6 +115,21 @@ For the topology:
   `[0,2]×[0,2]` and `[1,3]×[0,2]` intersect without touching. Hence
   `intersects_not_imp_touches`.
 
+For areas:
+
+- `Rect.toRegularClosed`: a rectangle with positive width and height is an
+  area (`Rect.closure_interior_toRegion`). `Rect.segment_not_regularClosed`
+  shows the positivity is needed: a width-zero rectangle is a segment, not an
+  area.
+- `RegularClosedRegion.inter_subset_boundary_of_touches`: when two areas
+  touch, every shared point lies on both boundaries. The only hypothesis is
+  `Touches`.
+- `Touches.not_exists_regularClosed_inter`: what two touching regions share
+  is never an area. In `Examples/Touches.lean`, the shared edge of the two
+  squares is a `Region` but not a `RegularClosedRegion`.
+- `RegularClosedRegion.union`: the union of two areas is an area. The
+  intersection is not, by the previous point.
+
 With concrete coordinates it also proves numeric facts, for example that the
 distance from `(0,0)` to `(10,10)` is `10 * √2` and that the 10 × 10 square has
 shoelace area `100`.
@@ -121,8 +154,10 @@ Other things that are not modelled yet:
 
 - Which set of points a general polygon encloses. Only `Rect` has a region,
   and so only `Rect` has a computed interior and boundary.
-- Whether a real region is closed, or equal to the closure of its interior.
-  Lemmas that need this take it as a hypothesis.
+- Whether a real place is an area. Building a `RegularClosedRegion` needs a
+  proof of `closure (interior A) = A`, which Lean can give for a `Rect` but not
+  for a boundary loaded from outside. For such data it is an assumption, made
+  once when the value is built.
 - Coordinate reference systems. Coordinates are plain real numbers in a flat
   plane, and `distance` is Euclidean, not a distance on the Earth.
 - Reading real data.
