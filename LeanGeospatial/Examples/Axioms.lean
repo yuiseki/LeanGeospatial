@@ -4,6 +4,8 @@ import LeanGeospatial.Examples.Intersects
 import LeanGeospatial.Examples.Measurement
 import LeanGeospatial.Examples.Touches
 import LeanGeospatial.RegularClosed
+import LeanGeospatial.NineIntersection
+import LeanGeospatial.Examples.NineIntersection
 
 /-!
 # Axiom audit
@@ -109,3 +111,43 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.Touches.shared_edge_not_area' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.Touches.shared_edge_not_area
+
+/-- info: 'Geospatial.interior_union_boundary_union_exterior' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.interior_union_boundary_union_exterior
+
+/-- info: 'Geospatial.existsUnique_stratum' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.existsUnique_stratum
+
+/-- info: 'Geospatial.iUnion_cell' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.iUnion_cell
+
+/-- info: 'Geospatial.cell_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.cell_disjoint
+
+/-- info: 'Geospatial.RegularClosedRegion.disjoint_iff_cells' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RegularClosedRegion.disjoint_iff_cells
+
+/-- info: 'Geospatial.RegularClosedRegion.touches_iff_cells' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RegularClosedRegion.touches_iff_cells
+
+/-- info: 'Geospatial.RegularClosedRegion.within_iff_cells' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RegularClosedRegion.within_iff_cells
+
+/-- info: 'Geospatial.RegularClosedRegion.contains_iff_cells' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RegularClosedRegion.contains_iff_cells
+
+/-- info: 'Geospatial.Examples.NineIntersection.empty_within_but_II_empty' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.NineIntersection.empty_within_but_II_empty
+
+/-- info: 'Geospatial.Examples.NineIntersection.segment_within_but_II_empty' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.NineIntersection.segment_within_but_II_empty

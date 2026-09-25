@@ -30,10 +30,12 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/Polygon.lean` | `Polygon` (vertex data, shoelace area), `Rect` (a shape with a defined region) |
 | `LeanGeospatial/Topology.lean` | The plane's topology, `boundary`, `Touches`, interior and boundary of a `Rect` |
 | `LeanGeospatial/RegularClosed.lean` | `RegularClosedRegion`, the type of areas |
+| `LeanGeospatial/NineIntersection.lean` | `exterior`, the three-part split, the nine cells, relations as cell conditions |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
 | `LeanGeospatial/Examples/Measurement.lean` | Distance and area on concrete coordinates |
 | `LeanGeospatial/Examples/Touches.lean` | Two squares that touch, and two that overlap; their shared edge is not an area |
+| `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/Axioms.lean` | Axiom audit of the main theorems |
 
 ## The model
@@ -88,6 +90,24 @@ value carries that proof, so theorems about areas do not ask for it again.
 `RegularClosedRegion` is a `SetLike`, so an area can be used wherever a
 `Region` is expected, but not the other way round.
 
+## Nine intersections
+
+`exterior A` is `interior Aᶜ`, which equals `(closure A)ᶜ`. Interior, boundary
+and exterior split the plane: every point is in exactly one of them
+(`existsUnique_stratum`). For two regions this gives nine cells,
+
+```lean
+cell s t A B = s.set A ∩ t.set B      -- s, t ∈ {I, B, E}
+```
+
+abbreviated `II`, `IB`, `IE`, `BI`, `BB`, `BE`, `EI`, `EB`, `EE`, with the
+first letter for `A`. Only whether a cell is empty is used. There are no
+dimensions, no matrix type and no pattern strings yet.
+
+The relations are still defined by the set operations above. The cell
+conditions are theorems derived from those definitions, not a second set of
+definitions.
+
 ## What Lean proves
 
 These hold for every region, whatever its shape or source:
@@ -129,6 +149,27 @@ For areas:
   squares is a `Region` but not a `RegularClosedRegion`.
 - `RegularClosedRegion.union`: the union of two areas is an area. The
   intersection is not, by the previous point.
+
+For the nine cells, with `A` and `B` areas:
+
+| Relation | Cell condition | Theorem |
+| --- | --- | --- |
+| `Disjoint A B` | `II`, `IB`, `BI`, `BB` all empty | `RegularClosedRegion.disjoint_iff_cells` |
+| `Intersects A B` | one of `II`, `IB`, `BI`, `BB` nonempty | `RegularClosedRegion.intersects_iff_cells` |
+| `Touches A B` | `II` empty, one of `IB`, `BI`, `BB` nonempty | `RegularClosedRegion.touches_iff_cells` |
+| `Within A B`, `A` nonempty | `II` nonempty, `IE` and `BE` empty | `RegularClosedRegion.within_iff_cells` |
+| `Contains A B`, `B` nonempty | `II` nonempty, `EI` and `EB` empty | `RegularClosedRegion.contains_iff_cells` |
+
+The first three already hold for any closed regions (`..._of_isClosed`). The
+`Within` row needs more, and `Examples/NineIntersection.lean` proves each
+hypothesis is needed:
+
+- The empty area lies within every area, but `II` is empty.
+- A segment on the edge of a square is closed, nonempty and within the
+  square, but its interior is empty, so `II` is empty. It is not an area.
+
+Without the `II` condition, `Within` on closed regions is exactly
+`IE` and `BE` empty (`within_iff_cells_of_isClosed`).
 
 With concrete coordinates it also proves numeric facts, for example that the
 distance from `(0,0)` to `(10,10)` is `10 * √2` and that the 10 × 10 square has

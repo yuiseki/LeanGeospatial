@@ -63,7 +63,7 @@ theorem interior_disjoint_boundary (A : Region) :
   exact hp' hp
 
 /-- A closed region is its interior together with its boundary. -/
-theorem IsClosed.interior_union_boundary {A : Region} (hA : IsClosed A) :
+theorem interior_union_boundary_of_isClosed {A : Region} (hA : IsClosed A) :
     interior A ∪ boundary A = A := by
   rw [boundary_eq, hA.closure_eq, Set.union_diff_cancel interior_subset]
 
