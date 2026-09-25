@@ -622,3 +622,35 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.Validator.unrelatedConflict_has_no_model' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.Validator.unrelatedConflict_has_no_model
+
+/-- info: 'Geospatial.Prover.equals_iff_rows' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Prover.equals_iff_rows
+
+/-- info: 'Geospatial.Prover.allF_matches_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Prover.allF_matches_iff
+
+/-- info: 'Geospatial.Prover.Claim.decide_kinds_irrel' depends on axioms: [propext] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Prover.Claim.decide_kinds_irrel
+
+/-- info: 'Geospatial.Prover.Claim.decide_iff_of_kindFree' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Prover.Claim.decide_iff_of_kindFree
+
+/-- info: 'Geospatial.Examples.Prover.equals_of_samePointMatrix' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Prover.equals_of_samePointMatrix
+
+/-- info: 'Geospatial.Examples.Prover.crosses_of_crossingMatrix' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Prover.crosses_of_crossingMatrix
+
+/-- info: 'Geospatial.Examples.Prover.overlaps_of_collinearMatrix' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Prover.overlaps_of_collinearMatrix
+
+/-- info: 'Geospatial.Examples.Prover.not_crosses_of_collinearMatrix' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Prover.not_crosses_of_collinearMatrix

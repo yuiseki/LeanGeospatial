@@ -385,16 +385,25 @@ A DE-9IM matrix and a Simple Features claim, answered by `Claim.decide`:
 ```json
 {"id":"case-2","matrix":"FF2F11212","claim":"touches"}
 {"status":"entailed","id":"case-2","claim":"touches"}
+{"id":"case-3","matrix":"0F1FF0102","claim":"crosses","a_kind":"line","b_kind":"line"}
+{"status":"entailed","id":"case-3","claim":"crosses"}
 ```
 
-The status is `entailed` or `refuted`. Supported claims are `disjoint`,
-`intersects`, `touches`, `within`, `contains`; `Claim.decide_iff` proves the
-answer exact for any points, lines or areas with that matrix. Equals,
-overlaps and crosses are not offered: equals has no matrix test equivalent to
-it, and the other two depend on the geometry kinds.
+The status is `entailed` or `refuted`, for any of the eight Simple Features
+relations. `Claim.decide_iff` proves the answer exact for any points, lines
+or areas with the stated matrix (and kinds):
+
+- disjoint, intersects, touches, within, contains are read from the rows the
+  Table 2 theorems prove equivalent;
+- equals is read from `T*F**FFF*`, or `FFFFFFFF*` when both geometries are
+  empty, not from Table 2's `TFFFTFFFT`;
+- overlaps and crosses follow the SFA definitions and need `a_kind` and
+  `b_kind` (`point`, `line` or `area`), which give each interior's dimension.
+  Other claims ignore the kinds (`Claim.decide_kinds_irrel`).
 
 Malformed JSON, missing fields, unknown relations, matrices that are not 9
-characters of `F 0 1 2`, and unsupported claims give `"status":"error"`.
+characters of `F 0 1 2`, unknown claims or kinds, overlaps or crosses without
+kinds, and lines with both `facts` and `matrix` give `"status":"error"`.
 
 Trust boundary. The facts and the matrix are premises. Lean does not compute
 them, and it does not check that they are true of any real geometry, whether
@@ -415,11 +424,12 @@ keys are ignored.
 | Request | Fields |
 | --- | --- |
 | RCC8 | `id` (any JSON, optional), `facts` (array of `{"a": string, "relation": string, "b": string}`), `query` (`{"a": string, "b": string}`) |
-| DE-9IM | `id` (optional), `matrix` (exactly 9 characters of `F 0 1 2`, as GEOS prints), `claim` (string) |
+| DE-9IM | `id` (optional), `matrix` (exactly 9 characters of `F 0 1 2`, as GEOS prints), `claim` (string), `a_kind` and `b_kind` (`point`, `line`, `area`; required for overlaps and crosses) |
 
 RCC8 relation names: `DC EC PO EQ TPP NTPP TPPi NTPPi`, any letter case. DE-9IM
-claims: `disjoint intersects touches within contains`, any letter case, with
-or without an `sf` prefix.
+claims: `equals disjoint intersects touches within contains overlaps
+crosses`, any letter case, with or without an `sf` prefix. Kinds also accept
+`P L A`, `linestring` and `polygon`.
 
 Output: one JSON object per non-blank input line, in input order. `id` is the
 request's `id`, or `null` if absent or if the line is not valid JSON. Key
