@@ -9,6 +9,8 @@ import LeanGeospatial.Examples.NineIntersection
 import LeanGeospatial.RCC8
 import LeanGeospatial.Examples.RCC8
 import LeanGeospatial.Composition
+import LeanGeospatial.CompositionTable.Cells
+import LeanGeospatial.Examples.PublishedTable
 
 /-!
 # Axiom audit
@@ -222,3 +224,47 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.RCC8.ntppi_compose_ntppi' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.RCC8.ntppi_compose_ntppi
+
+/-- info: 'Geospatial.RCC8.schema_sigOf' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.schema_sigOf
+
+/-- info: 'Geospatial.RCC8.sigOf_mem_sigs' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.sigOf_mem_sigs
+
+/-- info: 'Geospatial.RCC8.mem_table_of_mem_compose' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.mem_table_of_mem_compose
+
+/-- info: 'Geospatial.RCC8.realizes_of_mem_table' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.realizes_of_mem_table
+
+/-- info: 'Geospatial.RCC8.compose_eq_table' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.compose_eq_table
+
+/-- info: 'Geospatial.RCC8.compose_dc_dc' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.compose_dc_dc
+
+/-- info: 'Geospatial.RCC8.compose_ec_ec' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.compose_ec_ec
+
+/-- info: 'Geospatial.RCC8.compose_ec_ntpp' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.compose_ec_ntpp
+
+/-- info: 'Geospatial.RCC8.compose_tppi_tpp' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.compose_tppi_tpp
+
+/-- info: 'Geospatial.RCC8.compose_ntpp_ntppi' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.compose_ntpp_ntppi
+
+/-- info: 'Geospatial.Examples.PublishedTable.table_eq_published' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.PublishedTable.table_eq_published

@@ -34,12 +34,18 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/RCC8.lean` | The eight RCC8 base relations and the proof that exactly one holds |
 | `LeanGeospatial/RCC8Witnesses.lean` | Squares realising each RCC8 relation, used by weak composition |
 | `LeanGeospatial/Composition.lean` | Weak composition of RCC8 relations, defined and proved from the relations |
+| `LeanGeospatial/CompositionTable/Abstract.lean` | Signatures, nine laws, the computed `table`, and `r ⋄ s ⊆ table r s` |
+| `LeanGeospatial/RCC8Witnesses/Triples.lean` | Generated: 112 rectangle witnesses |
+| `LeanGeospatial/CompositionTable/Complete.lean` | Generated: every entry of `table` realised |
+| `LeanGeospatial/CompositionTable.lean` | `compose_eq_table : r ⋄ s = table r s` |
+| `LeanGeospatial/CompositionTable/Cells.lean` | Generated: the 64 cells, one theorem each |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
 | `LeanGeospatial/Examples/Measurement.lean` | Distance and area on concrete coordinates |
 | `LeanGeospatial/Examples/Touches.lean` | Two squares that touch, and two that overlap; their shared edge is not an area |
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
+| `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |
 | `LeanGeospatial/Examples/Axioms.lean` | Axiom audit of the main theorems |
 
 The library under `LeanGeospatial/` never imports `LeanGeospatial/Examples/`;
@@ -236,7 +242,45 @@ For weak composition:
   `ntpp_trans`, the other is three nested squares. `ntppi_compose_ntppi`
   follows from the converse law.
 
-The full 8 × 8 table is not attempted yet.
+The full table is derived below.
+
+## The composition table
+
+All 64 cells are theorems, `compose_dc_dc` through `compose_ntppi_ntppi` in
+`CompositionTable/Cells.lean`, for example
+
+```lean
+theorem compose_ec_ntpp : Relation.ec ⋄ Relation.ntpp = ↑({.po, .tpp, .ntpp} : Finset Relation)
+```
+
+They all come from `compose_eq_table : r ⋄ s = ↑(table r s)`, proved in two
+halves.
+
+- Exclusion, `r ⋄ s ⊆ table r s`, is one argument for every cell. Each
+  relation fixes six facts about a pair of areas (meet, interiors meet, within
+  either way, within the other's interior either way). Nine laws connect the
+  facts of the three pairs of a triangle, for example "X ⊆ Y ⊆ int Z gives
+  X ⊆ int Z", each proved from the set and topology definitions. `table r s`
+  keeps the `t` that some choice of facts allows under all nine laws in every
+  orientation, and is computed by `decide`. Two of the laws use that areas are
+  the closure of their interior; without them five cells would be looser
+  (`EC ⋄ EC` would admit `NTPP` and `NTPPi`, and `EC ⋄ NTPP`, `EC ⋄ NTPPi`,
+  `NTPP ⋄ EC`, `NTPPi ⋄ EC` would admit `EC`).
+- Realisation, `table r s ⊆ r ⋄ s`, uses three rectangles per entry. Of the
+  193 entries, the 15 in the `EQ` row and column follow from the identity
+  laws, and the converse law pairs the rest, so 112 witnesses cover all
+  entries. `rect_rcc8` checks each relation between rectangles by reducing it
+  to coordinate inequalities.
+
+`scripts/gen_rcc8_table.py` searches for the rectangles and writes the
+generated files; `data/rcc8_witnesses.tsv` lists them one per line. The script
+is not trusted: Lean checks every witness, and CI checks that the generated
+files are up to date.
+
+`Examples/PublishedTable.lean` compares the derived table with the one
+published on Wikipedia (`data/rcc8_known_table.tsv`, revision 1366466711) and
+proves they agree on all 64 cells. The published table is not used by any
+proof in the library.
 
 With concrete coordinates it also proves numeric facts, for example that the
 distance from `(0,0)` to `(10,10)` is `10 * √2` and that the 10 × 10 square has
@@ -272,5 +316,5 @@ Other things that are not modelled yet:
 
 ## Out of scope for now
 
-The full RCC8 composition table, DE-9IM dimensions and matrices, points and lines
+DE-9IM dimensions and matrices, points and lines
 with their OGC boundary, GeoSPARQL, coordinate reference systems and GIS I/O.

@@ -22,3 +22,7 @@ jobs:
           if grep -rn '^import .*Examples' LeanGeospatial.lean Main.lean LeanGeospatial --include=*.lean | grep -v '^LeanGeospatial/Examples/'; then
             exit 1
           fi
+      - name: Generated composition-table files are up to date
+        run: |
+          python3 scripts/gen_rcc8_table.py
+          git diff --exit-code

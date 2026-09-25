@@ -7,3 +7,5 @@ import LeanGeospatial.NineIntersection
 import LeanGeospatial.RCC8
 import LeanGeospatial.RCC8Witnesses
 import LeanGeospatial.Composition
+import LeanGeospatial.CompositionTable
+import LeanGeospatial.CompositionTable.Cells

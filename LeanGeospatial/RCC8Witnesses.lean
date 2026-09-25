@@ -47,9 +47,113 @@ theorem area_nonempty (r : Rect) (h : r.xmin < r.xmax ∧ r.ymin < r.ymax) :
     ((r.area h : RegularClosedRegion) : Region).Nonempty :=
   ⟨⟨r.xmin, r.ymin⟩, le_refl _, h.1.le, le_refl _, h.2.le⟩
 
+variable {r s : Rect} (hr : r.xmin < r.xmax ∧ r.ymin < r.ymax)
+  (hs : s.xmin < s.xmax ∧ s.ymin < s.ymax)
+
+/-! The four building blocks of every RCC8 relation, for rectangles, as
+inequalities between coordinates. -/
+
+theorem within_area_iff :
+    Within ((r.area hr : RegularClosedRegion) : Region) (s.area hs) ↔
+      s.xmin ≤ r.xmin ∧ r.xmax ≤ s.xmax ∧ s.ymin ≤ r.ymin ∧ r.ymax ≤ s.ymax := by
+  constructor
+  · intro h
+    have h₁ := h (show (⟨r.xmin, r.ymin⟩ : Point2D) ∈ ((r.area hr : RegularClosedRegion) : Region)
+      from ⟨le_rfl, hr.1.le, le_rfl, hr.2.le⟩)
+    have h₂ := h (show (⟨r.xmax, r.ymax⟩ : Point2D) ∈ ((r.area hr : RegularClosedRegion) : Region)
+      from ⟨hr.1.le, le_rfl, hr.2.le, le_rfl⟩)
+    exact ⟨h₁.1, h₂.2.1, h₁.2.2.1, h₂.2.2.2⟩
+  · rintro ⟨a, b, c, d⟩
+    exact within_of_bounds a b c d
+
+theorem within_interior_area_iff :
+    Within ((r.area hr : RegularClosedRegion) : Region)
+        (interior ((s.area hs : RegularClosedRegion) : Region)) ↔
+      s.xmin < r.xmin ∧ r.xmax < s.xmax ∧ s.ymin < r.ymin ∧ r.ymax < s.ymax := by
+  constructor
+  · intro h
+    rw [interior_area] at h
+    have h₁ := h (show (⟨r.xmin, r.ymin⟩ : Point2D) ∈ ((r.area hr : RegularClosedRegion) : Region)
+      from ⟨le_rfl, hr.1.le, le_rfl, hr.2.le⟩)
+    have h₂ := h (show (⟨r.xmax, r.ymax⟩ : Point2D) ∈ ((r.area hr : RegularClosedRegion) : Region)
+      from ⟨hr.1.le, le_rfl, hr.2.le, le_rfl⟩)
+    exact ⟨h₁.1, h₂.2.1, h₁.2.2.1, h₂.2.2.2⟩
+  · rintro ⟨a, b, c, d⟩
+    exact within_interior_of_bounds a b c d
+
+theorem intersects_area_iff :
+    Intersects ((r.area hr : RegularClosedRegion) : Region) (s.area hs) ↔
+      r.xmin ≤ s.xmax ∧ s.xmin ≤ r.xmax ∧ r.ymin ≤ s.ymax ∧ s.ymin ≤ r.ymax := by
+  constructor
+  · rintro ⟨p, ⟨a₁, a₂, a₃, a₄⟩, ⟨b₁, b₂, b₃, b₄⟩⟩
+    exact ⟨by linarith, by linarith, by linarith, by linarith⟩
+  · rintro ⟨h₁, h₂, h₃, h₄⟩
+    exact ⟨⟨max r.xmin s.xmin, max r.ymin s.ymin⟩,
+      ⟨le_max_left _ _, max_le hr.1.le h₂, le_max_left _ _, max_le hr.2.le h₄⟩,
+      ⟨le_max_right _ _, max_le h₁ hs.1.le, le_max_right _ _, max_le h₃ hs.2.le⟩⟩
+
+theorem intersects_interior_area_iff :
+    Intersects (interior ((r.area hr : RegularClosedRegion) : Region))
+        (interior ((s.area hs : RegularClosedRegion) : Region)) ↔
+      r.xmin < s.xmax ∧ s.xmin < r.xmax ∧ r.ymin < s.ymax ∧ s.ymin < r.ymax := by
+  rw [interior_area, interior_area]
+  constructor
+  · rintro ⟨p, ⟨a₁, a₂, a₃, a₄⟩, ⟨b₁, b₂, b₃, b₄⟩⟩
+    exact ⟨by linarith, by linarith, by linarith, by linarith⟩
+  · rintro ⟨h₁, h₂, h₃, h₄⟩
+    have hx := max_lt (lt_min hr.1 h₁) (lt_min h₂ hs.1)
+    have hy := max_lt (lt_min hr.2 h₃) (lt_min h₄ hs.2)
+    have := le_max_left r.xmin s.xmin
+    have := le_max_right r.xmin s.xmin
+    have := min_le_left r.xmax s.xmax
+    have := min_le_right r.xmax s.xmax
+    have := le_max_left r.ymin s.ymin
+    have := le_max_right r.ymin s.ymin
+    have := min_le_left r.ymax s.ymax
+    have := min_le_right r.ymax s.ymax
+    refine ⟨⟨(max r.xmin s.xmin + min r.xmax s.xmax) / 2,
+      (max r.ymin s.ymin + min r.ymax s.ymax) / 2⟩, ⟨?_, ?_, ?_, ?_⟩, ⟨?_, ?_, ?_, ?_⟩⟩ <;>
+      dsimp only <;> linarith
+
 end Rect
 
+/-- Two regions are equal exactly when each lies within the other. -/
+theorem region_eq_iff (A B : Region) : A = B ↔ Within A B ∧ Within B A :=
+  Set.Subset.antisymm_iff
+
 namespace RCC8
+
+/-- Decide an RCC8 relation between two `Rect.area`s with numeral coordinates:
+reduce it to coordinate inequalities, then evaluate them. -/
+macro "rect_rcc8" : tactic => `(tactic| (
+  simp only [Relation.holds, DC, EC, PO, EQ, TPP, NTPP, TPPi, NTPPi, Touches, ne_eq,
+    region_eq_iff, disjoint_iff_not_intersects, Rect.within_area_iff,
+    Rect.within_interior_area_iff, Rect.intersects_area_iff,
+    Rect.intersects_interior_area_iff] <;>
+  norm_num))
+
+/-- Some nonempty areas `A`, `B`, `C` have `r A B`, `s B C` and `t A C`. This
+is membership in the weak composition `r ⋄ s`, stated here so the witnesses
+do not depend on `Composition.lean`. -/
+def Realizes (r s t : Relation) : Prop :=
+  ∃ A B C : RegularClosedRegion,
+    (A : Region).Nonempty ∧ (B : Region).Nonempty ∧ (C : Region).Nonempty ∧
+    r.holds A B ∧ s.holds B C ∧ t.holds A C
+
+/-- Three rectangles witness `Realizes r s t`. -/
+theorem realizes_of_rects {r s t : Relation} (a b c : Rect)
+    (ha : a.xmin < a.xmax ∧ a.ymin < a.ymax) (hb : b.xmin < b.xmax ∧ b.ymin < b.ymax)
+    (hc : c.xmin < c.xmax ∧ c.ymin < c.ymax)
+    (h₁ : r.holds (a.area ha) (b.area hb)) (h₂ : s.holds (b.area hb) (c.area hc))
+    (h₃ : t.holds (a.area ha) (c.area hc)) : Realizes r s t :=
+  ⟨_, _, _, a.area_nonempty ha, b.area_nonempty hb, c.area_nonempty hc, h₁, h₂, h₃⟩
+
+/-- Reading a witness backwards gives a witness for the converses. -/
+theorem Realizes.converse {r s t : Relation} (h : Realizes r s t) :
+    Realizes s.converse r.converse t.converse := by
+  obtain ⟨A, B, C, hA, hB, hC, hr, hs, ht⟩ := h
+  exact ⟨C, B, A, hC, hB, hA, (s.holds_converse C B).mpr hs,
+    (r.holds_converse B A).mpr hr, (t.holds_converse C A).mpr ht⟩
 
 /-- A rectangle strictly inside another is a non-tangential proper part of it. -/
 theorem ntpp_of_rect {r s : Rect} (hr : r.xmin < r.xmax ∧ r.ymin < r.ymax)
@@ -192,6 +296,16 @@ theorem Relation.realizable (r : Relation) :
   | ntpp => exact ⟨areaN, areaA, rectN.area_nonempty hN, nA, N_A_ntpp⟩
   | tppi => exact ⟨areaA, areaT, nA, rectT.area_nonempty hT, A_T_tppi⟩
   | ntppi => exact ⟨areaA, areaN, nA, rectN.area_nonempty hN, A_N_ntppi⟩
+
+/-- `EQ` then `s` realises `s`. -/
+theorem realizes_eq_left (s : Relation) : Realizes .eq s s := by
+  obtain ⟨A, C, hA, hC, h⟩ := s.realizable
+  exact ⟨A, A, C, hA, hA, hC, rfl, h, h⟩
+
+/-- `r` then `EQ` realises `r`. -/
+theorem realizes_eq_right (r : Relation) : Realizes r .eq r := by
+  obtain ⟨A, C, hA, hC, h⟩ := r.realizable
+  exact ⟨A, C, C, hA, hC, hC, h, rfl, h⟩
 
 end RCC8
 
