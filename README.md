@@ -32,6 +32,7 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/RegularClosed.lean` | `RegularClosedRegion`, the type of areas |
 | `LeanGeospatial/NineIntersection.lean` | `exterior`, the three-part split, the nine cells, relations as cell conditions |
 | `LeanGeospatial/RCC8.lean` | The eight RCC8 base relations and the proof that exactly one holds |
+| `LeanGeospatial/RCC8Witnesses.lean` | Squares realising each RCC8 relation, used by weak composition |
 | `LeanGeospatial/Composition.lean` | Weak composition of RCC8 relations, defined and proved from the relations |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
@@ -40,6 +41,9 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/Axioms.lean` | Axiom audit of the main theorems |
+
+The library under `LeanGeospatial/` never imports `LeanGeospatial/Examples/`;
+the examples only use the library. CI checks this.
 
 ## The model
 
@@ -227,7 +231,7 @@ For weak composition:
   `s˘ ⋄ r˘`.
 - `eq_compose` and `compose_eq`: `EQ ⋄ r = {r} = r ⋄ EQ`. This needs every
   relation to occur between some pair of nonempty areas
-  (`Relation.realizable`, witnessed by the squares of `Examples/RCC8.lean`).
+  (`Relation.realizable`, witnessed by the squares of `RCC8Witnesses.lean`).
 - `ntpp_compose_ntpp`: `NTPP ⋄ NTPP = {NTPP}`. One direction is
   `ntpp_trans`, the other is three nested squares. `ntppi_compose_ntppi`
   follows from the converse law.

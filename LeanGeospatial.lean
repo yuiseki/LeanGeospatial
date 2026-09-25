@@ -5,4 +5,5 @@ import LeanGeospatial.Topology
 import LeanGeospatial.RegularClosed
 import LeanGeospatial.NineIntersection
 import LeanGeospatial.RCC8
+import LeanGeospatial.RCC8Witnesses
 import LeanGeospatial.Composition

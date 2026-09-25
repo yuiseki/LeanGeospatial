@@ -17,3 +17,8 @@ jobs:
           if grep -R -nE '\b(sorry|admit)\b' LeanGeospatial; then
             exit 1
           fi
+      - name: Library does not import Examples
+        run: |
+          if grep -rn '^import .*Examples' LeanGeospatial.lean Main.lean LeanGeospatial --include=*.lean | grep -v '^LeanGeospatial/Examples/'; then
+            exit 1
+          fi
