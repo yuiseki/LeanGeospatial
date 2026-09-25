@@ -39,3 +39,5 @@ jobs:
           .lake/build/bin/lean-geospatial-prover < samples/prover-contract.jsonl > contract.out
           test "$(grep -c . samples/prover-contract.jsonl)" -eq "$(wc -l < contract.out)"
           diff contract.out samples/prover-contract.expected.jsonl
+      - name: Prover streams many lines in constant stack
+        run: python3 scripts/prover_stream_test.py --lines 20000 --stack-kb 256

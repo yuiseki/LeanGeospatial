@@ -466,6 +466,16 @@ Known limits, kept as they are:
 
 `samples/prover-contract.jsonl` exercises this contract in CI.
 
+The prover reads its input as a stream in constant stack, so one process can
+take any number of lines. `scripts/prover_stream_test.py` generates an input
+at run time and checks the answers, their count and their order. CI runs it
+on 20,000 lines with a 256 KB stack, which catches a stack that grows per
+line; for a full stress run:
+
+```
+python3 scripts/prover_stream_test.py --lines 720000
+```
+
 ## What Lean proves
 
 These hold for every region, whatever its shape or source:
