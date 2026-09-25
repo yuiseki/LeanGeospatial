@@ -16,6 +16,7 @@ import LeanGeospatial.GeoSPARQL.Counterexamples
 import LeanGeospatial.Examples.DimensionalCells
 import LeanGeospatial.GeoSPARQL.Table2.Counterexamples
 import LeanGeospatial.SFA.Compare
+import LeanGeospatial.Examples.Prover
 
 /-!
 # Axiom audit
@@ -577,3 +578,23 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.SFA.sfaEquals_iff_jtsEquals_and' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.SFA.sfaEquals_iff_jtsEquals_and
+
+/-- info: 'Geospatial.Prover.Claim.decide_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Prover.Claim.decide_iff
+
+/-- info: 'Geospatial.Prover.Claim.holds_iff_rows' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Prover.Claim.holds_iff_rows
+
+/-- info: 'Geospatial.DE9IM.DimPattern.acceptsB_of_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.DimPattern.acceptsB_of_iff
+
+/-- info: 'Geospatial.Examples.Prover.touches_of_borderMatrix' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Prover.touches_of_borderMatrix
+
+/-- info: 'Geospatial.Examples.Prover.not_within_of_borderMatrix' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Prover.not_within_of_borderMatrix

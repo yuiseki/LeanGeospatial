@@ -27,3 +27,5 @@ import LeanGeospatial.GeoSPARQL.Table2.Kinds
 import LeanGeospatial.GeoSPARQL.Table2.Counterexamples
 import LeanGeospatial.SFA.Spec
 import LeanGeospatial.SFA.Compare
+import LeanGeospatial.Prover.DE9IMClaim
+import LeanGeospatial.ProverJSON

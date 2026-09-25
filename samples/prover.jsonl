@@ -1,0 +1,11 @@
+{"id":"rcc8-nested","facts":[{"a":"DistrictA","relation":"NTPP","b":"CityB"},{"a":"CityB","relation":"NTPP","b":"ProvinceC"}],"query":{"a":"DistrictA","b":"ProvinceC"}}
+{"id":"rcc8-touching","facts":[{"a":"ParcelA","relation":"EC","b":"RoadB"},{"a":"RoadB","relation":"EC","b":"ParcelC"}],"query":{"a":"ParcelA","b":"ParcelC"}}
+{"id":"rcc8-inconsistent","facts":[{"a":"BuildingA","relation":"NTPP","b":"LotB"},{"a":"LotB","relation":"NTPP","b":"BlockC"},{"a":"BuildingA","relation":"DC","b":"BlockC"}],"query":{"a":"BuildingA","b":"BlockC"}}
+{"id":"de9im-touches","matrix":"FF2F11212","claim":"touches"}
+{"id":"de9im-intersects","matrix":"FF2F11212","claim":"sfIntersects"}
+{"id":"de9im-within","matrix":"FF2F11212","claim":"within"}
+{"id":"de9im-disjoint","matrix":"FF2FF1212","claim":"disjoint"}
+{"id":"bad-json","facts":[
+{"id":"bad-relation","facts":[{"a":"A","relation":"NEAR","b":"B"}],"query":{"a":"A","b":"B"}}
+{"id":"bad-matrix","matrix":"FF2F1121","claim":"touches"}
+{"id":"bad-claim","matrix":"FF2F11212","claim":"equals"}

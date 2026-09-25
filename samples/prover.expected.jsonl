@@ -1,0 +1,11 @@
+{"status":"entailed","relation":"NTPP","id":"rcc8-nested"}
+{"status":"possible","relations":["DC","EC","PO","EQ","TPP","TPPi"],"id":"rcc8-touching"}
+{"status":"contradictory","id":"rcc8-inconsistent"}
+{"status":"entailed","id":"de9im-touches","claim":"touches"}
+{"status":"entailed","id":"de9im-intersects","claim":"intersects"}
+{"status":"refuted","id":"de9im-within","claim":"within"}
+{"status":"entailed","id":"de9im-disjoint","claim":"disjoint"}
+{"status":"error","id":null,"error":"malformed JSON: offset 26: unexpected end of input"}
+{"status":"error","id":"bad-relation","error":"unknown relation: NEAR"}
+{"status":"error","id":"bad-matrix","error":"not a DE-9IM matrix (9 characters of F 0 1 2): FF2F1121"}
+{"status":"error","id":"bad-claim","error":"unsupported claim: equals (supported: disjoint, intersects, touches, within, contains)"}

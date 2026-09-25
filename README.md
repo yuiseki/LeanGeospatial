@@ -62,6 +62,9 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |
 | `LeanGeospatial/Examples/DimensionalCells.lean` | One `II` cell of each value |
+| `LeanGeospatial/Prover/DE9IMClaim.lean` | Simple Features claims read off a stated DE-9IM matrix, proved exact |
+| `LeanGeospatial/ProverJSON.lean` | JSON Lines front end for `lean-geospatial-prover` (unproved glue) |
+| `LeanGeospatial/Examples/Prover.lean` | What the prover's DE-9IM answers mean, as theorems |
 | `LeanGeospatial/Examples/Validator.lean` | The validator's three cases, with what each verdict proves |
 | `LeanGeospatial/Examples/Axioms.lean` | Axiom audit of the main theorems |
 
@@ -357,6 +360,51 @@ three verdict theorems rest on the soundness half of the composition table
 and on "exactly one relation holds". `Examples/Validator.lean` proves the
 three sample cases as theorems; CI also runs the command on `samples/` and
 compares with `samples/expected.out`.
+
+## Prover (JSON Lines)
+
+`lean-geospatial-prover` reads one request per line on stdin and writes one
+response per line on stdout.
+
+```
+$ lake exe lean-geospatial-prover < samples/prover.jsonl
+```
+
+RCC8 facts and a query, answered by `Graph.check`:
+
+```json
+{"id":"case-1","facts":[{"a":"A","relation":"NTPP","b":"B"},{"a":"B","relation":"NTPP","b":"C"}],"query":{"a":"A","b":"C"}}
+{"status":"entailed","relation":"NTPP","id":"case-1"}
+```
+
+The status is `entailed` (with `relation`), `possible` (with `relations`) or
+`contradictory`, as for the validator above.
+
+A DE-9IM matrix and a Simple Features claim, answered by `Claim.decide`:
+
+```json
+{"id":"case-2","matrix":"FF2F11212","claim":"touches"}
+{"status":"entailed","id":"case-2","claim":"touches"}
+```
+
+The status is `entailed` or `refuted`. Supported claims are `disjoint`,
+`intersects`, `touches`, `within`, `contains`; `Claim.decide_iff` proves the
+answer exact for any points, lines or areas with that matrix. Equals,
+overlaps and crosses are not offered: equals has no matrix test equivalent to
+it, and the other two depend on the geometry kinds.
+
+Malformed JSON, missing fields, unknown relations, matrices that are not 9
+characters of `F 0 1 2`, and unsupported claims give `"status":"error"`.
+
+Trust boundary. The facts and the matrix are premises. Lean does not compute
+them, and it does not check that they are true of any real geometry, whether
+they come from Natural Earth, GEOS or a GeoSPARQL endpoint. What the theorems
+guarantee is that the answer follows from the premises: `entailed` means
+every model of the stated facts (or every geometry pair with the stated
+matrix) has the relation. The JSON parsing in `ProverJSON.lean` is not
+proved; it only builds the `Graph` or `Matrix9` handed to the proved
+functions. CI runs `samples/prover.jsonl` and compares with
+`samples/prover.expected.jsonl`.
 
 ## What Lean proves
 

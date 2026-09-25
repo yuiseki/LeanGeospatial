@@ -1,6 +1,6 @@
 name = "lean-geospatial"
 version = "0.1.0"
-defaultTargets = ["LeanGeospatial", "lean-geospatial"]
+defaultTargets = ["LeanGeospatial", "lean-geospatial", "lean-geospatial-prover"]
 
 [[lean_lib]]
 name = "LeanGeospatial"
@@ -9,6 +9,10 @@ globs = ["LeanGeospatial.*"]
 [[lean_exe]]
 name = "lean-geospatial"
 root = "Main"
+
+[[lean_exe]]
+name = "lean-geospatial-prover"
+root = "ProverMain"
 
 [[require]]
 name = "mathlib"

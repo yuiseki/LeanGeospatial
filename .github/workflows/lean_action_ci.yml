@@ -30,3 +30,7 @@ jobs:
         run: |
           lake build lean-geospatial
           .lake/build/bin/lean-geospatial samples/*.txt | diff - samples/expected.out
+      - name: Prover samples give the expected answers
+        run: |
+          lake build lean-geospatial-prover
+          .lake/build/bin/lean-geospatial-prover < samples/prover.jsonl | diff - samples/prover.expected.jsonl
