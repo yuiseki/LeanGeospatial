@@ -43,6 +43,10 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/DE9IM.lean` | DE-9IM patterns with `T`, `F`, `*`, read from 9-character strings |
 | `LeanGeospatial/Geometry.lean` | Points, line strings and areas with Simple Features interior, boundary, exterior |
 | `LeanGeospatial/DE9IM/Dimension.lean` | DE-9IM cell values `F`, `0`, `1`, `2` and dimensioned patterns |
+| `LeanGeospatial/GeometryFacts.lean` | Lines are closed with empty interior; arcs survive removing points; `g ⊄ h` iff `IE ≠ ∅` |
+| `LeanGeospatial/DE9IM/Values.lean` | Which cell values points, lines and areas allow |
+| `LeanGeospatial/SimpleFeatures.lean` | The eight Simple Features relations, defined from point sets |
+| `LeanGeospatial/GeoSPARQL/Table2/*.lean` | GeoSPARQL 1.1 Table 2 against those definitions |
 | `LeanGeospatial/GeoSPARQL/Spec.lean` | GeoSPARQL 1.1 Tables 2, 4, 5, 6, 8, transcribed for comparison |
 | `LeanGeospatial/GeoSPARQL/AreaArea.lean` | The tables compared with the semantics, for areas |
 | `LeanGeospatial/GeoSPARQL/Counterexamples.lean` | Areas where the Table 8 patterns fail |
@@ -238,6 +242,48 @@ Every cell has exactly one value (`existsUnique_describes`). Patterns may use
 `T F * 0 1 2`. `Examples/DimensionalCells.lean` shows one `II` cell of each
 value, including two segments crossing in a point (`0`) and two collinear
 segments overlapping in a segment (`1`).
+
+## GeoSPARQL 1.1 Table 2, points, lines and areas
+
+`DE9IM/Values.lean` checks the cell values are sensible: a cell through a
+point's interior or boundary is `F` or `0`; through a line's interior or
+boundary it is never `2`; two areas' interiors meet in `F` or `2`; and two
+lines' interiors meet in `1` exactly when the intersection contains an arc,
+in `0` when it is nonempty without one.
+
+`SimpleFeatures.lean` defines the eight relations from point sets, strata
+and interior dimensions, following the Simple Features point-set definitions,
+with no DE-9IM pattern. `GeoSPARQL/Table2/` then compares Table 2's patterns
+with them, for every combination of kinds Table 2 lists:
+
+| Relation | Kinds | Table 2 pattern ⇔ definition |
+| --- | --- | --- |
+| equals | all | pattern ⇒ `Equals` always; converse fails for P/P (points have no boundary, so the pattern never matches), for closed rings, for lines that double back, and for the whole plane; holds across kinds and for areas other than the plane |
+| disjoint | all | Table 2's entry `FF**FF****` is malformed; `FF*FF****` (Tables 3, 6) matches |
+| intersects | all | matches |
+| touches | all but P/P | matches |
+| within | all | matches |
+| contains | all | matches |
+| overlaps | A/A, L/L | matches; L/L is `II = 1` |
+| overlaps | P/P | neither can hold for single points |
+| crosses | L/L | matches; `II = 0`. Table 6's `0*T***T**` also matches |
+| crosses | L/A | matches |
+| crosses | P/L, P/A | neither can hold for single points |
+
+GEOS agrees on the equals counterexamples: it reports point-set equality for
+them while the `TFFFTFFFT` pattern fails.
+
+Patterns that single geometries cannot realise: `overlaps` P/P, `crosses`
+P/L and P/A (all need a MultiPoint), and `equals` P/P.
+
+Not yet verified, because they need multi geometries:
+
+- `overlaps` P/P and `crosses` P/L, P/A with MultiPoints;
+- the mod-2 boundary rule of MultiLineStrings, which changes boundaries and
+  so `equals`, `touches`, `within`, `overlaps`, `crosses` for lines;
+- MultiPolygon validity rules (areas here may already have several parts,
+  but are not checked against them);
+- geometry collections of mixed dimension.
 
 ## Validator
 

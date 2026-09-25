@@ -18,3 +18,10 @@ import LeanGeospatial.GeoSPARQL.AreaArea
 import LeanGeospatial.GeoSPARQL.Counterexamples
 import LeanGeospatial.Geometry
 import LeanGeospatial.DE9IM.Dimension
+import LeanGeospatial.GeometryFacts
+import LeanGeospatial.DE9IM.Values
+import LeanGeospatial.SimpleFeatures
+import LeanGeospatial.GeoSPARQL.Table2.Spec
+import LeanGeospatial.GeoSPARQL.Table2.Generic
+import LeanGeospatial.GeoSPARQL.Table2.Kinds
+import LeanGeospatial.GeoSPARQL.Table2.Counterexamples

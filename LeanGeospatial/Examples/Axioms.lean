@@ -14,6 +14,7 @@ import LeanGeospatial.Examples.PublishedTable
 import LeanGeospatial.Examples.Validator
 import LeanGeospatial.GeoSPARQL.Counterexamples
 import LeanGeospatial.Examples.DimensionalCells
+import LeanGeospatial.GeoSPARQL.Table2.Counterexamples
 
 /-!
 # Axiom audit
@@ -407,3 +408,103 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.DimensionalCells.point_point_II' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.DimensionalCells.point_point_II
+
+/-- info: 'Geospatial.DE9IM.point_value_right' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.point_value_right
+
+/-- info: 'Geospatial.DE9IM.line_value_left_ne_d2' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.line_value_left_ne_d2
+
+/-- info: 'Geospatial.DE9IM.line_value_right_ne_d2' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.line_value_right_ne_d2
+
+/-- info: 'Geospatial.DE9IM.line_line_II_cases' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.line_line_II_cases
+
+/-- info: 'Geospatial.Geometry.not_subset_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Geometry.not_subset_iff
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.disjoint_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.disjoint_iff
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.intersects_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.intersects_iff
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.touches_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.touches_iff
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.within_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.within_iff
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.contains_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.contains_iff
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.equals_of_holds' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.equals_of_holds
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.overlaps_area_area' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.overlaps_area_area
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.overlaps_line_line' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.overlaps_line_line
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.overlaps_point_point' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.overlaps_point_point
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.crosses_line_line' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.crosses_line_line
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.crosses_line_line_table6' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.crosses_line_line_table6
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.crosses_line_area' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.crosses_line_area
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.crosses_point_line' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.crosses_point_line
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.crosses_point_area' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.crosses_point_area
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.equals_iff_of_kind_ne' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.equals_iff_of_kind_ne
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.point_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.point_counterexample
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.ring_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.ring_counterexample
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.backtrack_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.backtrack_counterexample
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.equals_area_area_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.equals_area_area_iff
+
+/-- info: 'Geospatial.GeoSPARQL.Table2.univ_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.GeoSPARQL.Table2.univ_counterexample
