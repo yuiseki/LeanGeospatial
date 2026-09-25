@@ -2,6 +2,7 @@ import LeanGeospatial
 import LeanGeospatial.Examples.Administrative
 import LeanGeospatial.Examples.Intersects
 import LeanGeospatial.Examples.Measurement
+import LeanGeospatial.Examples.Touches
 
 /-!
 # Axiom audit
@@ -55,3 +56,27 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.Measurement.area_square' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.Measurement.area_square
+
+/-- info: 'Geospatial.touches_symm' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.touches_symm
+
+/-- info: 'Geospatial.Touches.inter_subset_boundary' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Touches.inter_subset_boundary
+
+/-- info: 'Geospatial.Rect.interior_toRegion' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Rect.interior_toRegion
+
+/-- info: 'Geospatial.Rect.boundary_toRegion' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Rect.boundary_toRegion
+
+/-- info: 'Geospatial.Examples.Touches.touches_distinguishes_from_intersects' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Touches.touches_distinguishes_from_intersects
+
+/-- info: 'Geospatial.Examples.Touches.intersects_not_imp_touches' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Touches.intersects_not_imp_touches

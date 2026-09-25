@@ -28,9 +28,11 @@ also greps for `sorry` and `admit`.
 | `LeanGeospatial/Point.lean` | `Point2D`, Euclidean `distance`, `midpoint` |
 | `LeanGeospatial/Region.lean` | `Region`, the four relations and their laws |
 | `LeanGeospatial/Polygon.lean` | `Polygon` (vertex data, shoelace area), `Rect` (a shape with a defined region) |
+| `LeanGeospatial/Topology.lean` | The plane's topology, `boundary`, `Touches`, interior and boundary of a `Rect` |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
 | `LeanGeospatial/Examples/Measurement.lean` | Distance and area on concrete coordinates |
+| `LeanGeospatial/Examples/Touches.lean` | Two squares that touch, and two that overlap |
 | `LeanGeospatial/Examples/Axioms.lean` | Axiom audit of the main theorems |
 
 ## The model
@@ -46,8 +48,27 @@ set operations, not postulated:
 | `Intersects A B` | `(A ∩ B).Nonempty` |
 | `Disjoint A B` | `A ∩ B = ∅` |
 
-Boundaries are not distinguished from interiors. Two regions that only touch
-along an edge therefore `Intersect`, and are not `Disjoint`.
+These four relations ignore boundaries. Two regions that only share an edge
+`Intersect`, and are not `Disjoint`.
+
+## Topology
+
+`Point2D` carries the topology it inherits from `ℝ × ℝ` through its
+coordinates, which is the usual Euclidean topology of the plane.
+`Point2D.homeomorphProd : Point2D ≃ₜ ℝ × ℝ` records this, so Mathlib's lemmas
+about products and intervals apply directly. The topological vocabulary is
+Mathlib's, not new definitions:
+
+| Name | Meaning |
+| --- | --- |
+| `interior A` | Mathlib's `interior` |
+| `closure A` | Mathlib's `closure` |
+| `boundary A` | Mathlib's `frontier`, which is `closure A \ interior A` |
+| `Touches A B` | `Intersects A B ∧ Disjoint (interior A) (interior B)` |
+
+`Touches` is the point-set definition: the regions share a point but no
+interior point. It separates "shares an edge" from "overlaps", which
+`Intersects` alone cannot.
 
 ## What Lean proves
 
@@ -62,6 +83,19 @@ These hold for every region, whatever its shape or source:
   imply `Intersects A C`. The proof is a counterexample with `A = {a}`,
   `B = {a, c}`, `C = {c}`. `Examples/Intersects.lean` gives the same failure
   with three side-by-side rectangles.
+
+For the topology:
+
+- `Rect.interior_toRegion`: the interior of a closed rectangle is the open
+  rectangle, and `Rect.boundary_toRegion` computes its boundary.
+- `touches_symm`, `Touches.intersects`, and
+  `touches_iff_of_intersects`: among intersecting regions, touching means the
+  interiors do not meet.
+- `Touches.inter_subset_boundary`: for regions equal to the closure of their
+  interior, every shared point of touching regions lies on both boundaries.
+- `Examples/Touches.lean`: `[0,2]×[0,2]` and `[2,4]×[0,2]` touch, while
+  `[0,2]×[0,2]` and `[1,3]×[0,2]` intersect without touching. Hence
+  `intersects_not_imp_touches`.
 
 With concrete coordinates it also proves numeric facts, for example that the
 distance from `(0,0)` to `(10,10)` is `10 * √2` and that the 10 × 10 square has
@@ -85,7 +119,10 @@ unsupported, and Lean cannot notice that.
 
 Other things that are not modelled yet:
 
-- Which set of points a general polygon encloses. Only `Rect` has a region.
+- Which set of points a general polygon encloses. Only `Rect` has a region,
+  and so only `Rect` has a computed interior and boundary.
+- Whether a real region is closed, or equal to the closure of its interior.
+  Lemmas that need this take it as a hypothesis.
 - Coordinate reference systems. Coordinates are plain real numbers in a flat
   plane, and `distance` is Euclidean, not a distance on the Earth.
 - Reading real data.
