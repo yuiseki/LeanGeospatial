@@ -429,7 +429,7 @@ order carries no meaning.
 | --- | --- | --- |
 | `entailed` | `relation` (RCC8) or `claim` (DE-9IM) | RCC8: every model of the facts has this relation between `a` and `b`. DE-9IM: every geometry pair with this matrix satisfies the claim |
 | `possible` | `relations` (fixed order `DC EC PO EQ TPP NTPP TPPi NTPPi`) | every model has one of these; not a claim that each occurs |
-| `contradictory` | | the facts have no model |
+| `contradictory` | | the facts have no model (found through one intermediate feature or between facts for one pair) |
 | `refuted` | `claim` | DE-9IM: no geometry pair with this matrix satisfies the claim |
 | `error` | `error` (message) | the line was not processed; nothing is claimed |
 
@@ -447,14 +447,20 @@ LeanGeospatial commit, which fixes `lean-toolchain` (Lean) and
 `lake-manifest.json` (Mathlib). `lakefile.toml`'s `version` is not updated
 per change.
 
-Known limits of the current checker, kept as they are:
+Every fact constrains its pair: facts stated between the queried pair
+narrow the answer (a stated `A NTPP B` queried as `A`, `B` is `entailed
+NTPP`), a fact stated the other way round counts as its converse, and two
+different relations stated for one pair anywhere in the graph make every
+query `contradictory`. A line with both `facts` and `matrix` is an `error`.
 
-- a fact stated directly between the queried pair only rules the answer
-  `contradictory` or not; it does not narrow `possible` (a stated `A NTPP B`
-  queried as `A`, `B` gives `possible` with all eight);
-- two different facts for the same pair are not compared: the first one is
-  used;
-- a line with both `facts` and `matrix` is read as a DE-9IM request;
+Known limits, kept as they are:
+
+- the checker is not an RCC8 satisfiability solver: it finds contradictions
+  only through the composition table along one intermediate feature and
+  between facts stated for the same pair, so a graph with no model can still
+  get `entailed` or `possible` (then vacuously true);
+- `possible` is not always the tightest set: constraints over longer paths
+  are not propagated;
 - some error messages come from the JSON library and are terse
   (`String expected` for a missing `claim`).
 

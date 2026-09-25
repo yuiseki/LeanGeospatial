@@ -67,4 +67,42 @@ theorem inconsistent_verdict : inconsistent.check "BuildingA" "BlockC" = .contra
 theorem inconsistent_has_no_model : ¬ ∃ M, inconsistent.Satisfies M :=
   Graph.check_contradictory inconsistent_verdict
 
+/-! ## Stated facts between the queried pair -/
+
+/-- A fact about the queried pair decides it. -/
+def direct : Graph := ⟨[⟨"A", .ntpp, "B"⟩]⟩
+
+theorem direct_verdict : direct.check "A" "B" = .entailed .ntpp := by decide
+
+/-- Stating the same fact twice is no contradiction. -/
+def duplicate : Graph := ⟨[⟨"A", .ntpp, "B"⟩, ⟨"A", .ntpp, "B"⟩]⟩
+
+theorem duplicate_verdict : duplicate.check "A" "B" = .entailed .ntpp := by decide
+
+/-- A fact and its converse, stated the other way round, are the same
+constraint. -/
+def converseEquivalent : Graph := ⟨[⟨"A", .tpp, "B"⟩, ⟨"B", .tppi, "A"⟩]⟩
+
+theorem converseEquivalent_verdict : converseEquivalent.check "A" "B" = .entailed .tpp := by
+  decide
+
+/-- Two different relations stated for one pair contradict each other. -/
+def conflicting : Graph := ⟨[⟨"A", .dc, "B"⟩, ⟨"A", .eq, "B"⟩]⟩
+
+theorem conflicting_verdict : conflicting.check "A" "B" = .contradictory := by decide
+
+theorem conflicting_has_no_model : ¬ ∃ M, conflicting.Satisfies M :=
+  Graph.check_contradictory conflicting_verdict
+
+/-- A contradiction between other features makes every query contradictory:
+the graph as a whole has no model. -/
+def unrelatedConflict : Graph :=
+  ⟨[⟨"A", .ntpp, "B"⟩, ⟨"X", .dc, "Y"⟩, ⟨"X", .eq, "Y"⟩]⟩
+
+theorem unrelatedConflict_verdict : unrelatedConflict.check "A" "B" = .contradictory := by
+  decide
+
+theorem unrelatedConflict_has_no_model : ¬ ∃ M, unrelatedConflict.Satisfies M :=
+  Graph.check_contradictory unrelatedConflict_verdict
+
 end Geospatial.Examples.Validator

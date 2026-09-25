@@ -12,3 +12,10 @@
 {"status":"error","id":"missing-claim","error":"String expected"}
 {"status":"error","id":"missing-query","error":"property not found: query"}
 {"status":"refuted","id":"crlf","claim":"within"}
+{"status":"entailed","relation":"NTPP","id":"direct-fact"}
+{"status":"entailed","relation":"NTPPi","id":"direct-fact-reversed-query"}
+{"status":"entailed","relation":"NTPP","id":"duplicate-fact"}
+{"status":"entailed","relation":"TPP","id":"converse-equivalent"}
+{"status":"contradictory","id":"conflicting-facts"}
+{"status":"contradictory","id":"conflict-elsewhere"}
+{"status":"error","id":"facts-and-matrix","error":"ambiguous request: has both facts (RCC8) and matrix (DE-9IM)"}

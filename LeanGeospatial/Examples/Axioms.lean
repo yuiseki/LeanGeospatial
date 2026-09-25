@@ -598,3 +598,27 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.Prover.not_within_of_borderMatrix' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.Prover.not_within_of_borderMatrix
+
+/-- info: 'Geospatial.RCC8.Graph.mem_stated' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Graph.mem_stated
+
+/-- info: 'Geospatial.RCC8.Graph.no_model_of_conflict' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Graph.no_model_of_conflict
+
+/-- info: 'Geospatial.RCC8.Graph.mem_allowed' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Graph.mem_allowed
+
+/-- info: 'Geospatial.Examples.Validator.direct_verdict' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Validator.direct_verdict
+
+/-- info: 'Geospatial.Examples.Validator.conflicting_has_no_model' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Validator.conflicting_has_no_model
+
+/-- info: 'Geospatial.Examples.Validator.unrelatedConflict_has_no_model' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Validator.unrelatedConflict_has_no_model

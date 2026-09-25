@@ -13,3 +13,10 @@
 {"id":"missing-claim","matrix":"FF2F11212"}
 {"id":"missing-query","facts":[]}
 {"id":"crlf","matrix":"FF2F11212","claim":"within"}
+{"id":"direct-fact","facts":[{"a":"A","relation":"NTPP","b":"B"}],"query":{"a":"A","b":"B"}}
+{"id":"direct-fact-reversed-query","facts":[{"a":"A","relation":"NTPP","b":"B"}],"query":{"a":"B","b":"A"}}
+{"id":"duplicate-fact","facts":[{"a":"A","relation":"NTPP","b":"B"},{"a":"A","relation":"NTPP","b":"B"}],"query":{"a":"A","b":"B"}}
+{"id":"converse-equivalent","facts":[{"a":"A","relation":"TPP","b":"B"},{"a":"B","relation":"TPPi","b":"A"}],"query":{"a":"A","b":"B"}}
+{"id":"conflicting-facts","facts":[{"a":"A","relation":"DC","b":"B"},{"a":"A","relation":"EQ","b":"B"}],"query":{"a":"A","b":"B"}}
+{"id":"conflict-elsewhere","facts":[{"a":"A","relation":"NTPP","b":"B"},{"a":"X","relation":"DC","b":"Y"},{"a":"X","relation":"EQ","b":"Y"}],"query":{"a":"A","b":"B"}}
+{"id":"facts-and-matrix","facts":[],"query":{"a":"A","b":"B"},"matrix":"FF2F11212","claim":"touches"}

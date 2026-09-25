@@ -7,22 +7,29 @@ Input: a list of facts `a r b`, where `a` and `b` are feature IDs and `r` is
 an RCC8 base relation. A *model* of the facts gives every feature a nonempty
 area so that every fact holds.
 
-For a pair of features `a`, `c`, `derived` intersects `table r s` over every
-feature `b` with a known relation `r` from `a` to `b` and `s` from `b` to `c`.
+For a pair of features `a`, `c`, the allowed relations are the intersection
+of `derived`, which intersects `table r s` over every feature `b` with a known
+relation `r` from `a` to `b` and `s` from `b` to `c`, and `stated`, which
+intersects `{r}` for every fact `a r c` and `{r˘}` for every fact `c r a`.
 `check` then gives one of three verdicts:
 
 | Verdict | Meaning | Theorem |
 | --- | --- | --- |
 | `entailed t` | only `t` is left | every model has `t` between `a` and `c` (`check_entailed`) |
 | `possible S` | several are left | every model has one of `S` (`check_possible`) |
-| `contradictory` | nothing is left, or the stated `a c` fact is not among them | no model exists (`check_contradictory`) |
+| `contradictory` | nothing is left, or two facts about one pair anywhere in the graph contradict each other | no model exists (`check_contradictory`) |
 
 The verdicts rest on `mem_table_of_mem_compose`, the soundness half of the
 composition table, and on RCC8's "exactly one relation holds".
 
-`possible` is sound but not always tight: with several intermediate features,
-constraints further away could rule out more. For a single triangle it is
-tight: every candidate has a model (`triangle_realizes`).
+The checker is sound, not complete. It finds contradictions only through the
+composition table along one intermediate feature, and between facts stated
+for the same pair (`conflict`). It is not a satisfiability solver for RCC8
+networks: a graph can have no model and still get `entailed` or `possible`
+(then vacuously true). `possible` is not always tight either: with several
+intermediate features, constraints further away could rule out more. For a
+single triangle it is tight: every candidate has a model
+(`triangle_realizes`).
 -/
 
 namespace Geospatial.RCC8
@@ -185,51 +192,105 @@ theorem eq_of_verdictOf_possible {S S' : Finset Relation} (h : verdictOf S = .po
   · cases h
     rfl
 
-/-- Whether the stated relation from `a` to `c`, if any, is allowed. -/
-def Graph.statedOk (g : Graph) (a c : FeatureId) : Bool :=
-  match g.lookup a c with
-  | some t => decide (t ∈ g.derived a c)
-  | none => true
+/-! ## Stated facts as constraints -/
 
-/-- In a model, the stated relation is always allowed. -/
-theorem Graph.statedOk_of_model {g : Graph} {M : FeatureId → RegularClosedRegion}
-    (hM : g.Satisfies M) (a c : FeatureId) : g.statedOk a c = true := by
-  unfold Graph.statedOk
-  split
-  · next t ht => exact decide_eq_true (Graph.mem_derived hM (Graph.lookup_sound hM ht))
-  · rfl
+/-- The relations the facts themselves allow between `a` and `b`: every fact
+stated between them narrows it to that relation, and every fact stated from
+`b` to `a` to its converse. Other facts leave it unconstrained. -/
+def statedFacts : List Fact → FeatureId → FeatureId → Finset Relation
+  | [], _, _ => Relation.all
+  | f :: fs, a, b =>
+    if f.a = a ∧ f.b = b then statedFacts fs a b ∩ {f.rel}
+    else if f.a = b ∧ f.b = a then statedFacts fs a b ∩ {f.rel.converse}
+    else statedFacts fs a b
 
-/-- Check the pair `a`, `c`. -/
+/-- What the stated facts allow between `a` and `b`. -/
+def Graph.stated (g : Graph) (a b : FeatureId) : Finset Relation := statedFacts g.facts a b
+
+theorem mem_statedFacts {M : FeatureId → RegularClosedRegion} (hne : ∀ x, (M x : Region).Nonempty)
+    {fs : List Fact} (hM : ∀ f ∈ fs, f.rel.holds (M f.a) (M f.b)) {a b : FeatureId}
+    {t : Relation} (ht : t.holds (M a) (M b)) : t ∈ statedFacts fs a b := by
+  induction fs with
+  | nil => exact Relation.mem_all t
+  | cons f fs ih =>
+    have hf : f.rel.holds (M f.a) (M f.b) := hM f (List.mem_cons_self _ _)
+    have ih' := ih fun f' hf' => hM f' (List.mem_cons_of_mem _ hf')
+    simp only [statedFacts]
+    split_ifs with h₁ h₂
+    · obtain ⟨rfl, rfl⟩ := h₁
+      refine Finset.mem_inter.mpr ⟨ih', Finset.mem_singleton.mpr ?_⟩
+      exact relation_unique _ _ (hne _) (hne _) ht hf
+    · obtain ⟨rfl, rfl⟩ := h₂
+      refine Finset.mem_inter.mpr ⟨ih', Finset.mem_singleton.mpr ?_⟩
+      exact relation_unique _ _ (hne _) (hne _) ht ((f.rel.holds_converse _ _).mpr hf)
+    · exact ih'
+
+/-- Whatever relation a model has between `a` and `b` is allowed by the
+stated facts. -/
+theorem Graph.mem_stated {g : Graph} {M : FeatureId → RegularClosedRegion}
+    (hM : g.Satisfies M) {a b : FeatureId} {t : Relation} (ht : t.holds (M a) (M b)) :
+    t ∈ g.stated a b :=
+  mem_statedFacts hM.1 hM.2 ht
+
+/-- Some fact's own pair is left with no relation by the stated facts: two
+facts contradict each other directly. -/
+def Graph.conflict (g : Graph) : Bool := g.facts.any fun f => decide (g.stated f.a f.b = ∅)
+
+/-- Directly contradicting facts have no model. -/
+theorem Graph.no_model_of_conflict {g : Graph} (h : g.conflict = true) :
+    ¬ ∃ M, g.Satisfies M := by
+  rintro ⟨M, hM⟩
+  obtain ⟨f, hf, hempty⟩ := List.any_eq_true.mp h
+  have hmem := Graph.mem_stated hM (hM.2 f hf)
+  rw [of_decide_eq_true hempty] at hmem
+  exact Finset.not_mem_empty _ hmem
+
+/-- The relations allowed between `a` and `c`: through every intermediate
+feature, and by the facts stated between `a` and `c` themselves. -/
+def Graph.allowed (g : Graph) (a c : FeatureId) : Finset Relation :=
+  g.derived a c ∩ g.stated a c
+
+theorem Graph.mem_allowed {g : Graph} {M : FeatureId → RegularClosedRegion}
+    (hM : g.Satisfies M) {a c : FeatureId} {t : Relation} (ht : t.holds (M a) (M c)) :
+    t ∈ g.allowed a c :=
+  Finset.mem_inter.mpr ⟨Graph.mem_derived hM ht, Graph.mem_stated hM ht⟩
+
+/-- Check the pair `a`, `c`. Directly contradicting facts anywhere in the graph
+make the whole graph contradictory. -/
 def Graph.check (g : Graph) (a c : FeatureId) : Verdict :=
-  if g.statedOk a c then verdictOf (g.derived a c) else .contradictory
+  if g.conflict then .contradictory else verdictOf (g.allowed a c)
 
 /-- A `contradictory` verdict means the facts have no model. -/
 theorem Graph.check_contradictory {g : Graph} {a c : FeatureId}
     (h : g.check a c = .contradictory) : ¬ ∃ M, g.Satisfies M := by
+  by_cases hc : g.conflict = true
+  · exact Graph.no_model_of_conflict hc
   rintro ⟨M, hM⟩
   obtain ⟨t, ht⟩ := exists_relation (M a) (M c) (hM.1 a) (hM.1 c)
   unfold Graph.check at h
-  rw [Graph.statedOk_of_model hM, if_pos rfl] at h
-  exact not_mem_of_verdictOf_contradictory h t (Graph.mem_derived hM ht)
+  rw [if_neg hc] at h
+  exact not_mem_of_verdictOf_contradictory h t (Graph.mem_allowed hM ht)
 
 /-- An `entailed t` verdict means every model has `t` from `a` to `c`. -/
 theorem Graph.check_entailed {g : Graph} {a c : FeatureId} {t : Relation}
     (h : g.check a c = .entailed t) {M : FeatureId → RegularClosedRegion}
     (hM : g.Satisfies M) : t.holds (M a) (M c) := by
   obtain ⟨t₀, ht₀⟩ := exists_relation (M a) (M c) (hM.1 a) (hM.1 c)
+  have hc : ¬ g.conflict = true := fun hc => Graph.no_model_of_conflict hc ⟨M, hM⟩
   unfold Graph.check at h
-  rw [Graph.statedOk_of_model hM, if_pos rfl] at h
-  rw [← eq_of_verdictOf_entailed h (Graph.mem_derived hM ht₀)]
+  rw [if_neg hc] at h
+  rw [← eq_of_verdictOf_entailed h (Graph.mem_allowed hM ht₀)]
   exact ht₀
 
 /-- A `possible S` verdict means every model has one of `S` from `a` to `c`. -/
 theorem Graph.check_possible {g : Graph} {a c : FeatureId} {S : Finset Relation}
     (h : g.check a c = .possible S) {M : FeatureId → RegularClosedRegion}
     (hM : g.Satisfies M) {t : Relation} (ht : t.holds (M a) (M c)) : t ∈ S := by
+  have hc : ¬ g.conflict = true := fun hc => Graph.no_model_of_conflict hc ⟨M, hM⟩
   unfold Graph.check at h
-  rw [Graph.statedOk_of_model hM, if_pos rfl] at h
+  rw [if_neg hc] at h
   rw [eq_of_verdictOf_possible h]
-  exact Graph.mem_derived hM ht
+  exact Graph.mem_allowed hM ht
 
 /-! ## A single triangle is tight -/
 

@@ -33,7 +33,8 @@ This file is glue and is not proved: it turns JSON into a `Graph` or a
 Those theorems are about the facts as given: Lean does not know whether the
 stated relations or matrix are true of any real geometry. Every problem with
 the input (malformed JSON, missing field, unknown relation, a matrix that is
-not 9 characters of `F 0 1 2`) is answered with `"status":"error"`.
+not 9 characters of `F 0 1 2`, a line with both `facts` and `matrix`) is
+answered with `"status":"error"`.
 -/
 
 namespace Geospatial.Prover
@@ -103,8 +104,12 @@ def handleLine (line : String) : Json :=
   | .error e => errorResponse Json.null s!"malformed JSON: {e}"
   | .ok j =>
     let id := (j.getObjVal? "id").toOption.getD Json.null
+    let hasMatrix := (j.getObjVal? "matrix").toOption.isSome
+    let hasFacts := (j.getObjVal? "facts").toOption.isSome
     let result :=
-      if (j.getObjVal? "matrix").toOption.isSome then handleDE9IM j else handleRCC8 j
+      if hasMatrix && hasFacts then
+        .error "ambiguous request: has both facts (RCC8) and matrix (DE-9IM)"
+      else if hasMatrix then handleDE9IM j else handleRCC8 j
     match result with
     | .ok fields => Json.mkObj (("id", id) :: fields)
     | .error e => errorResponse id e
