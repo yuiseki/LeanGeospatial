@@ -479,6 +479,8 @@ entry is realised in `α` (`rcc8Complete_iff_table_subset`).
 | Any nonempty open subset of the plane, such as a disk or the plane without a point | yes | `rcc8Complete_of_isOpen` |
 | Any nonempty Hausdorff 2-manifold, such as the sphere | yes | `rcc8Complete_of_chartedSpace` |
 | The real line `ℝ` | yes | `rcc8Complete_real` |
+| A complete space times any nonempty space, such as `ℝ × Bool` | yes | `RCC8Complete.prod_right`, `RCC8Complete.prod_left` |
+| Euclidean space of every dimension from one up, such as `EuclideanSpace ℝ (Fin 3)` | yes | `rcc8Complete_euclideanSpace`, `rcc8Complete_euclideanSpace3` |
 
 Weak composition is a topological invariant (`compose_eq_of_homeomorph`):
 homeomorphic spaces have the same table. A discrete space fails because its
@@ -502,6 +504,15 @@ cells (`data/line_witnesses.tsv`), and Lean checks all 193 by `decide`
 (`lineWitness_ok`), which gives `rcc8Complete_real`. The witnesses use
 disconnected areas: with intervals alone the search finds none for four
 entries, such as three areas that touch one another pairwise.
+
+Products carry completeness. For an area `A` of `α` and a nonempty `β`,
+`A ×ˢ univ` is an area of `α × β` whose interior is `interior A ×ˢ univ`, so
+every relation is read off the first factor and every configuration of `α`
+reappears in `α × β` (`RCC8Complete.prod_right`). The factor must be the whole
+of `β`: with a bounded factor such as `[0, 1]`, its boundary would break
+`NTPP`. From the line, induction on the dimension gives every Euclidean space
+(`rcc8Complete_euclideanSpace`), space itself included, and the plane a second
+time without rectangles.
 
 `scripts/gen_rcc8_table.py` searches for the rectangles and writes the
 generated files; `data/rcc8_witnesses.tsv` lists them one per line. The script
@@ -865,6 +876,8 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Line/Cells.lean` | Areas of the line made of unit cells; their relations as conditions on integer sets |
 | `LeanGeospatial/Line/Witnesses.lean` | Generated: three sets of cells for each table entry |
 | `LeanGeospatial/Line.lean` | The table is complete on the real line |
+| `LeanGeospatial/CompositionTable/Product.lean` | `A ×ˢ univ` keeps every relation; completeness passes to products with nonempty spaces |
+| `LeanGeospatial/Euclidean.lean` | The table is complete in Euclidean space of every dimension from one up |
 | `LeanGeospatial/NineIntersection.lean` | `exterior`, the three-part split, the nine cells, relations as cell conditions |
 | `LeanGeospatial/RCC8.lean` | The eight RCC8 base relations and the proof that exactly one holds |
 | `LeanGeospatial/RCC8Witnesses.lean` | Squares realising each RCC8 relation, used by weak composition |
@@ -898,6 +911,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/Homeomorph.lean` | The example areas keep their Touches, RCC8 and DE-9IM relations after a slide, a reflection, or any homeomorphism |
 | `LeanGeospatial/Examples/GenericSpace.lean` | Areas and RCC8 on the real line, in discrete spaces (where the table is sound but not complete), and carried from the plane into `ℝ × ℝ` |
 | `LeanGeospatial/Examples/Manifold.lean` | The table is complete on the sphere, the open unit disk and the punctured plane |
+| `LeanGeospatial/Examples/Products.lean` | The plane from the line, space, every dimension, and two parallel lines `ℝ × Bool` |
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |

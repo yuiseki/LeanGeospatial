@@ -15,6 +15,8 @@ import LeanGeospatial.Manifold
 import LeanGeospatial.Line.Cells
 import LeanGeospatial.Line.Witnesses
 import LeanGeospatial.Line
+import LeanGeospatial.CompositionTable.Product
+import LeanGeospatial.Euclidean
 import LeanGeospatial.Validator
 import LeanGeospatial.ValidatorText
 import LeanGeospatial.Connected
