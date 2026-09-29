@@ -740,3 +740,15 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.Manifold.sphere_rcc8Complete' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.Manifold.sphere_rcc8Complete
+
+/-- info: 'Geospatial.rcc8Complete_real' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.rcc8Complete_real
+
+/-- info: 'Geospatial.Line.cellRel_holds' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Line.cellRel_holds
+
+/-- info: 'Geospatial.Line.lineWitness_ok' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Line.lineWitness_ok

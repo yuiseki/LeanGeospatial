@@ -1,6 +1,7 @@
 import LeanGeospatial.CompositionTable
 import LeanGeospatial.Homeomorph
 import LeanGeospatial.Examples.Touches
+import LeanGeospatial.Line
 
 /-!
 # Areas and RCC8 beyond the plane
@@ -92,6 +93,9 @@ example : RCC8Complete Point2D := rcc8Complete_plane
 /-- `ℝ × ℝ` is homeomorphic to the plane, so the table is complete there too. -/
 example : RCC8Complete (ℝ × ℝ) :=
   (RCC8Complete.homeomorph Point2D.homeomorphProd).mp rcc8Complete_plane
+
+/-- The real line is complete too, with areas made of unit cells. -/
+example : RCC8Complete ℝ := rcc8Complete_real
 
 /-- `Bool` is not. -/
 example : ¬ RCC8Complete Bool := not_rcc8Complete_bool

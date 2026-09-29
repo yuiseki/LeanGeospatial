@@ -478,6 +478,7 @@ entry is realised in `α` (`rcc8Complete_iff_table_subset`).
 | Any Hausdorff space containing an open copy of the plane | yes | `rcc8Complete_of_isOpenEmbedding` |
 | Any nonempty open subset of the plane, such as a disk or the plane without a point | yes | `rcc8Complete_of_isOpen` |
 | Any nonempty Hausdorff 2-manifold, such as the sphere | yes | `rcc8Complete_of_chartedSpace` |
+| The real line `ℝ` | yes | `rcc8Complete_real` |
 
 Weak composition is a topological invariant (`compose_eq_of_homeomorph`):
 homeomorphic spaces have the same table. A discrete space fails because its
@@ -491,6 +492,16 @@ open copy of the plane anywhere in a Hausdorff space is enough. A 2-manifold
 has one inside any chart: a small disk, which is homeomorphic to the plane.
 `Examples/Manifold.lean` applies this to the sphere, the unit disk and the
 punctured plane.
+
+The line has no open copy of the plane, and is complete for another reason.
+An area made of unit cells `[i, i + 1]`, `i ∈ S`, for a finite set of integers
+`S`, relates to another by conditions on the integer sets alone
+(`Line/Cells.lean`), so `cellRel S T` computes the relation. For every entry
+of the table `scripts/gen_line_witnesses.py` finds three sets of at most five
+cells (`data/line_witnesses.tsv`), and Lean checks all 193 by `decide`
+(`lineWitness_ok`), which gives `rcc8Complete_real`. The witnesses use
+disconnected areas: with intervals alone the search finds none for four
+entries, such as three areas that touch one another pairwise.
 
 `scripts/gen_rcc8_table.py` searches for the rectangles and writes the
 generated files; `data/rcc8_witnesses.tsv` lists them one per line. The script
@@ -851,6 +862,9 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Homeomorph.lean` | Homeomorphisms preserve touching, the RCC8 relations and the DE-9IM matrix |
 | `LeanGeospatial/CompositionTable/Embedding.lean` | Open embeddings keep relations between compact areas; completeness is local |
 | `LeanGeospatial/Manifold.lean` | Nonempty Hausdorff 2-manifolds and open subsets of the plane are complete |
+| `LeanGeospatial/Line/Cells.lean` | Areas of the line made of unit cells; their relations as conditions on integer sets |
+| `LeanGeospatial/Line/Witnesses.lean` | Generated: three sets of cells for each table entry |
+| `LeanGeospatial/Line.lean` | The table is complete on the real line |
 | `LeanGeospatial/NineIntersection.lean` | `exterior`, the three-part split, the nine cells, relations as cell conditions |
 | `LeanGeospatial/RCC8.lean` | The eight RCC8 base relations and the proof that exactly one holds |
 | `LeanGeospatial/RCC8Witnesses.lean` | Squares realising each RCC8 relation, used by weak composition |

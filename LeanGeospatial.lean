@@ -12,6 +12,9 @@ import LeanGeospatial.CompositionTable
 import LeanGeospatial.CompositionTable.Cells
 import LeanGeospatial.CompositionTable.Embedding
 import LeanGeospatial.Manifold
+import LeanGeospatial.Line.Cells
+import LeanGeospatial.Line.Witnesses
+import LeanGeospatial.Line
 import LeanGeospatial.Validator
 import LeanGeospatial.ValidatorText
 import LeanGeospatial.Connected

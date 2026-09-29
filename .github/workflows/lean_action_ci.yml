@@ -25,6 +25,7 @@ jobs:
       - name: Generated composition-table files are up to date
         run: |
           python3 scripts/gen_rcc8_table.py
+          python3 scripts/gen_line_witnesses.py
           git diff --exit-code
       - name: Validator samples give the expected verdicts
         run: |
