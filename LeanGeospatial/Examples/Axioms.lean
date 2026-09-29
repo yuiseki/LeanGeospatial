@@ -12,6 +12,7 @@ import LeanGeospatial.Examples.Homeomorph
 import LeanGeospatial.Examples.GenericSpace
 import LeanGeospatial.Examples.Manifold
 import LeanGeospatial.Examples.Products
+import LeanGeospatial.Examples.ConnectedComplete
 import LeanGeospatial.Composition
 import LeanGeospatial.CompositionTable.Cells
 import LeanGeospatial.Examples.PublishedTable
@@ -769,3 +770,27 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.rcc8Complete_euclideanSpace3' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.rcc8Complete_euclideanSpace3
+
+/-- info: 'Geospatial.not_ec_triangle_real' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.not_ec_triangle_real
+
+/-- info: 'Geospatial.not_rcc8ConnectedComplete_real' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.not_rcc8ConnectedComplete_real
+
+/-- info: 'Geospatial.rcc8ConnectedComplete_plane' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.rcc8ConnectedComplete_plane
+
+/-- info: 'Geospatial.RCC8ConnectedComplete.homeomorph' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8ConnectedComplete.homeomorph
+
+/-- info: 'Geospatial.RCC8ConnectedComplete.prod_right' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8ConnectedComplete.prod_right
+
+/-- info: 'Geospatial.rcc8ConnectedComplete_euclideanSpace3' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.rcc8ConnectedComplete_euclideanSpace3

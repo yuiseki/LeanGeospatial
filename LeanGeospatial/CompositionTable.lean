@@ -37,7 +37,7 @@ namespace Geospatial.RCC8
 
 /-- A compact witness is a witness. -/
 theorem Realizes.mem_compose {r s t : Relation} (h : Realizes r s t) : t ∈ r ⋄ s :=
-  let ⟨A, B, C, _, _, _, hA, hB, hC, hr, hs, ht⟩ := h
+  let ⟨A, B, C, _, _, _, _, _, _, hA, hB, hC, hr, hs, ht⟩ := h
   ⟨A, B, C, hA, hB, hC, hr, hs, ht⟩
 
 /-- The weak composition of two base relations is the computed table. -/

@@ -15,9 +15,10 @@ holds between the areas, so every entry is realised
 The witnesses need disconnected areas. With intervals alone the generator
 finds no witness for four entries, `EC ⋄ EC ∋ EC`, `EC ⋄ EC ∋ PO`,
 `EC ⋄ PO ∋ EC` and `PO ⋄ EC ∋ EC`: three intervals cannot, for instance, touch
-one another pairwise. Unions of cells fill those entries. (That intervals do
-not suffice is what the search observed up to eight cells; it is not a
-theorem here.)
+one another pairwise. Unions of cells fill those entries. For
+`EC ⋄ EC ∋ EC` that intervals cannot do it is a theorem,
+`not_ec_triangle_real` in `ConnectedComplete.lean`; for the other three it is
+what the search observed up to eight cells.
 -/
 
 namespace Geospatial.Line

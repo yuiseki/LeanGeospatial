@@ -164,6 +164,13 @@ theorem isClosed_toRegion (r : Rect) : IsClosed r.toRegion := by
   rw [toRegion_eq_preimage]
   exact (isClosed_Icc.prod isClosed_Icc).preimage Point2D.homeomorphProd.continuous
 
+/-- A closed rectangle with its bounds in order is connected. -/
+theorem isConnected_toRegion (r : Rect) (hx : r.xmin ≤ r.xmax) (hy : r.ymin ≤ r.ymax) :
+    IsConnected r.toRegion := by
+  rw [toRegion_eq_preimage]
+  exact Point2D.homeomorphProd.isConnected_preimage.mpr
+    ((isConnected_Icc hx).prod (isConnected_Icc hy))
+
 /-- A closed rectangle is compact. -/
 theorem isCompact_toRegion (r : Rect) : IsCompact r.toRegion := by
   rw [toRegion_eq_preimage]

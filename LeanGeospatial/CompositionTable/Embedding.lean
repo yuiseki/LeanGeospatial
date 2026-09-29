@@ -106,7 +106,7 @@ table: the plane's compact witnesses carry over. -/
 theorem rcc8Complete_of_isOpenEmbedding [T2Space α] {f : Point2D → α}
     (hf : IsOpenEmbedding f) : RCC8Complete α := by
   refine rcc8Complete_iff_table_subset.mpr fun r s t ht => ?_
-  obtain ⟨A, B, C, kA, kB, kC, hA, hB, hC, hr, hs, ht'⟩ :=
+  obtain ⟨A, B, C, kA, kB, kC, -, -, -, hA, hB, hC, hr, hs, ht'⟩ :=
     realizes_of_mem_table r s t (Finset.mem_coe.mp ht)
   exact ⟨A.mapCompact hf kA, B.mapCompact hf kB, C.mapCompact hf kC,
     hA.image f, hB.image f, hC.image f,

@@ -514,6 +514,30 @@ of `β`: with a bounded factor such as `[0, 1]`, its boundary would break
 (`rcc8Complete_euclideanSpace`), space itself included, and the plane a second
 time without rectangles.
 
+Asking for connected areas gives a sharper property, which sees dimension:
+
+```lean
+def RCC8ConnectedComplete (α : Type*) [TopologicalSpace α] : Prop :=
+  ∀ r s, composeConnected α r s = table r s
+```
+
+where `composeConnected` is weak composition over connected areas.
+
+| Space | Complete for connected areas? | Theorem |
+| --- | --- | --- |
+| The line `ℝ` | no | `not_rcc8ConnectedComplete_real` |
+| The plane `Point2D` | yes | `rcc8ConnectedComplete_plane` |
+| A complete space times a connected space | yes | `RCC8ConnectedComplete.prod_right`, `RCC8ConnectedComplete.prod_left` |
+| Euclidean space of every dimension from two up, such as `EuclideanSpace ℝ (Fin 3)` | yes | `rcc8ConnectedComplete_euclideanSpace`, `rcc8ConnectedComplete_euclideanSpace3` |
+
+The line fails because its connected areas are intervals, and no three
+intervals touch one another pairwise (`not_ec_triangle_real`): of three points
+inside them, the middle one's interval lies between the other two, so the outer
+intervals could only meet by reaching across it. So `EC ⋄ EC ∋ EC` has no
+connected witness on the line, although it has one made of unit cells. The
+property implies `RCC8Complete` and is a topological invariant
+(`RCC8ConnectedComplete.homeomorph`).
+
 `scripts/gen_rcc8_table.py` searches for the rectangles and writes the
 generated files; `data/rcc8_witnesses.tsv` lists them one per line. The script
 is not trusted: Lean checks every witness, and CI checks that the generated
@@ -878,6 +902,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Line.lean` | The table is complete on the real line |
 | `LeanGeospatial/CompositionTable/Product.lean` | `A ×ˢ univ` keeps every relation; completeness passes to products with nonempty spaces |
 | `LeanGeospatial/Euclidean.lean` | The table is complete in Euclidean space of every dimension from one up |
+| `LeanGeospatial/ConnectedComplete.lean` | Completeness with connected areas: not on the line, yes in the plane and in every dimension from two |
 | `LeanGeospatial/NineIntersection.lean` | `exterior`, the three-part split, the nine cells, relations as cell conditions |
 | `LeanGeospatial/RCC8.lean` | The eight RCC8 base relations and the proof that exactly one holds |
 | `LeanGeospatial/RCC8Witnesses.lean` | Squares realising each RCC8 relation, used by weak composition |
@@ -912,6 +937,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/GenericSpace.lean` | Areas and RCC8 on the real line, in discrete spaces (where the table is sound but not complete), and carried from the plane into `ℝ × ℝ` |
 | `LeanGeospatial/Examples/Manifold.lean` | The table is complete on the sphere, the open unit disk and the punctured plane |
 | `LeanGeospatial/Examples/Products.lean` | The plane from the line, space, every dimension, and two parallel lines `ℝ × Bool` |
+| `LeanGeospatial/Examples/ConnectedComplete.lean` | The line is complete but not for connected areas; the plane and space are |
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |
