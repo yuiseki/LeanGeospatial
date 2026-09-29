@@ -268,7 +268,7 @@ theorem Graph.check_contradictory {g : Graph} {a c : FeatureId}
   rintro ⟨M, hM⟩
   obtain ⟨t, ht⟩ := exists_relation (M a) (M c) (hM.1 a) (hM.1 c)
   unfold Graph.check at h
-  rw [if_neg hc] at h
+  rw [ite_eq_right hc] at h
   exact not_mem_of_verdictOf_contradictory h t (Graph.mem_allowed hM ht)
 
 /-- An `entailed t` verdict means every model has `t` from `a` to `c`. -/
@@ -278,7 +278,7 @@ theorem Graph.check_entailed {g : Graph} {a c : FeatureId} {t : Relation}
   obtain ⟨t₀, ht₀⟩ := exists_relation (M a) (M c) (hM.1 a) (hM.1 c)
   have hc : ¬ g.conflict = true := fun hc => Graph.no_model_of_conflict hc ⟨M, hM⟩
   unfold Graph.check at h
-  rw [if_neg hc] at h
+  rw [ite_eq_right hc] at h
   rw [← eq_of_verdictOf_entailed h (Graph.mem_allowed hM ht₀)]
   exact ht₀
 
@@ -288,7 +288,7 @@ theorem Graph.check_possible {g : Graph} {a c : FeatureId} {S : Finset Relation}
     (hM : g.Satisfies M) {t : Relation} (ht : t.holds (M a) (M c)) : t ∈ S := by
   have hc : ¬ g.conflict = true := fun hc => Graph.no_model_of_conflict hc ⟨M, hM⟩
   unfold Graph.check at h
-  rw [if_neg hc] at h
+  rw [ite_eq_right hc] at h
   rw [eq_of_verdictOf_possible h]
   exact Graph.mem_allowed hM ht
 

@@ -132,7 +132,7 @@ theorem toRegion_eq_preimage (r : Rect) :
       Point2D.homeomorphProd ⁻¹' (Set.Icc r.xmin r.xmax ×ˢ Set.Icc r.ymin r.ymax) := by
   ext p
   simp only [toRegion, Set.mem_preimage, Point2D.homeomorphProd_apply, Set.mem_prod,
-    Set.mem_Icc, Set.mem_setOf_eq]
+    Set.mem_Icc, Set.mem_ofPred_eq]
   tauto
 
 theorem openRegion_eq_preimage (r : Rect) :
@@ -140,7 +140,7 @@ theorem openRegion_eq_preimage (r : Rect) :
       Point2D.homeomorphProd ⁻¹' (Set.Ioo r.xmin r.xmax ×ˢ Set.Ioo r.ymin r.ymax) := by
   ext p
   simp only [openRegion, Set.mem_preimage, Point2D.homeomorphProd_apply, Set.mem_prod,
-    Set.mem_Ioo, Set.mem_setOf_eq]
+    Set.mem_Ioo, Set.mem_ofPred_eq]
   tauto
 
 theorem isClosed_toRegion (r : Rect) : IsClosed r.toRegion := by

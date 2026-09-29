@@ -236,42 +236,42 @@ theorem classify_eq_of_holds (hA : (A : Region).Nonempty) (hB : (B : Region).Non
   obtain ⟨hDC, hEC, hOC, hPO, hQO, hNP, hNQ, hEQ, hEQ'⟩ := facts A B hA hB
   have nn : ∀ {P : Prop}, P → ¬ ¬ P := fun h h' => h' h
   cases r with
-  | dc => exact if_pos (hDC.mp hr)
+  | dc => exact ite_eq_left (hDC.mp hr)
   | ec =>
     obtain ⟨hc, ho⟩ := hEC.mp hr
-    rw [classify, if_neg (nn hc), if_pos ho]
+    rw [classify, ite_eq_right (nn hc), ite_eq_left ho]
   | eq =>
     change (A : Region) = B at hr
     have ho := hPO (hEQ.mp hr).1
-    rw [classify, if_neg (nn (hOC ho)), if_neg (nn ho), if_pos hr]
+    rw [classify, ite_eq_right (nn (hOC ho)), ite_eq_right (nn ho), ite_eq_left hr]
   | tpp =>
     obtain ⟨hp, he, hn⟩ := hr
     have ho := hPO hp
-    rw [classify, if_neg (nn (hOC ho)), if_neg (nn ho), if_neg he, if_pos hp, if_neg hn]
+    rw [classify, ite_eq_right (nn (hOC ho)), ite_eq_right (nn ho), ite_eq_right he, ite_eq_left hp, ite_eq_right hn]
   | ntpp =>
     obtain ⟨hn, he⟩ := hr
     have hp := hNP hn
     have ho := hPO hp
-    rw [classify, if_neg (nn (hOC ho)), if_neg (nn ho), if_neg he, if_pos hp, if_pos hn]
+    rw [classify, ite_eq_right (nn (hOC ho)), ite_eq_right (nn ho), ite_eq_right he, ite_eq_left hp, ite_eq_left hn]
   | tppi =>
     obtain ⟨hq, he', hn⟩ := hr
     have he : (A : Region) ≠ B := fun h => he' (hEQ'.mpr h)
     have hp : ¬ Within (A : Region) B := fun hp => he (hEQ.mpr ⟨hp, hq⟩)
     have ho := hQO hq
-    rw [classify, if_neg (nn (hOC ho)), if_neg (nn ho), if_neg he, if_neg hp, if_pos hq,
-      if_neg hn]
+    rw [classify, ite_eq_right (nn (hOC ho)), ite_eq_right (nn ho), ite_eq_right he, ite_eq_right hp, ite_eq_left hq,
+      ite_eq_right hn]
   | ntppi =>
     obtain ⟨hn, he'⟩ := hr
     have hq := hNQ hn
     have he : (A : Region) ≠ B := fun h => he' (hEQ'.mpr h)
     have hp : ¬ Within (A : Region) B := fun hp => he (hEQ.mpr ⟨hp, hq⟩)
     have ho := hQO hq
-    rw [classify, if_neg (nn (hOC ho)), if_neg (nn ho), if_neg he, if_neg hp, if_pos hq,
-      if_pos hn]
+    rw [classify, ite_eq_right (nn (hOC ho)), ite_eq_right (nn ho), ite_eq_right he, ite_eq_right hp, ite_eq_left hq,
+      ite_eq_left hn]
   | po =>
     obtain ⟨ho, hp, hq⟩ := hr
     have he : (A : Region) ≠ B := fun h => hp (hEQ.mp h).1
-    rw [classify, if_neg (nn (hOC ho)), if_neg (nn ho), if_neg he, if_neg hp, if_neg hq]
+    rw [classify, ite_eq_right (nn (hOC ho)), ite_eq_right (nn ho), ite_eq_right he, ite_eq_right hp, ite_eq_right hq]
 
 /-- Pairwise disjoint: at most one base relation holds. -/
 theorem relation_unique (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty)

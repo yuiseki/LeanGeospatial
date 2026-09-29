@@ -112,7 +112,7 @@ theorem seg_carrier (a b : Point2D) (h : a ≠ b) : (seg a b h).carrier = segmen
 
 theorem seg_boundary (a b : Point2D) (h : a ≠ b) : (seg a b h).boundary = {a, b} := by
   have : ¬ (seg a b h).IsRing := h
-  simp only [boundary, this, if_false]
+  simp only [boundary, this, ite_false]
   rfl
 
 theorem seg_interior (a b : Point2D) (h : a ≠ b) :

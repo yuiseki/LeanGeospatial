@@ -155,7 +155,7 @@ theorem segment_not_regularClosed :
   rw [hempty, closure_empty]
   intro h
   have hp : (⟨0, 0⟩ : Point2D) ∈ (⟨0, 0, 0, 1⟩ : Rect).toRegion := by
-    simp only [toRegion, Set.mem_setOf_eq]
+    simp only [toRegion, Set.mem_ofPred_eq]
     norm_num
   rw [← h] at hp
   exact hp

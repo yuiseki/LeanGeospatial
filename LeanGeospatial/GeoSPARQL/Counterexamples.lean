@@ -138,7 +138,7 @@ theorem ec_counterexample :
   obtain ⟨⟨b₁, b₂, b₃, b₄⟩, hnot⟩ := hp
   apply hpE
   rw [mem_frame]
-  simp only [s1, Rect.openRegion, Set.mem_setOf_eq, not_and_or, not_lt] at b₁ b₂ b₃ b₄ hnot
+  simp only [s1, Rect.openRegion, Set.mem_ofPred_eq, not_and_or, not_lt] at b₁ b₂ b₃ b₄ hnot
   rcases hnot with h | h | h | h
   · exact Or.inr (Or.inl ⟨by linarith, by linarith, b₃, b₄⟩)
   · exact Or.inr (Or.inr ⟨h, by linarith, b₃, b₄⟩)

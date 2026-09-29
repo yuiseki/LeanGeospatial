@@ -31,12 +31,12 @@ def stripC : Rect := ⟨3, 5, 0, 1⟩
 
 theorem A_intersects_B : Intersects stripA.toRegion stripB.toRegion :=
   ⟨⟨3 / 2, 0⟩, by
-    simp only [Set.mem_inter_iff, Rect.toRegion, stripA, stripB, Set.mem_setOf_eq]
+    simp only [Set.mem_inter_iff, Rect.toRegion, stripA, stripB, Set.mem_ofPred_eq]
     norm_num⟩
 
 theorem B_intersects_C : Intersects stripB.toRegion stripC.toRegion :=
   ⟨⟨7 / 2, 0⟩, by
-    simp only [Set.mem_inter_iff, Rect.toRegion, stripB, stripC, Set.mem_setOf_eq]
+    simp only [Set.mem_inter_iff, Rect.toRegion, stripB, stripC, Set.mem_ofPred_eq]
     norm_num⟩
 
 theorem A_disjoint_C : Geospatial.Disjoint stripA.toRegion stripC.toRegion := by

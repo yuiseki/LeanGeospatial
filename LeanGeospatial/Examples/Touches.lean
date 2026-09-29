@@ -37,7 +37,7 @@ def edgePoint : Point2D := ⟨2, 1⟩
 theorem A_intersects_B : Intersects squareA.toRegion squareB.toRegion :=
   ⟨edgePoint, by
     simp only [Set.mem_inter_iff, Rect.toRegion, squareA, squareB, edgePoint,
-      Set.mem_setOf_eq]
+      Set.mem_ofPred_eq]
     norm_num⟩
 
 theorem interiors_A_B_disjoint :
@@ -57,7 +57,7 @@ theorem edgePoint_on_both_boundaries :
     edgePoint ∈ boundary squareA.toRegion ∩ boundary squareB.toRegion := by
   rw [Rect.boundary_toRegion, Rect.boundary_toRegion]
   simp only [Set.mem_inter_iff, Set.mem_sdiff, Rect.toRegion, Rect.openRegion,
-    squareA, squareB, edgePoint, Set.mem_setOf_eq]
+    squareA, squareB, edgePoint, Set.mem_ofPred_eq]
   norm_num
 
 /-- Squares A and B as areas. Building them needs only positive width and
@@ -86,7 +86,7 @@ def overlapPoint : Point2D := ⟨3 / 2, 1⟩
 theorem A_intersects_C : Intersects squareA.toRegion squareC.toRegion :=
   ⟨overlapPoint, by
     simp only [Set.mem_inter_iff, Rect.toRegion, squareA, squareC, overlapPoint,
-      Set.mem_setOf_eq]
+      Set.mem_ofPred_eq]
     norm_num⟩
 
 theorem interiors_A_C_intersect :
@@ -94,7 +94,7 @@ theorem interiors_A_C_intersect :
   ⟨overlapPoint, by
     rw [Rect.interior_toRegion, Rect.interior_toRegion]
     simp only [Set.mem_inter_iff, Rect.openRegion, squareA, squareC, overlapPoint,
-      Set.mem_setOf_eq]
+      Set.mem_ofPred_eq]
     norm_num⟩
 
 /-- A and C intersect but do not touch: they overlap. -/

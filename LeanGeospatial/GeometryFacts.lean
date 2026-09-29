@@ -39,7 +39,7 @@ theorem Point2D.lerp_injective {a b : Point2D} (h : a ≠ b) : Function.Injectiv
 
 theorem segment_eq_image (a b : Point2D) : segment a b = a.lerp b '' Set.Icc 0 1 := by
   ext p
-  simp only [segment, Set.mem_setOf_eq, Set.mem_image]
+  simp only [segment, Set.mem_ofPred_eq, Set.mem_image]
   exact ⟨fun ⟨t, ht, h⟩ => ⟨t, ht, h.symm⟩, fun ⟨t, ht, h⟩ => ⟨t, ht, h.symm⟩⟩
 
 theorem isClosed_segment (a b : Point2D) : IsClosed (segment a b) := by
@@ -74,7 +74,7 @@ theorem interior_line_eq_empty (a u : Point2D) (hu : u.x ≠ 0 ∨ u.y ≠ 0) :
     rw [Metric.mem_ball, Real.dist_eq, sub_zero, abs_of_pos (by linarith)]
     linarith))
   have hpL : p ∈ L := interior_subset hp
-  simp only [L, Set.mem_setOf_eq, g] at hmem hpL
+  simp only [L, Set.mem_ofPred_eq, g] at hmem hpL
   have hsq : ε / 2 * (u.x ^ 2 + u.y ^ 2) = 0 := by linear_combination hmem - hpL
   have hpos : 0 < u.x ^ 2 + u.y ^ 2 := by
     rcases hu with h | h
@@ -96,7 +96,7 @@ theorem interior_segment (a b : Point2D) (h : a ≠ b) : interior (segment a b) 
   refine (interior_mono ?_).trans
     (interior_line_eq_empty a ⟨b.x - a.x, b.y - a.y⟩ hu).subset
   rintro p ⟨t, -, rfl⟩
-  simp only [Set.mem_setOf_eq, Point2D.lerp]
+  simp only [Set.mem_ofPred_eq, Point2D.lerp]
   ring
 
 /-- A finite union of closed sets with empty interior has empty interior. -/

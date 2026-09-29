@@ -132,7 +132,7 @@ theorem backtrack_counterexample :
         have hnr : ¬ backtrack.IsRing := by
           simp [LineString.IsRing, LineString.start, LineString.finish, backtrack,
             Point2D.ext_iff]
-        simp only [LineString.boundary, hnr, if_false]
+        simp only [LineString.boundary, hnr, ite_false]
         right
         rfl
     rw [hIB] at hmem

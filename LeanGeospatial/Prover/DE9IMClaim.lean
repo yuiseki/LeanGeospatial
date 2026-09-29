@@ -263,11 +263,11 @@ theorem of_interior_eq (g : Geometry) {e : Bool} (he : e = true ↔ g.carrier = 
     DimValue.of (g.stratum .I) = interiorValue g.kind e := by
   unfold interiorValue
   by_cases hg : g.carrier = ∅
-  · rw [if_pos (he.mpr hg)]
+  · rw [ite_eq_left (he.mpr hg)]
     exact (DimValue.of_eq_F_iff _).mpr
       (Set.eq_empty_of_subset_empty (hg ▸ g.stratum_I_subset))
   · have : e ≠ true := fun h' => hg (he.mp h')
-    rw [if_neg this, kind_dimValue]
+    rw [ite_eq_right this, kind_dimValue]
     exact Geometry.of_stratum_I g (Set.nonempty_iff_ne_empty.mpr hg)
 
 theorem DimValue.of_ne_F_iff (S : Region) : DimValue.of S ≠ .F ↔ S.Nonempty := by
@@ -310,8 +310,8 @@ theorem Claim.decide_iff (c : Claim) {g h : Geometry} {k k' : Kind} {m : Matrix9
   case crosses =>
     simp only [Claim.decide]
     rw [← hIa, ← hIb]
-    simp only [Claim.holds, SF.Crosses, SF.II, Bool.and_eq_true, bne_iff_ne, decide_eq_true_eq,
-      Matrix9.of, matrix, DimValue.of_ne_F_iff, hIE, hEI]
+    simp only [Bool.and_eq_true, bne_iff_ne, decide_eq_true_eq]
+    simp only [Claim.holds, SF.Crosses, SF.II, Matrix9.of, matrix, DimValue.of_ne_F_iff, hIE, hEI]
     tauto
   all_goals
     rw [Claim.holds_iff_rows _ rfl]

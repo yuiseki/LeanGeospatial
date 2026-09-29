@@ -50,7 +50,8 @@ theorem squares_II : matrix (.area sqA) (.area sqC) .I .I = .d2 := by
 
 def o : Point2D := ⟨0, 0⟩
 def e2 : Point2D := ⟨2, 0⟩
-def lineX : LineString := LineString.seg o e2 (by simp [o, e2])
+theorem o_ne_e2 : o ≠ e2 := by simp [o, e2]
+def lineX : LineString := LineString.seg o e2 o_ne_e2
 
 theorem mem_lineX_interior {p : Point2D} (h : p ∈ (Geometry.line lineX).stratum .I) :
     ∃ t ∈ Set.Icc (0 : ℝ) 1, p = ⟨2 * t, 0⟩ := by
