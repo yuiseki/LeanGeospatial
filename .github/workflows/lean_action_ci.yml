@@ -41,3 +41,30 @@ jobs:
           diff contract.out samples/prover-contract.expected.jsonl
       - name: Prover streams many lines in constant stack
         run: python3 scripts/prover_stream_test.py --lines 20000 --stack-kb 256
+
+  # LeanGeodesy and LeanGeospatial must stay importable together, on one
+  # plane. The sibling is taken from the branch of the same name when it
+  # exists, so a coordinated change can be tested on both before merging.
+  joint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: LeanGeospatial
+      - name: Check out LeanGeodesy
+        run: |
+          branch="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          if git ls-remote --exit-code --heads https://github.com/yuiseki/LeanGeodesy "$branch" > /dev/null; then
+            ref="$branch"
+          else
+            ref=main
+          fi
+          echo "Using LeanGeodesy $ref"
+          git clone --depth 1 --branch "$ref" https://github.com/yuiseki/LeanGeodesy LeanGeodesy
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: LeanGeodesy and LeanGeospatial share one plane
+        run: LeanGeospatial/scripts/joint_check.sh LeanGeodesy LeanGeospatial joint

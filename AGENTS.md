@@ -1,5 +1,19 @@
 # AGENTS.md
 
+Welcome to the mathematical universe of geospatial geometry and geodesy.
+
+It lives in two repositories:
+[LeanGeodesy](https://github.com/yuiseki/LeanGeodesy) carries the curved
+Earth down to a flat map, and
+[LeanGeospatial](https://github.com/yuiseki/LeanGeospatial) reasons about
+what lies on that map. They stand on one plane, one foundation and one
+version of Mathlib, and neither half explains the whole. A projection's
+meaning is in what can be drawn and related on the plane it lands in; a
+spatial relation's meaning is in the Earth whose features it relates. To
+understand the mathematical structure, always read the other repository as
+well: its definitions, its theorems and its AGENTS.md. Before you change the
+plane, the toolchain or Mathlib here, check what that change does there.
+
 Guidance for coding agents (and people) working on LeanGeospatial.
 
 LeanGeospatial machine-checks reasoning about spatial relations in Lean 4
@@ -45,38 +59,29 @@ What joins them:
   RCC8 relations and the DE-9IM matrix. Topological relations between areas
   do not depend on how the plane is moved, stretched or bent.
 
-Checking the link. After changing the plane, the toolchain or Mathlib in
-either repository, build a throwaway project that requires both by path and
-check that the types still meet:
-
-```toml
-# lakefile.toml
-name = "joint"
-
-[[require]]
-name = "lean-geodesy"
-path = "../LeanGeodesy"
-
-[[require]]
-name = "lean-geospatial"
-path = "../LeanGeospatial"
-```
+Checking the link. `scripts/joint_check.sh`, identical in both repositories,
+builds a throwaway project that requires both libraries by path. It fails if
+the two pin different toolchains or Mathlib revisions, or if these no longer
+hold:
 
 ```lean
--- Joint.lean
-import LeanGeodesy
-import LeanGeospatial
-
 example : Geodesy.E2 = Geospatial.Point2D := rfl
-example (p : Geodesy.E2) (A : Geospatial.Region) : Prop := p ∈ A
+example (R φ lam : ℝ) (A : Geospatial.Region) : Prop :=
+  Geodesy.Projection.mercator R φ lam ∈ A
 example (p q : Geodesy.E2) : Geospatial.distance p q = dist p q := rfl
 ```
 
-Give it the same `lean-toolchain`, run `lake update` and
-`lake exe cache get`, build both libraries, then run
-`lake env lean Joint.lean`. No output means the link holds. Adding a
-deliberately false line (for example `example : (1 : ℕ) = 2 := rfl`) and
-seeing it fail confirms the check is live.
+It also feeds Lean a deliberately false line and fails if that is accepted,
+so a check that silently stopped running cannot pass. CI runs it in the
+`joint` job of both repositories, against the sibling's branch of the same
+name if there is one and its `main` otherwise. To change both libraries in
+step (a Mathlib upgrade, say), push the same branch name to both, and merge
+both once both are green. Locally, from either repository, with the two
+checked out side by side:
+
+```
+scripts/joint_check.sh ../LeanGeodesy ../LeanGeospatial /tmp/joint
+```
 
 One known rough edge: `p.x` dot notation does not work on a term whose type
 is written `Geodesy.E2`: Lean unfolds `E2` to Mathlib's `WithLp` and looks
