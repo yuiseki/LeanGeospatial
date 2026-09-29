@@ -22,13 +22,14 @@ of a space. `RCC8Complete α` says that in `α` every weak composition is the
 table. Since the table is sound in every space, this is the same as every
 entry of the table being realised in `α` (`rcc8Complete_iff_table_subset`).
 
-- The plane is complete (`rcc8Complete_point2D`), which is `compose_eq_table`.
+- The plane is complete (`rcc8Complete_plane`), which is `compose_eq_table`.
+- `Bool` is not (`not_rcc8Complete_bool`), from `table_not_complete_bool`:
+  `EC` is in the table's `DC ⋄ DC` but in no weak composition over `Bool`.
+  The same holds for every discrete space (`not_rcc8Complete_of_discrete`):
+  its areas have no boundary, so no two are `EC` (`not_ec_of_discrete`).
 - Weak composition is a topological invariant (`compose_eq_of_homeomorph`),
-  so completeness passes to every homeomorphic space
-  (`RCC8Complete.of_homeomorph`); `ℝ × ℝ` is one.
-- No discrete space is complete (`not_rcc8Complete_of_discrete`): its areas
-  have no boundary, so no two are `EC` (`not_ec_of_discrete`), yet `EC` is in
-  the table's `DC ⋄ DC`. `Bool` is an example.
+  so homeomorphic spaces are complete together or not at all
+  (`RCC8Complete.homeomorph`); `ℝ × ℝ` is complete because the plane is.
 -/
 
 namespace Geospatial.RCC8
@@ -64,8 +65,13 @@ theorem rcc8Complete_iff_table_subset :
       (fun _ ht => Finset.mem_coe.mpr (mem_table_of_mem_compose ht)) (h r s)⟩
 
 /-- The table is complete for the plane. -/
-theorem rcc8Complete_point2D : RCC8Complete Point2D :=
+theorem rcc8Complete_plane : RCC8Complete Point2D :=
   compose_eq_table
+
+/-- A table entry that the space does not realise rules completeness out. -/
+theorem not_rcc8Complete_of_not_mem {r s t : Relation} (ht : t ∈ table r s)
+    (hn : t ∉ compose α r s) : ¬ RCC8Complete α := fun h =>
+  hn (by rw [h r s, Finset.mem_coe]; exact ht)
 
 /-- A homeomorphism carries a configuration realising `t ∈ r ⋄ s` to one in
 the other space. -/
@@ -85,6 +91,10 @@ theorem RCC8.compose_eq_of_homeomorph (e : α ≃ₜ β) (r s : Relation) :
 /-- Completeness passes along a homeomorphism. -/
 theorem RCC8Complete.of_homeomorph (h : RCC8Complete α) (e : α ≃ₜ β) : RCC8Complete β :=
   fun r s => (compose_eq_of_homeomorph e r s).symm.trans (h r s)
+
+/-- Homeomorphic spaces are complete together or not at all. -/
+theorem RCC8Complete.homeomorph (e : α ≃ₜ β) : RCC8Complete α ↔ RCC8Complete β :=
+  ⟨fun h => h.of_homeomorph e, fun h => h.of_homeomorph e.symm⟩
 
 section Discrete
 
@@ -107,17 +117,33 @@ theorem RCC8.not_tpp_of_discrete (A B : RegularClosedRegion α) : ¬ TPP A B := 
   rw [(isOpen_discrete _).interior_eq]
   exact hW
 
+/-- `EC` is in no weak composition over a discrete space. -/
+theorem RCC8.ec_not_mem_compose_of_discrete (r s : Relation) : Relation.ec ∉ compose α r s :=
+  fun ⟨A, _, C, _, _, _, _, _, h⟩ => not_ec_of_discrete A C h
+
 variable (α) in
-/-- The table is complete for no discrete space: `EC` is in the table's
-`DC ⋄ DC`, but no two areas of a discrete space are `EC`. -/
-theorem not_rcc8Complete_of_discrete : ¬ RCC8Complete α := by
-  intro h
-  have hmem : Relation.ec ∈ compose α .dc .dc := by
-    rw [h, Finset.mem_coe]
-    decide
-  obtain ⟨A, _, C, _, _, _, _, _, hAC⟩ := hmem
-  exact not_ec_of_discrete A C hAC
+/-- A discrete space misses a table entry: `EC` is in the table's `DC ⋄ DC`,
+which the plane realises, but no two areas of a discrete space are `EC`. -/
+theorem table_not_complete_of_discrete :
+    ∃ r s t, t ∈ table r s ∧ t ∉ compose α r s :=
+  ⟨.dc, .dc, .ec, by decide, ec_not_mem_compose_of_discrete _ _⟩
+
+variable (α) in
+/-- The table is complete for no discrete space. -/
+theorem not_rcc8Complete_of_discrete : ¬ RCC8Complete α :=
+  let ⟨_, _, _, ht, hn⟩ := table_not_complete_of_discrete α
+  not_rcc8Complete_of_not_mem ht hn
 
 end Discrete
+
+/-- Over `Bool`, `EC` is in the table's `DC ⋄ DC` but not in the weak
+composition. -/
+theorem table_not_complete_bool : ∃ r s t, t ∈ table r s ∧ t ∉ compose Bool r s :=
+  table_not_complete_of_discrete Bool
+
+/-- The table is not complete for `Bool`. -/
+theorem not_rcc8Complete_bool : ¬ RCC8Complete Bool :=
+  let ⟨_, _, _, ht, hn⟩ := table_not_complete_bool
+  not_rcc8Complete_of_not_mem ht hn
 
 end Geospatial

@@ -471,9 +471,10 @@ entry is realised in `α` (`rcc8Complete_iff_table_subset`).
 
 | Space | Complete? | Theorem |
 | --- | --- | --- |
-| The plane `Point2D` | yes | `rcc8Complete_point2D` |
-| Any space homeomorphic to a complete one, such as `ℝ × ℝ` | yes | `RCC8Complete.of_homeomorph`, from `compose_eq_of_homeomorph` |
-| Any discrete space, such as `Bool` | no | `not_rcc8Complete_of_discrete` |
+| The plane `Point2D` | yes | `rcc8Complete_plane`, from `compose_eq_table` |
+| `Bool` | no | `not_rcc8Complete_bool`, from `table_not_complete_bool` |
+| Any space homeomorphic to a complete one, such as `ℝ × ℝ` | yes | `RCC8Complete.homeomorph : RCC8Complete α ↔ RCC8Complete β`, from `compose_eq_of_homeomorph` |
+| Any discrete space | no | `not_rcc8Complete_of_discrete` |
 
 Weak composition is a topological invariant (`compose_eq_of_homeomorph`):
 homeomorphic spaces have the same table. A discrete space fails because its

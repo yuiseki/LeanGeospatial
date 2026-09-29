@@ -65,8 +65,8 @@ every set is open, so no two areas are `EC` and none is a `TPP` of another.
 -/
 
 /-- `EC` is in no weak composition over `Bool`. -/
-theorem ec_not_mem_compose_bool (r s : Relation) : Relation.ec ∉ compose Bool r s :=
-  fun ⟨A, _, C, _, _, _, _, _, h⟩ => not_ec_of_discrete A C h
+example (r s : Relation) : Relation.ec ∉ compose Bool r s :=
+  ec_not_mem_compose_of_discrete r s
 
 /-- The table is sound over `Bool`, as over every space. -/
 example {r s t : Relation} (h : t ∈ compose Bool r s) : t ∈ table r s :=
@@ -74,8 +74,7 @@ example {r s t : Relation} (h : t ∈ compose Bool r s) : t ∈ table r s :=
 
 /-- It is not complete over `Bool`: `EC` is in the table's `DC ⋄ DC`, which the
 plane realises, but not in `Bool`'s. -/
-theorem table_not_complete_bool : ∃ r s t, t ∈ table r s ∧ t ∉ compose Bool r s :=
-  ⟨.dc, .dc, .ec, by decide, ec_not_mem_compose_bool _ _⟩
+example : ∃ r s t, t ∈ table r s ∧ t ∉ compose Bool r s := table_not_complete_bool
 
 /-! ## From the plane to `ℝ × ℝ` -/
 
@@ -88,12 +87,16 @@ theorem squares_ec_in_prod :
 /-! ## Which spaces the table is complete for -/
 
 /-- The plane: every entry of the table is realised. -/
-example : RCC8Complete Point2D := rcc8Complete_point2D
+example : RCC8Complete Point2D := rcc8Complete_plane
 
 /-- `ℝ × ℝ` is homeomorphic to the plane, so the table is complete there too. -/
-example : RCC8Complete (ℝ × ℝ) := rcc8Complete_point2D.of_homeomorph Point2D.homeomorphProd
+example : RCC8Complete (ℝ × ℝ) :=
+  (RCC8Complete.homeomorph Point2D.homeomorphProd).mp rcc8Complete_plane
 
-/-- `Bool`, like every discrete space, is not. -/
-example : ¬ RCC8Complete Bool := not_rcc8Complete_of_discrete Bool
+/-- `Bool` is not. -/
+example : ¬ RCC8Complete Bool := not_rcc8Complete_bool
+
+/-- Nor is any other discrete space. -/
+example : ¬ RCC8Complete (Fin 3) := not_rcc8Complete_of_discrete (Fin 3)
 
 end Geospatial.Examples.GenericSpace
