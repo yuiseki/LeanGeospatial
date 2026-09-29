@@ -54,9 +54,11 @@ What joins them:
   together: a project that requires both libraries resolves a single Mathlib,
   so if the pins drift apart the two can no longer be imported together.
 - One topology. LeanGeospatial's relations are defined from Mathlib's
-  `interior`, `closure` and `frontier`, and `LeanGeospatial/Homeomorph.lean`
-  proves that every homeomorphism of the plane preserves touching, the eight
-  RCC8 relations and the DE-9IM matrix. Topological relations between areas
+  `interior`, `closure` and `frontier`, for areas of any topological space
+  (`RegularClosedRegion α`), and `LeanGeospatial/Homeomorph.lean` proves that
+  every homeomorphism `α ≃ₜ β` preserves touching and the eight RCC8
+  relations, and that homeomorphisms of the plane preserve the DE-9IM
+  matrix. Topological relations between areas
   do not depend on how the plane is moved, stretched or bent. On the other
   side, `LeanGeodesy/Projection/Homeomorph.lean` constructs projections as
   homeomorphisms on the domains where they are ones: Mercator from the open
@@ -64,7 +66,9 @@ What joins them:
   from the globe cut along the antimeridian onto the square
   (`webMercatorHomeomorph`; without the cut it is discontinuous). Composing
   two such maps gives a homeomorphism of the plane, and LeanGeospatial's
-  theorems then say the two maps agree on every topological relation.
+  theorems then say the two maps agree on every topological relation. And
+  because areas live in any space, the relations between areas of the globe
+  itself (the Web Mercator chart) are those between their images on the map.
 
 Checking the link. `scripts/joint_check.sh`, identical in both repositories,
 builds a throwaway project that requires both libraries by path. It fails if

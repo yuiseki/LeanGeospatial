@@ -76,11 +76,21 @@ example : Geospatial.Region := Geodesy.Projection.webMercatorChartImage
 /-- Two Mercator maps of one globe at different scales differ by a
 homeomorphism of the plane, so they agree on every RCC8 relation between the
 areas drawn on them. -/
-example (R₁ R₂ : ℝ) (h₁ : R₁ ≠ 0) (h₂ : R₂ ≠ 0) (A B : Geospatial.RegularClosedRegion)
+example (R₁ R₂ : ℝ) (h₁ : R₁ ≠ 0) (h₂ : R₂ ≠ 0)
+    (A B : Geospatial.RegularClosedRegion Geospatial.Point2D)
     (r : Geospatial.RCC8.Relation) :
     let e := (Geodesy.Projection.mercatorHomeomorph R₁ h₁).symm.trans
       (Geodesy.Projection.mercatorHomeomorph R₂ h₂)
     r.holds (A.map e) (B.map e) ↔ r.holds A B :=
+  Geospatial.RCC8.Relation.holds_map_iff _ A B r
+
+/-- On the globe itself: the RCC8 relation between two areas of the Web
+Mercator chart (latitude and longitude, cut along the antimeridian) is the
+relation between their images on the map. -/
+example (A B : Geospatial.RegularClosedRegion Geodesy.Projection.webMercatorChart)
+    (r : Geospatial.RCC8.Relation) :
+    r.holds (A.map Geodesy.Projection.webMercatorHomeomorph)
+      (B.map Geodesy.Projection.webMercatorHomeomorph) ↔ r.holds A B :=
   Geospatial.RCC8.Relation.holds_map_iff _ A B r
 LEAN
 
