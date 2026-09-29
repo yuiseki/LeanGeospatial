@@ -338,6 +338,51 @@ empty, `*` anything. A pattern is a record with one field per cell;
 `Pattern.ofString?` reads the 9-character notation and rejects anything
 else. Patterns with dimensions (`0`, `1`, `2`) are in section 5.
 
+Dimensions in any space. `DE9IM/DimensionFunction.lean` makes the
+dimension-valued matrix independent of the plane:
+
+```lean
+structure DimensionFunction (α : Type*) [TopologicalSpace α] where
+  dim : Set α → WithBot ℕ
+  dim_eq_bot_iff : ∀ {S : Set α}, dim S = ⊥ ↔ S = ∅
+
+def DimensionCompatible (dα : DimensionFunction α) (dβ : DimensionFunction β)
+    (e : α ≃ₜ β) : Prop :=
+  ∀ S, dβ.dim (e '' S) = dα.dim S
+```
+
+`dim_eq_bot_iff` is the contract that keeps DE-9IM's letters: `F` is empty and
+`T` nonempty for every dimension function (`de9im_eq_bot_iff`,
+`de9im_ne_bot_iff`), so a `T`/`F`/`*` pattern means the same whichever
+dimension function reads it (`Pattern.toCell_matches`). Compatibility across
+spaces is a separate predicate, so homeomorphisms between different spaces
+stay first-class: `de9im d A B s t := d.dim (cell s t A B)`, and
+
+```lean
+theorem de9im_map (h : DimensionCompatible dα dβ e) (A B : Set α) :
+    de9im dβ (e '' A) (e '' B) = de9im dα A B
+```
+
+with the same for patterns of `T`, `F`, `*` and exact values `k`
+(`CellPattern.matches_map`).
+
+`DE9IM/CubeDimension.lean` gives one dimension function for every space:
+`cubeDim n` is `⊥` on the empty set, `n` on a set with interior, and otherwise
+the largest `k < n` such that the set contains an embedded cube `[0, 1]ᵏ`. It
+is compatible with every homeomorphism (`cubeDim_compatible`). The plane's
+values `F, 0, 1, 2` are exactly `cubeDim 2`, an arc being an embedded 1-cube
+(`planeDim_eq_cubeDim`), and the existing matrix of two areas is
+`de9im planeDim` (`matrix_toWithBot`). In space, `cubeDim 3` takes every
+value `⊥, 0, 1, 2, 3`, on the empty set, a point, a segment, a flat square and
+a ball (`DE9IM/Space3.lean`); the ball's interior-interior entry with itself
+is `3`. That the segment is not `2` rests on `not_injOn_square`: the square
+does not inject continuously into the line.
+
+`cubeDim n` is a definition, not a theorem about topological dimension: that
+a set with interior in `ℝⁿ` holds no embedded `(n+1)`-cube, or that an
+embedded `n`-cube has interior, is invariance of domain, which is not proved
+here. The dimension functions are abstract enough not to need it.
+
 ### 5. Points, lines and areas
 
 Mathlib's `interior` and `frontier` are right for areas but not for points
@@ -931,6 +976,9 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/DE9IM.lean` | DE-9IM patterns with `T`, `F`, `*`, read from 9-character strings |
 | `LeanGeospatial/Geometry.lean` | Points, line strings and areas with Simple Features interior, boundary, exterior |
 | `LeanGeospatial/DE9IM/Dimension.lean` | DE-9IM cell values `F`, `0`, `1`, `2` and dimensioned patterns |
+| `LeanGeospatial/DE9IM/DimensionFunction.lean` | Dimension functions, compatibility along homeomorphisms, the dimension-valued matrix and its patterns in any space |
+| `LeanGeospatial/DE9IM/CubeDimension.lean` | `cubeDim n` by embedded cubes; the plane's values are `cubeDim 2` |
+| `LeanGeospatial/DE9IM/Space3.lean` | `⊥, 0, 1, 2, 3` in space; the square does not inject into the line |
 | `LeanGeospatial/GeometryFacts.lean` | Lines are closed with empty interior; arcs survive removing points; `g ⊄ h` iff `IE ≠ ∅` |
 | `LeanGeospatial/DE9IM/Values.lean` | Which cell values points, lines and areas allow |
 | `LeanGeospatial/SimpleFeatures.lean` | The eight Simple Features relations, defined from point sets |
@@ -954,6 +1002,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/Products.lean` | The plane from the line, space, every dimension, and two parallel lines `ℝ × Bool` |
 | `LeanGeospatial/Examples/ConnectedComplete.lean` | The line is complete but not for connected areas; the plane and space are |
 | `LeanGeospatial/Examples/Circle.lean` | The circle is complete for connected areas; the line is not |
+| `LeanGeospatial/Examples/Dimension3.lean` | Every dimension value in space, and an entry of `3` |
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |

@@ -30,6 +30,9 @@ import LeanGeospatial.GeoSPARQL.AreaArea
 import LeanGeospatial.GeoSPARQL.Counterexamples
 import LeanGeospatial.Geometry
 import LeanGeospatial.DE9IM.Dimension
+import LeanGeospatial.DE9IM.DimensionFunction
+import LeanGeospatial.DE9IM.CubeDimension
+import LeanGeospatial.DE9IM.Space3
 import LeanGeospatial.GeometryFacts
 import LeanGeospatial.DE9IM.Values
 import LeanGeospatial.SimpleFeatures

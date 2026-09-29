@@ -14,6 +14,7 @@ import LeanGeospatial.Examples.Manifold
 import LeanGeospatial.Examples.Products
 import LeanGeospatial.Examples.ConnectedComplete
 import LeanGeospatial.Examples.Circle
+import LeanGeospatial.Examples.Dimension3
 import LeanGeospatial.Composition
 import LeanGeospatial.CompositionTable.Cells
 import LeanGeospatial.Examples.PublishedTable
@@ -811,3 +812,43 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.rcc8ConnectedComplete_circle' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.rcc8ConnectedComplete_circle
+
+/-- info: 'Geospatial.DE9IM.de9im_map' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.de9im_map
+
+/-- info: 'Geospatial.DE9IM.CellPattern.matches_map' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.CellPattern.matches_map
+
+/-- info: 'Geospatial.DE9IM.Pattern.toCell_matches' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.Pattern.toCell_matches
+
+/-- info: 'Geospatial.DE9IM.cubeDim_compatible' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.cubeDim_compatible
+
+/-- info: 'Geospatial.DE9IM.planeDim_eq_cubeDim' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.planeDim_eq_cubeDim
+
+/-- info: 'Geospatial.DE9IM.matrix_toWithBot' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.matrix_toWithBot
+
+/-- info: 'Geospatial.DE9IM.not_injOn_square' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.not_injOn_square
+
+/-- info: 'Geospatial.DE9IM.Space3.cubeDim_segment' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.Space3.cubeDim_segment
+
+/-- info: 'Geospatial.DE9IM.Space3.cubeDim_square' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.Space3.cubeDim_square
+
+/-- info: 'Geospatial.DE9IM.Space3.de9im_ball_ball_II' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.Space3.de9im_ball_ball_II
