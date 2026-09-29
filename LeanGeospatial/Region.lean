@@ -117,8 +117,8 @@ each other. The witness uses two distinct points `a` and `c`, with
 theorem intersects_not_transitive :
     ¬ ∀ A B C : Region, Intersects A B → Intersects B C → Intersects A C := by
   intro h
-  let a : Point2D := ⟨0, 0⟩
-  let c : Point2D := ⟨1, 0⟩
+  let a : Point2D := Point2D.mk 0 0
+  let c : Point2D := Point2D.mk 1 0
   have hAB : Intersects {a} {a, c} := ⟨a, by simp⟩
   have hBC : Intersects {a, c} {c} := ⟨c, by simp⟩
   obtain ⟨p, hpA, hpC⟩ := h {a} {a, c} {c} hAB hBC

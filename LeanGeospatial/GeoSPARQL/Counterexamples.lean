@@ -43,7 +43,7 @@ def S3 : RegularClosedRegion := s3.area h3
 
 theorem S1_nonempty : (S1 : Region).Nonempty := s1.area_nonempty h1
 
-theorem univ_nonempty : (RCC8.univ : Region).Nonempty := ⟨⟨0, 0⟩, trivial⟩
+theorem univ_nonempty : (RCC8.univ : Region).Nonempty := ⟨Point2D.mk 0 0, trivial⟩
 
 @[simp] theorem coe_univ : (RCC8.univ : Region) = Set.univ := rfl
 
@@ -61,7 +61,7 @@ theorem eq_counterexample :
   exact this
 
 theorem S1_ne_univ : (S1 : Region) ≠ Set.univ := fun h => by
-  have : (⟨5, 5⟩ : Point2D) ∈ (S1 : Region) := by rw [h]; trivial
+  have : Point2D.mk 5 5 ∈ (S1 : Region) := by rw [h]; trivial
   rw [S1, Rect.mem_area] at this
   norm_num [s1] at this
 
@@ -111,7 +111,7 @@ theorem mem_frame (p : Point2D) :
   tauto
 
 theorem S1_ec_frame : EC S1 frame := by
-  refine ⟨⟨⟨0, 0⟩, ?_, ?_⟩, ?_⟩
+  refine ⟨⟨Point2D.mk 0 0, ?_, ?_⟩, ?_⟩
   · rw [S1, Rect.mem_area]; norm_num [s1]
   · rw [mem_frame]; norm_num
   · rw [Geospatial.Disjoint, Set.eq_empty_iff_forall_notMem]
@@ -125,7 +125,7 @@ theorem S1_ec_frame : EC S1 frame := by
 theorem ec_counterexample :
     ∃ A B : RegularClosedRegion, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
       EC A B ∧ ¬ (rcc8Pattern .ec).Matches A B := by
-  refine ⟨S1, frame, S1_nonempty, ⟨⟨0, 0⟩, by rw [mem_frame]; norm_num⟩, S1_ec_frame,
+  refine ⟨S1, frame, S1_nonempty, ⟨Point2D.mk 0 0, by rw [mem_frame]; norm_num⟩, S1_ec_frame,
     fun h => ?_⟩
   simp only [rcc8Pattern_ec_eq, Pattern.Matches, PatternChar.matches_T, PatternChar.matches_F]
     at h
@@ -180,11 +180,11 @@ theorem not_mem_interior_S1_of_boundary {p : Point2D} (hp : p ∈ boundary (S1 :
 
 theorem S1_tpp_S12 : TPP S1 S12 := by
   refine ⟨Set.subset_union_left, fun h => ?_, fun h => ?_⟩
-  · have hp : (⟨5, 0⟩ : Point2D) ∈ (S12 : Region) :=
+  · have hp : Point2D.mk 5 0 ∈ (S12 : Region) :=
       Set.mem_union_right _ (by rw [S2, Rect.mem_area]; norm_num [s2])
     rw [← h, S1, Rect.mem_area] at hp
     norm_num [s1] at hp
-  · have hp : (⟨0, 0⟩ : Point2D) ∈ (S1 : Region) := by rw [S1, Rect.mem_area]; norm_num [s1]
+  · have hp : Point2D.mk 0 0 ∈ (S1 : Region) := by rw [S1, Rect.mem_area]; norm_num [s1]
     rcases interior_union_subset S1 S2 (h hp) with h' | h'
     · rw [S1, Rect.interior_area] at h'
       obtain ⟨h'', -⟩ := h'
@@ -215,16 +215,16 @@ theorem tppi_counterexample :
 
 theorem S12_po_S13 : PO S12 S13 := by
   refine ⟨?_, fun h => ?_, fun h => ?_⟩
-  · refine ⟨⟨1 / 2, 1 / 2⟩, interior_mono Set.subset_union_left ?_,
+  · refine ⟨Point2D.mk (1 / 2) (1 / 2), interior_mono Set.subset_union_left ?_,
       interior_mono Set.subset_union_left ?_⟩ <;>
     · rw [S1, Rect.interior_area]
       show (0 : ℝ) < 1 / 2 ∧ (1 / 2 : ℝ) < 1 ∧ (0 : ℝ) < 1 / 2 ∧ (1 / 2 : ℝ) < 1
       norm_num
-  · have hp : (⟨5, 0⟩ : Point2D) ∈ (S2 : Region) := by rw [S2, Rect.mem_area]; norm_num [s2]
+  · have hp : Point2D.mk 5 0 ∈ (S2 : Region) := by rw [S2, Rect.mem_area]; norm_num [s2]
     rcases h (Set.mem_union_right _ hp) with h' | h'
     · exact S1_S2_apart _ h' hp
     · exact S2_S3_apart _ hp h'
-  · have hp : (⟨0, 5⟩ : Point2D) ∈ (S3 : Region) := by rw [S3, Rect.mem_area]; norm_num [s3]
+  · have hp : Point2D.mk 0 5 ∈ (S3 : Region) := by rw [S3, Rect.mem_area]; norm_num [s3]
     rcases h (Set.mem_union_right _ hp) with h' | h'
     · exact S1_S3_apart _ h' hp
     · exact S2_S3_apart _ h' hp

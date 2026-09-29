@@ -4,9 +4,9 @@ import Mathlib.Topology.Connected.Clopen
 /-!
 # The plane is connected
 
-`Point2D` is homeomorphic to `ℝ × ℝ`, which is connected, so the only sets
-that are both open and closed are `∅` and the whole plane. Consequences used
-for DE-9IM:
+`Point2D`, Mathlib's Euclidean plane, is connected (every real normed space is
+path-connected, and Mathlib provides the instance), so the only sets that are
+both open and closed are `∅` and the whole plane. Consequences used for DE-9IM:
 
 - an area other than the whole plane has a nonempty boundary;
 - a closed region other than the whole plane has a nonempty exterior;
@@ -15,11 +15,9 @@ for DE-9IM:
 
 namespace Geospatial
 
-instance : PreconnectedSpace Point2D :=
-  ⟨by
-    have := (isPreconnected_univ (α := ℝ × ℝ)).image Point2D.homeomorphProd.symm
-      Point2D.homeomorphProd.symm.continuous.continuousOn
-    rwa [Set.image_univ_of_surjective Point2D.homeomorphProd.symm.surjective] at this⟩
+/-- The plane is connected. Mathlib already knows this: a real normed space is
+path-connected. -/
+example : PreconnectedSpace Point2D := inferInstance
 
 theorem boundary_subset_of_isClosed {A : Region} (hA : IsClosed A) : boundary A ⊆ A := by
   rw [boundary_eq, hA.closure_eq]

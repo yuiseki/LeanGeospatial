@@ -16,14 +16,11 @@ namespace Geospatial
 
 open DE9IM
 
-instance : T2Space Point2D := Point2D.homeomorphProd.isEmbedding.t2Space
-
 /-! ## Segments -/
 
-theorem Point2D.continuous_lerp (a b : Point2D) : Continuous (a.lerp b) :=
-  continuous_induced_rng.mpr (by
-    show Continuous fun t : ℝ => ((1 - t) * a.x + t * b.x, (1 - t) * a.y + t * b.y)
-    fun_prop)
+theorem Point2D.continuous_lerp (a b : Point2D) : Continuous (a.lerp b) := by
+  unfold Point2D.lerp
+  fun_prop
 
 theorem Point2D.lerp_injective {a b : Point2D} (h : a ≠ b) : Function.Injective (a.lerp b) := by
   intro s t hst
@@ -61,10 +58,8 @@ theorem interior_line_eq_empty (a u : Point2D) (hu : u.x ≠ 0 ∨ u.y ≠ 0) :
   rw [Set.eq_empty_iff_forall_notMem]
   intro p hp
   -- Move off the line along the normal direction.
-  let g : ℝ → Point2D := fun t => ⟨p.x - t * u.y, p.y + t * u.x⟩
-  have hg : Continuous g := continuous_induced_rng.mpr (by
-    show Continuous fun t : ℝ => (p.x - t * u.y, p.y + t * u.x)
-    fun_prop)
+  let g : ℝ → Point2D := fun t => Point2D.mk (p.x - t * u.y) (p.y + t * u.x)
+  have hg : Continuous g := by fun_prop
   have hg0 : g 0 = p := Point2D.ext (by simp [g]) (by simp [g])
   have h0 : (0 : ℝ) ∈ g ⁻¹' interior L := by
     show g 0 ∈ interior L
@@ -74,7 +69,7 @@ theorem interior_line_eq_empty (a u : Point2D) (hu : u.x ≠ 0 ∨ u.y ≠ 0) :
     rw [Metric.mem_ball, Real.dist_eq, sub_zero, abs_of_pos (by linarith)]
     linarith))
   have hpL : p ∈ L := interior_subset hp
-  simp only [L, Set.mem_ofPred_eq, g] at hmem hpL
+  simp only [L, Set.mem_ofPred_eq, g, Point2D.x_mk, Point2D.y_mk] at hmem hpL
   have hsq : ε / 2 * (u.x ^ 2 + u.y ^ 2) = 0 := by linear_combination hmem - hpL
   have hpos : 0 < u.x ^ 2 + u.y ^ 2 := by
     rcases hu with h | h
@@ -94,9 +89,9 @@ theorem interior_segment (a b : Point2D) (h : a ≠ b) : interior (segment a b) 
     exact h (Point2D.ext (by linarith [hc.1]) (by linarith [hc.2]))
   apply Set.eq_empty_of_subset_empty
   refine (interior_mono ?_).trans
-    (interior_line_eq_empty a ⟨b.x - a.x, b.y - a.y⟩ hu).subset
+    (interior_line_eq_empty a (Point2D.mk (b.x - a.x) (b.y - a.y)) hu).subset
   rintro p ⟨t, -, rfl⟩
-  simp only [Set.mem_ofPred_eq, Point2D.lerp]
+  simp only [Set.mem_ofPred_eq, Point2D.lerp, Point2D.x_mk, Point2D.y_mk]
   ring
 
 /-- A finite union of closed sets with empty interior has empty interior. -/

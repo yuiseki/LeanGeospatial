@@ -45,7 +45,7 @@ theorem interior_area (r : Rect) (h : r.xmin < r.xmax ∧ r.ymin < r.ymax) :
 
 theorem area_nonempty (r : Rect) (h : r.xmin < r.xmax ∧ r.ymin < r.ymax) :
     ((r.area h : RegularClosedRegion) : Region).Nonempty :=
-  ⟨⟨r.xmin, r.ymin⟩, le_refl _, h.1.le, le_refl _, h.2.le⟩
+  ⟨Point2D.mk r.xmin r.ymin, le_refl _, h.1.le, le_refl _, h.2.le⟩
 
 variable {r s : Rect} (hr : r.xmin < r.xmax ∧ r.ymin < r.ymax)
   (hs : s.xmin < s.xmax ∧ s.ymin < s.ymax)
@@ -58,9 +58,9 @@ theorem within_area_iff :
       s.xmin ≤ r.xmin ∧ r.xmax ≤ s.xmax ∧ s.ymin ≤ r.ymin ∧ r.ymax ≤ s.ymax := by
   constructor
   · intro h
-    have h₁ := h (show (⟨r.xmin, r.ymin⟩ : Point2D) ∈ ((r.area hr : RegularClosedRegion) : Region)
+    have h₁ := h (show Point2D.mk r.xmin r.ymin ∈ ((r.area hr : RegularClosedRegion) : Region)
       from ⟨le_rfl, hr.1.le, le_rfl, hr.2.le⟩)
-    have h₂ := h (show (⟨r.xmax, r.ymax⟩ : Point2D) ∈ ((r.area hr : RegularClosedRegion) : Region)
+    have h₂ := h (show Point2D.mk r.xmax r.ymax ∈ ((r.area hr : RegularClosedRegion) : Region)
       from ⟨hr.1.le, le_rfl, hr.2.le, le_rfl⟩)
     exact ⟨h₁.1, h₂.2.1, h₁.2.2.1, h₂.2.2.2⟩
   · rintro ⟨a, b, c, d⟩
@@ -73,9 +73,9 @@ theorem within_interior_area_iff :
   constructor
   · intro h
     rw [interior_area] at h
-    have h₁ := h (show (⟨r.xmin, r.ymin⟩ : Point2D) ∈ ((r.area hr : RegularClosedRegion) : Region)
+    have h₁ := h (show Point2D.mk r.xmin r.ymin ∈ ((r.area hr : RegularClosedRegion) : Region)
       from ⟨le_rfl, hr.1.le, le_rfl, hr.2.le⟩)
-    have h₂ := h (show (⟨r.xmax, r.ymax⟩ : Point2D) ∈ ((r.area hr : RegularClosedRegion) : Region)
+    have h₂ := h (show Point2D.mk r.xmax r.ymax ∈ ((r.area hr : RegularClosedRegion) : Region)
       from ⟨hr.1.le, le_rfl, hr.2.le, le_rfl⟩)
     exact ⟨h₁.1, h₂.2.1, h₁.2.2.1, h₂.2.2.2⟩
   · rintro ⟨a, b, c, d⟩
@@ -88,7 +88,7 @@ theorem intersects_area_iff :
   · rintro ⟨p, ⟨a₁, a₂, a₃, a₄⟩, ⟨b₁, b₂, b₃, b₄⟩⟩
     exact ⟨by linarith, by linarith, by linarith, by linarith⟩
   · rintro ⟨h₁, h₂, h₃, h₄⟩
-    exact ⟨⟨max r.xmin s.xmin, max r.ymin s.ymin⟩,
+    exact ⟨Point2D.mk (max r.xmin s.xmin) (max r.ymin s.ymin),
       ⟨le_max_left _ _, max_le hr.1.le h₂, le_max_left _ _, max_le hr.2.le h₄⟩,
       ⟨le_max_right _ _, max_le h₁ hs.1.le, le_max_right _ _, max_le h₃ hs.2.le⟩⟩
 
@@ -111,9 +111,9 @@ theorem intersects_interior_area_iff :
     have := le_max_right r.ymin s.ymin
     have := min_le_left r.ymax s.ymax
     have := min_le_right r.ymax s.ymax
-    refine ⟨⟨(max r.xmin s.xmin + min r.xmax s.xmax) / 2,
-      (max r.ymin s.ymin + min r.ymax s.ymax) / 2⟩, ⟨?_, ?_, ?_, ?_⟩, ⟨?_, ?_, ?_, ?_⟩⟩ <;>
-      dsimp only <;> linarith
+    refine ⟨Point2D.mk ((max r.xmin s.xmin + min r.xmax s.xmax) / 2)
+      ((max r.ymin s.ymin + min r.ymax s.ymax) / 2), ⟨?_, ?_, ?_, ?_⟩, ⟨?_, ?_, ?_, ?_⟩⟩ <;>
+      simp only [Point2D.x_mk, Point2D.y_mk] <;> linarith
 
 end Rect
 
@@ -201,7 +201,7 @@ def areaT : RegularClosedRegion := rectT.area hT
 theorem A_D_dc : DC areaA areaD := dc_of_rect hA hD (by norm_num [rectA, rectD])
 
 theorem A_B_ec : EC areaA areaB := by
-  refine ⟨⟨⟨2, 1⟩, ?_, ?_⟩, ?_⟩
+  refine ⟨⟨Point2D.mk 2 1, ?_, ?_⟩, ?_⟩
   · rw [areaA, Rect.mem_area]; norm_num [rectA]
   · rw [areaB, Rect.mem_area]; norm_num [rectB]
   · rw [Geospatial.Disjoint, areaA, areaB, Rect.interior_area, Rect.interior_area,
@@ -211,18 +211,18 @@ theorem A_B_ec : EC areaA areaB := by
     linarith
 
 theorem A_C_po : PO areaA areaC := by
-  refine ⟨⟨⟨3 / 2, 1⟩, ?_, ?_⟩, fun h => ?_, fun h => ?_⟩
+  refine ⟨⟨Point2D.mk (3 / 2) 1, ?_, ?_⟩, fun h => ?_, fun h => ?_⟩
   · rw [areaA, Rect.interior_area]
     show (0 : ℝ) < 3 / 2 ∧ (3 / 2 : ℝ) < 2 ∧ (0 : ℝ) < 1 ∧ (1 : ℝ) < 2
     norm_num
   · rw [areaC, Rect.interior_area]
     show (1 : ℝ) < 3 / 2 ∧ (3 / 2 : ℝ) < 3 ∧ (0 : ℝ) < 1 ∧ (1 : ℝ) < 2
     norm_num
-  · have := h (show (⟨0, 1⟩ : Point2D) ∈ (areaA : Region) by
+  · have := h (show Point2D.mk 0 1 ∈ (areaA : Region) by
       rw [areaA, Rect.mem_area]; norm_num [rectA])
     rw [areaC, Rect.mem_area] at this
     norm_num [rectC] at this
-  · have := h (show (⟨3, 1⟩ : Point2D) ∈ (areaC : Region) by
+  · have := h (show Point2D.mk 3 1 ∈ (areaC : Region) by
       rw [areaC, Rect.mem_area]; norm_num [rectC])
     rw [areaA, Rect.mem_area] at this
     norm_num [rectA] at this
@@ -235,7 +235,7 @@ theorem T_A_tpp : TPP areaT areaA := by
     Rect.toRegion_ne_of_xmin_lt (by norm_num [rectT, rectA]) hA.1.le hA.2.le,
     fun h => ?_⟩
   -- (2, 0) is in T but on A's right edge, not in A's interior.
-  have := h (show (⟨2, 0⟩ : Point2D) ∈ (areaT : Region) by
+  have := h (show Point2D.mk 2 0 ∈ (areaT : Region) by
     rw [areaT, Rect.mem_area]; norm_num [rectT])
   rw [areaA, Rect.interior_area] at this
   obtain ⟨-, h₂, -⟩ := this

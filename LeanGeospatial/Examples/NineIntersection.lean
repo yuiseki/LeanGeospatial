@@ -66,7 +66,7 @@ theorem N_within_A : Within (areaN : Region) areaA :=
     (by norm_num [squareN, squareA]) (by norm_num [squareN, squareA])
 
 theorem areaN_nonempty : (areaN : Region).Nonempty :=
-  ⟨⟨1, 1⟩, by
+  ⟨Point2D.mk 1 1, by
     show (1 / 2 : ℝ) ≤ 1 ∧ (1 : ℝ) ≤ 3 / 2 ∧ (1 / 2 : ℝ) ≤ 1 ∧ (1 : ℝ) ≤ 3 / 2
     norm_num⟩
 
@@ -97,7 +97,7 @@ that is why it is stated for `RegularClosedRegion`. -/
 theorem segment_within_but_II_empty :
     IsClosed segment.toRegion ∧ segment.toRegion.Nonempty ∧
     Within segment.toRegion areaA ∧ II segment.toRegion areaA = ∅ := by
-  refine ⟨segment.isClosed_toRegion, ⟨⟨0, 0⟩, ?_⟩, ?_, ?_⟩
+  refine ⟨segment.isClosed_toRegion, ⟨Point2D.mk 0 0, ?_⟩, ?_, ?_⟩
   · show (0 : ℝ) ≤ 0 ∧ (0 : ℝ) ≤ 0 ∧ (0 : ℝ) ≤ 0 ∧ (0 : ℝ) ≤ 2
     norm_num
   · exact Rect.within_of_bounds (by norm_num [segment, squareA])

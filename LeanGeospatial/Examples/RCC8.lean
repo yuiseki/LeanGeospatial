@@ -54,10 +54,10 @@ theorem mem_area (r : Rect) (hx : r.xmin < r.xmax) (hy : r.ymin < r.ymax) (p : P
   Iff.rfl
 
 theorem areaA_nonempty : (areaA : Region).Nonempty :=
-  ⟨⟨0, 0⟩, by rw [areaA, mem_area]; norm_num [squareA]⟩
+  ⟨Point2D.mk 0 0, by rw [areaA, mem_area]; norm_num [squareA]⟩
 
 theorem areaT_nonempty : (areaT : Region).Nonempty :=
-  ⟨⟨0, 0⟩, by rw [areaT, mem_area]; norm_num [squareT]⟩
+  ⟨Point2D.mk 0 0, by rw [areaT, mem_area]; norm_num [squareT]⟩
 
 theorem A_D_dc : DC areaA areaD := A_disjoint_D
 
@@ -65,12 +65,12 @@ theorem A_B_ec : EC areaA areaB := areaA_touches_areaB
 
 theorem A_C_po : PO areaA areaC := by
   refine ⟨interiors_A_C_intersect, fun h => ?_, fun h => ?_⟩
-  · have hp : (⟨0, 1⟩ : Point2D) ∈ (areaA : Region) := by
+  · have hp : Point2D.mk 0 1 ∈ (areaA : Region) := by
       rw [areaA, mem_area]; norm_num [squareA]
     have := h hp
     rw [areaC, mem_area] at this
     norm_num [squareC] at this
-  · have hp : (⟨3, 1⟩ : Point2D) ∈ (areaC : Region) := by
+  · have hp : Point2D.mk 3 1 ∈ (areaC : Region) := by
       rw [areaC, mem_area]; norm_num [squareC]
     have := h hp
     rw [areaA, mem_area] at this
@@ -83,12 +83,12 @@ theorem T_A_tpp : TPP areaT areaA := by
       (by norm_num [squareT, squareA]) (by norm_num [squareT, squareA])
       (by norm_num [squareT, squareA]), fun h => ?_, fun h => ?_⟩
   · -- (2, 2) is a corner of A but not in T.
-    have hp : (⟨2, 2⟩ : Point2D) ∈ (areaA : Region) := by
+    have hp : Point2D.mk 2 2 ∈ (areaA : Region) := by
       rw [areaA, mem_area]; norm_num [squareA]
     rw [← h, areaT, mem_area] at hp
     norm_num [squareT] at hp
   · -- (0, 0) is in T but on A's boundary, not in its interior.
-    have hp : (⟨0, 0⟩ : Point2D) ∈ (areaT : Region) := by
+    have hp : Point2D.mk 0 0 ∈ (areaT : Region) := by
       rw [areaT, mem_area]; norm_num [squareT]
     have := h hp
     rw [areaA, Rect.coe_toRegularClosed, Rect.interior_toRegion] at this
@@ -102,7 +102,7 @@ theorem N_A_ntpp : NTPP areaN areaA := by
     simp only [squareN] at hp
     obtain ⟨h₁, h₂, h₃, h₄⟩ := hp
     refine ⟨?_, ?_, ?_, ?_⟩ <;> simp only [squareA] <;> linarith
-  · have hp : (⟨0, 0⟩ : Point2D) ∈ (areaA : Region) := by
+  · have hp : Point2D.mk 0 0 ∈ (areaA : Region) := by
       rw [areaA, mem_area]; norm_num [squareA]
     rw [← h, areaN, mem_area] at hp
     norm_num [squareN] at hp
@@ -119,7 +119,7 @@ theorem T_A_only_tpp (r : Relation) : r.holds areaT areaA ↔ r = .tpp :=
 /-- The relation between A and C is `PO` and nothing else. -/
 theorem A_C_only_po (r : Relation) : r.holds areaA areaC ↔ r = .po :=
   ⟨fun h => relation_unique areaA areaC areaA_nonempty
-      ⟨⟨3 / 2, 1⟩, by rw [areaC, mem_area]; norm_num [squareC]⟩ h A_C_po,
+      ⟨Point2D.mk (3 / 2) 1, by rw [areaC, mem_area]; norm_num [squareC]⟩ h A_C_po,
     fun h => h ▸ A_C_po⟩
 
 end

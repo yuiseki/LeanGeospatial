@@ -57,7 +57,8 @@ def toRegion (r : Rect) : Region :=
 
 /-- The rectangle's corners, counter-clockwise from the lower left. -/
 def toPolygon (r : Rect) : Polygon :=
-  ⟨[⟨r.xmin, r.ymin⟩, ⟨r.xmax, r.ymin⟩, ⟨r.xmax, r.ymax⟩, ⟨r.xmin, r.ymax⟩]⟩
+  ⟨[Point2D.mk r.xmin r.ymin, Point2D.mk r.xmax r.ymin, Point2D.mk r.xmax r.ymax,
+    Point2D.mk r.xmin r.ymax]⟩
 
 /-- A rectangle lies within another when its bounds lie inside the other's. -/
 theorem within_of_bounds {r s : Rect}
@@ -73,10 +74,11 @@ theorem area_toPolygon (r : Rect) :
   have h : signedArea2 r.toPolygon.vertices =
       2 * ((r.xmax - r.xmin) * (r.ymax - r.ymin)) := by
     have hr : r.toPolygon.vertices.rotate 1 =
-        [⟨r.xmax, r.ymin⟩, ⟨r.xmax, r.ymax⟩, ⟨r.xmin, r.ymax⟩, ⟨r.xmin, r.ymin⟩] := rfl
+        [Point2D.mk r.xmax r.ymin, Point2D.mk r.xmax r.ymax, Point2D.mk r.xmin r.ymax,
+          Point2D.mk r.xmin r.ymin] := rfl
     rw [signedArea2, hr]
     simp only [toPolygon, List.zip_cons_cons, List.zip_nil_left, List.map_cons, List.map_nil,
-      List.sum_cons, List.sum_nil, cross]
+      List.sum_cons, List.sum_nil, cross, Point2D.x_mk, Point2D.y_mk]
     ring
   rw [polygonArea, h, abs_mul, abs_two]
   ring

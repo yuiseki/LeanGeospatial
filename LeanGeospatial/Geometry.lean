@@ -28,7 +28,7 @@ namespace Geospatial
 
 /-- The point a fraction `t` of the way from `a` to `b`. -/
 def Point2D.lerp (a b : Point2D) (t : ℝ) : Point2D :=
-  ⟨(1 - t) * a.x + t * b.x, (1 - t) * a.y + t * b.y⟩
+  Point2D.mk ((1 - t) * a.x + t * b.x) ((1 - t) * a.y + t * b.y)
 
 @[simp] theorem Point2D.lerp_zero (a b : Point2D) : a.lerp b 0 = a := by
   simp [Point2D.lerp]
@@ -232,12 +232,6 @@ theorem singleton_eq_preimage (p : Point2D) :
   constructor
   · rintro rfl; exact ⟨rfl, rfl⟩
   · rintro ⟨h₁, h₂⟩; exact Point2D.ext h₁ h₂
-
-/-- Points are closed. -/
-instance : T1Space Point2D :=
-  ⟨fun p => by
-    rw [singleton_eq_preimage, Set.singleton_prod_singleton]
-    exact isClosed_singleton.preimage Point2D.homeomorphProd.continuous⟩
 
 /-- In the plane a single point has no topological interior. -/
 theorem interior_singleton_eq_empty (p : Point2D) : interior ({p} : Region) = ∅ := by

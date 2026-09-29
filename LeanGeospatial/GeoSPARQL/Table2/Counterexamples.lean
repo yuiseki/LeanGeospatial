@@ -79,7 +79,7 @@ theorem holds_equals_line_self_iff (l : LineString) :
 
 /-- The unit square as a closed line string. -/
 def square : LineString :=
-  ⟨3, ![⟨0, 0⟩, ⟨1, 0⟩, ⟨1, 1⟩, ⟨0, 1⟩, ⟨0, 0⟩], by
+  ⟨3, ![Point2D.mk 0 0, Point2D.mk 1 0, Point2D.mk 1 1, Point2D.mk 0 1, Point2D.mk 0 0], by
     intro i
     fin_cases i <;> simp [Point2D.ext_iff]⟩
 
@@ -90,15 +90,16 @@ theorem ring_counterexample :
   ⟨rfl, fun h => (holds_equals_line_self_iff square).mp h square_isRing⟩
 
 /-- `(0,0)–(2,0)`. -/
-def straight : LineString := LineString.seg ⟨0, 0⟩ ⟨2, 0⟩ (by simp [Point2D.ext_iff])
+def straight : LineString :=
+  LineString.seg (Point2D.mk 0 0) (Point2D.mk 2 0) (by simp [Point2D.ext_iff])
 
 /-- `(0,0)–(2,0)–(1,0)`: the same points, but ending at `(1,0)`. -/
 def backtrack : LineString :=
-  ⟨1, ![⟨0, 0⟩, ⟨2, 0⟩, ⟨1, 0⟩], by
+  ⟨1, ![Point2D.mk 0 0, Point2D.mk 2 0, Point2D.mk 1 0], by
     intro i
     fin_cases i <;> simp [Point2D.ext_iff]⟩
 
-theorem backtrack_carrier : backtrack.carrier = segment ⟨0, 0⟩ ⟨2, 0⟩ := by
+theorem backtrack_carrier : backtrack.carrier = segment (Point2D.mk 0 0) (Point2D.mk 2 0) := by
   apply Set.Subset.antisymm
   · intro p hp
     simp only [LineString.carrier, Set.mem_iUnion] at hp
@@ -122,7 +123,7 @@ theorem backtrack_counterexample :
     simp only [equalsPattern, DimPattern.Matches, DimPatternChar.matches_F] at h
     obtain ⟨-, hIB, -⟩ := h
     -- (1,0) is inside the straight line and an end point of the backtracking one.
-    have hmem : (⟨1, 0⟩ : Point2D) ∈ Geometry.cell .I .B (line straight) (line backtrack) := by
+    have hmem : Point2D.mk 1 0 ∈ Geometry.cell .I .B (line straight) (line backtrack) := by
       refine ⟨?_, ?_⟩
       · show _ ∈ straight.interior
         rw [straight, LineString.seg_interior]
@@ -171,6 +172,6 @@ def planeArea : RegularClosedRegion := ⟨Set.univ, by simp⟩
 theorem univ_counterexample :
     SF.Equals (area planeArea) (area planeArea) ∧
       ¬ Holds .equals (area planeArea) (area planeArea) :=
-  ⟨rfl, fun h => (holds_equals_area_self_iff planeArea ⟨⟨0, 0⟩, trivial⟩).mp h rfl⟩
+  ⟨rfl, fun h => (holds_equals_area_self_iff planeArea ⟨Point2D.mk 0 0, trivial⟩).mp h rfl⟩
 
 end Geospatial.GeoSPARQL.Table2

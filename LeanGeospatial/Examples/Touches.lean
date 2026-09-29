@@ -32,7 +32,7 @@ def squareB : Rect := ⟨2, 4, 0, 2⟩
 def squareC : Rect := ⟨1, 3, 0, 2⟩
 
 /-- `(2, 1)` is on the shared edge of A and B. -/
-def edgePoint : Point2D := ⟨2, 1⟩
+def edgePoint : Point2D := Point2D.mk 2 1
 
 theorem A_intersects_B : Intersects squareA.toRegion squareB.toRegion :=
   ⟨edgePoint, by
@@ -81,7 +81,7 @@ theorem shared_edge_not_area :
   areaA_touches_areaB.not_exists_regularClosed_inter
 
 /-- `(3/2, 1)` is inside both A and C. -/
-def overlapPoint : Point2D := ⟨3 / 2, 1⟩
+def overlapPoint : Point2D := Point2D.mk (3 / 2) 1
 
 theorem A_intersects_C : Intersects squareA.toRegion squareC.toRegion :=
   ⟨overlapPoint, by

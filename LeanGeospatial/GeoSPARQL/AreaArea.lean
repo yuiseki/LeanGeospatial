@@ -363,7 +363,7 @@ theorem table5_within_row_fails :
       (Within (A : Region) B ↔ HoldsAny (table5 .within) A B) := by
   intro h
   let A := RCC8.univ
-  have hA : (A : Region).Nonempty := ⟨⟨0, 0⟩, trivial⟩
+  have hA : (A : Region).Nonempty := ⟨Point2D.mk 0 0, trivial⟩
   obtain ⟨r, hr, hholds⟩ := (h A A hA hA).mp (within_refl _)
   have heq : Relation.eq.holds A A := rfl
   have := relation_unique A A hA hA hholds heq
@@ -375,7 +375,7 @@ theorem table5_contains_row_fails :
       (Contains (A : Region) B ↔ HoldsAny (table5 .contains) A B) := by
   intro h
   let A := RCC8.univ
-  have hA : (A : Region).Nonempty := ⟨⟨0, 0⟩, trivial⟩
+  have hA : (A : Region).Nonempty := ⟨Point2D.mk 0 0, trivial⟩
   obtain ⟨r, hr, hholds⟩ := (h A A hA hA).mp (contains_refl _)
   have heq : Relation.eq.holds A A := rfl
   have := relation_unique A A hA hA hholds heq

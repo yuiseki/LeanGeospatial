@@ -176,8 +176,11 @@ comparison, and the implementation.
 
 ### 1. Mathematical model
 
-Points are pairs of real numbers in a flat plane. A `Region` is a set of
-points, `Set Point2D`. A `Polygon` is only data, a list of vertices, and is
+Points are pairs of real numbers in a flat plane. The plane is Mathlib's
+Euclidean plane, `Point2D := EuclideanSpace ℝ (Fin 2)`, the same type as
+LeanGeodesy's `E2`, so a point from a LeanGeodesy map projection is directly a
+point here; `Point2D.mk x y` builds one and `p.x`, `p.y` read its coordinates.
+A `Region` is a set of points, `Set Point2D`. A `Polygon` is only data, a list of vertices, and is
 kept separate from `Region`; the one shape with a defined region is `Rect`,
 an axis-aligned rectangle. The basic relations are defined by set
 operations, not postulated:
@@ -213,10 +216,11 @@ shoelace area `100`.
 
 ### 2. Regions and topology
 
-`Point2D` carries the topology it inherits from `ℝ × ℝ` through its
-coordinates, which is the usual Euclidean topology of the plane.
-`Point2D.homeomorphProd : Point2D ≃ₜ ℝ × ℝ` records this, so Mathlib's lemmas
-about products and intervals apply directly. The topological vocabulary is
+`Point2D` carries Mathlib's topology and metric on `EuclideanSpace ℝ (Fin 2)`,
+the usual Euclidean ones; `distance` is Mathlib's `dist`.
+`Point2D.homeomorphProd : Point2D ≃ₜ ℝ × ℝ`, which sends `p` to `(p.x, p.y)`,
+identifies it with the product topology, so Mathlib's lemmas about products and
+intervals apply directly. The topological vocabulary is
 Mathlib's, not new definitions:
 
 | Name | Meaning |

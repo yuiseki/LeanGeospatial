@@ -5,9 +5,10 @@ import Mathlib.Topology.Order.DenselyOrdered
 /-!
 # Topology of regions
 
-`Point2D` gets the topology it inherits from the coordinate pair `(x, y)`, that
-is the product topology of `ℝ × ℝ`, which is the usual Euclidean topology of
-the plane. `Point2D.homeomorphProd` records that the two spaces are the same.
+`Point2D` is Mathlib's `EuclideanSpace ℝ (Fin 2)` and carries Mathlib's
+topology, the usual Euclidean topology of the plane. `Point2D.homeomorphProd`
+records that it is the same space as the coordinate pair `(x, y)` in `ℝ × ℝ`
+with the product topology.
 
 With that in place, a region's interior, closure and boundary are Mathlib's
 `interior`, `closure` and `frontier`. Nothing is postulated.
@@ -21,27 +22,35 @@ namespace Geospatial
 /-- The coordinates of a point as a pair. -/
 def Point2D.toProd (p : Point2D) : ℝ × ℝ := (p.x, p.y)
 
-/-- The plane's topology, pulled back from `ℝ × ℝ` along the coordinates. -/
-instance : TopologicalSpace Point2D :=
-  TopologicalSpace.induced Point2D.toProd inferInstance
+@[fun_prop] theorem Point2D.continuous_x : Continuous Point2D.x :=
+  PiLp.continuous_apply 2 _ 0
+
+@[fun_prop] theorem Point2D.continuous_y : Continuous Point2D.y :=
+  PiLp.continuous_apply 2 _ 1
+
+/-- Building a point from continuously varying coordinates is continuous. -/
+@[fun_prop] theorem Point2D.continuous_mk {α : Type*} [TopologicalSpace α] {f g : α → ℝ}
+    (hf : Continuous f) (hg : Continuous g) :
+    Continuous fun a => Point2D.mk (f a) (g a) := by
+  refine (PiLp.continuous_toLp 2 _).comp (continuous_pi fun i => ?_)
+  fin_cases i
+  · exact hf
+  · exact hg
 
 /-- `Point2D` and `ℝ × ℝ` are the same topological space. -/
 def Point2D.homeomorphProd : Point2D ≃ₜ ℝ × ℝ where
   toFun := Point2D.toProd
-  invFun q := ⟨q.1, q.2⟩
-  left_inv _ := rfl
+  invFun q := Point2D.mk q.1 q.2
+  left_inv p := Point2D.mk_x_y p
   right_inv _ := rfl
-  continuous_toFun := continuous_induced_dom
-  continuous_invFun := continuous_induced_rng.2 continuous_id
+  continuous_toFun := Point2D.continuous_x.prodMk Point2D.continuous_y
+  continuous_invFun := Point2D.continuous_mk continuous_fst continuous_snd
 
 @[simp] theorem Point2D.homeomorphProd_apply (p : Point2D) :
     Point2D.homeomorphProd p = (p.x, p.y) := rfl
 
-theorem Point2D.continuous_x : Continuous Point2D.x :=
-  Point2D.homeomorphProd.continuous.fst
-
-theorem Point2D.continuous_y : Continuous Point2D.y :=
-  Point2D.homeomorphProd.continuous.snd
+@[simp] theorem Point2D.homeomorphProd_symm_apply (q : ℝ × ℝ) :
+    Point2D.homeomorphProd.symm q = Point2D.mk q.1 q.2 := rfl
 
 /-! ## Interior, closure, boundary -/
 
@@ -174,7 +183,7 @@ theorem toRegion_ne_of_xmin_lt {r s : Rect} (hx : s.xmin < r.xmin)
     (hsx : s.xmin ≤ s.xmax) (hsy : s.ymin ≤ s.ymax) :
     r.toRegion ≠ s.toRegion := by
   intro h
-  have hp : (⟨s.xmin, s.ymin⟩ : Point2D) ∈ s.toRegion :=
+  have hp : Point2D.mk s.xmin s.ymin ∈ s.toRegion :=
     ⟨le_refl _, hsx, le_refl _, hsy⟩
   rw [← h] at hp
   exact absurd hp.1 (not_le.mpr hx)

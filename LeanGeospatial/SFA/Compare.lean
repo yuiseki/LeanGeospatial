@@ -148,24 +148,24 @@ theorem crosses_line_area_iff (l : LineString) (A : RegularClosedRegion)
 /-! ## Counterexamples -/
 
 /-- A point at the corner of the square `[0,2]²`. -/
-noncomputable def cornerPoint : Geometry := .point ⟨0, 0⟩
+noncomputable def cornerPoint : Geometry := .point (Point2D.mk 0 0)
 noncomputable def square2 : RegularClosedRegion := Rect.area ⟨0, 2, 0, 2⟩ (by norm_num)
 
 theorem within_counterexample :
     SFA.Within cornerPoint (.area square2) ∧ ¬ SF.Within cornerPoint (.area square2) := by
-  have hmem : (⟨0, 0⟩ : Point2D) ∈ (square2 : Region) := by
+  have hmem : Point2D.mk 0 0 ∈ (square2 : Region) := by
     rw [square2, Rect.mem_area]; norm_num
   refine ⟨⟨?_, ?_⟩, ?_⟩
-  · show {(⟨0, 0⟩ : Point2D)} ∩ (square2 : Region) = {⟨0, 0⟩}
+  · show {Point2D.mk 0 0} ∩ (square2 : Region) = {Point2D.mk 0 0}
     exact Set.inter_eq_left.mpr (Set.singleton_subset_iff.mpr hmem)
   · rw [Set.eq_empty_iff_forall_notMem]
     rintro p ⟨hp, hpE⟩
-    have hp' : p = ⟨0, 0⟩ := hp
+    have hp' : p = Point2D.mk 0 0 := hp
     subst hp'
     rw [(area square2).stratum_E] at hpE
     exact hpE hmem
   · rintro ⟨-, ⟨p, hp, hpI⟩⟩
-    have hp' : p = ⟨0, 0⟩ := hp
+    have hp' : p = Point2D.mk 0 0 := hp
     subst hp'
     change _ ∈ interior (square2 : Region) at hpI
     rw [square2, Rect.interior_area] at hpI
@@ -173,37 +173,42 @@ theorem within_counterexample :
     norm_num at h
 
 /-- `(0,0)–(2,0)` and `(1,0)–(3,0)`, overlapping between `x = 1` and `x = 2`. -/
-noncomputable def segA : LineString := LineString.seg ⟨0, 0⟩ ⟨2, 0⟩ (by simp [Point2D.ext_iff])
-noncomputable def segB : LineString := LineString.seg ⟨1, 0⟩ ⟨3, 0⟩ (by simp [Point2D.ext_iff])
+noncomputable def segA : LineString :=
+  LineString.seg (Point2D.mk 0 0) (Point2D.mk 2 0) (by simp [Point2D.ext_iff])
+noncomputable def segB : LineString :=
+  LineString.seg (Point2D.mk 1 0) (Point2D.mk 3 0) (by simp [Point2D.ext_iff])
 
-theorem mem_segA_interior {p : Point2D} (t : ℝ) (ht₀ : 0 < t) (ht₁ : t < 2) (hp : p = ⟨t, 0⟩) :
+theorem mem_segA_interior {p : Point2D} (t : ℝ) (ht₀ : 0 < t) (ht₁ : t < 2)
+    (hp : p = Point2D.mk t 0) :
     p ∈ (line segA).stratum .I := by
   subst hp
   show _ ∈ segA.interior
   rw [segA, LineString.seg_interior]
   refine ⟨⟨t / 2, ⟨by linarith, by linarith⟩, ?_⟩, ?_⟩
-  · simp only [Point2D.lerp, Point2D.mk.injEq]
+  · simp only [Point2D.lerp, Point2D.mk.injEq, Point2D.x_mk, Point2D.y_mk]
     constructor <;> ring
   simp only [Set.mem_insert_iff, Set.mem_singleton_iff, Point2D.mk.injEq, and_true, not_or]
   exact ⟨by linarith, by linarith⟩
 
-theorem mem_segB_interior {p : Point2D} (t : ℝ) (ht₀ : 1 < t) (ht₁ : t < 3) (hp : p = ⟨t, 0⟩) :
+theorem mem_segB_interior {p : Point2D} (t : ℝ) (ht₀ : 1 < t) (ht₁ : t < 3)
+    (hp : p = Point2D.mk t 0) :
     p ∈ (line segB).stratum .I := by
   subst hp
   show _ ∈ segB.interior
   rw [segB, LineString.seg_interior]
   refine ⟨⟨(t - 1) / 2, ⟨by linarith, by linarith⟩, ?_⟩, ?_⟩
-  · simp only [Point2D.lerp, Point2D.mk.injEq]
+  · simp only [Point2D.lerp, Point2D.mk.injEq, Point2D.x_mk, Point2D.y_mk]
     constructor <;> ring
   simp only [Set.mem_insert_iff, Set.mem_singleton_iff, Point2D.mk.injEq, and_true, not_or]
   exact ⟨by linarith, by linarith⟩
 
 theorem segA_segB_hasArc : HasArc (Geometry.cell .I .I (line segA) (line segB)) := by
-  have hne : (⟨5 / 4, 0⟩ : Point2D) ≠ ⟨7 / 4, 0⟩ := by norm_num [Point2D.ext_iff]
+  have hne : Point2D.mk (5 / 4) 0 ≠ Point2D.mk (7 / 4) 0 := by norm_num [Point2D.ext_iff]
   apply (hasArc_segment_diff hne Set.finite_empty).mono
   rintro p ⟨⟨t, ⟨h₀, h₁⟩, rfl⟩, -⟩
-  have hp : (⟨5 / 4, 0⟩ : Point2D).lerp ⟨7 / 4, 0⟩ t = ⟨5 / 4 + t / 2, 0⟩ := by
-    simp only [Point2D.lerp, Point2D.mk.injEq]
+  have hp :
+      (Point2D.mk (5 / 4) 0).lerp (Point2D.mk (7 / 4) 0) t = Point2D.mk (5 / 4 + t / 2) 0 := by
+    simp only [Point2D.lerp, Point2D.mk.injEq, Point2D.x_mk, Point2D.y_mk]
     constructor <;> ring
   exact ⟨mem_segA_interior (5 / 4 + t / 2) (by linarith) (by linarith) hp,
     mem_segB_interior (5 / 4 + t / 2) (by linarith) (by linarith) hp⟩
@@ -212,19 +217,19 @@ theorem crosses_counterexample :
     SFA.Crosses (line segA) (line segB) ∧ ¬ SF.Crosses (line segA) (line segB) := by
   have hAB : ¬ (line segA).carrier ⊆ (line segB).carrier := by
     intro h
-    have : (⟨0, 0⟩ : Point2D) ∈ (line segB).carrier := h (segA.start_mem)
+    have : Point2D.mk 0 0 ∈ (line segB).carrier := h (segA.start_mem)
     change _ ∈ segB.carrier at this
     rw [segB, LineString.seg_carrier] at this
     obtain ⟨t, ⟨h₀, -⟩, ht⟩ := this
-    simp only [Point2D.lerp, Point2D.mk.injEq] at ht
+    simp only [Point2D.lerp, Point2D.mk.injEq, Point2D.x_mk, Point2D.y_mk] at ht
     linarith [ht.1]
   have hBA : ¬ (line segB).carrier ⊆ (line segA).carrier := by
     intro h
-    have : (⟨3, 0⟩ : Point2D) ∈ (line segA).carrier := h (segB.finish_mem)
+    have : Point2D.mk 3 0 ∈ (line segA).carrier := h (segB.finish_mem)
     change _ ∈ segA.carrier at this
     rw [segA, LineString.seg_carrier] at this
     obtain ⟨t, ⟨-, h₁⟩, ht⟩ := this
-    simp only [Point2D.lerp, Point2D.mk.injEq] at ht
+    simp only [Point2D.lerp, Point2D.mk.injEq, Point2D.x_mk, Point2D.y_mk] at ht
     linarith [ht.1]
   refine ⟨⟨segA_segB_hasArc.nonempty.ne_empty, (inter_ne_left_iff _ _).mpr hAB,
     (inter_ne_right_iff _ _).mpr hBA⟩, fun h => ?_⟩

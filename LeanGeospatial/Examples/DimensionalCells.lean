@@ -38,7 +38,7 @@ theorem squares_II : matrix (.area sqA) (.area sqC) .I .I = .d2 := by
   rcases area_II_value sqA sqC with h | h
   · exfalso
     rw [matrix, DimValue.of_eq_F_iff, Set.eq_empty_iff_forall_notMem] at h
-    apply h ⟨3 / 2, 1⟩
+    apply h (Point2D.mk (3 / 2) 1)
     show _ ∈ interior (sqA : Region) ∧ _ ∈ interior (sqC : Region)
     rw [sqA, sqC, Rect.interior_area, Rect.interior_area]
     constructor <;>
@@ -48,24 +48,25 @@ theorem squares_II : matrix (.area sqA) (.area sqC) .I .I = .d2 := by
 
 /-! ## Lines -/
 
-def o : Point2D := ⟨0, 0⟩
-def e2 : Point2D := ⟨2, 0⟩
+def o : Point2D := Point2D.mk 0 0
+def e2 : Point2D := Point2D.mk 2 0
 theorem o_ne_e2 : o ≠ e2 := by simp [o, e2]
 def lineX : LineString := LineString.seg o e2 o_ne_e2
 
 theorem mem_lineX_interior {p : Point2D} (h : p ∈ (Geometry.line lineX).stratum .I) :
-    ∃ t ∈ Set.Icc (0 : ℝ) 1, p = ⟨2 * t, 0⟩ := by
+    ∃ t ∈ Set.Icc (0 : ℝ) 1, p = Point2D.mk (2 * t) 0 := by
   change p ∈ lineX.interior at h
   rw [lineX, LineString.seg_interior] at h
   obtain ⟨⟨t, ht, rfl⟩, -⟩ := h
   exact ⟨t, ht, by simp [Point2D.lerp, o, e2]; ring⟩
 
 /-- `(0,0)–(2,0)` and `(1,-1)–(1,1)` cross at `(1,0)`. -/
-def lineY : LineString := LineString.seg ⟨1, -1⟩ ⟨1, 1⟩ (by norm_num [Point2D.ext_iff])
+def lineY : LineString :=
+  LineString.seg (Point2D.mk 1 (-1)) (Point2D.mk 1 1) (by norm_num [Point2D.ext_iff])
 
 theorem crossing_II : matrix (.line lineX) (.line lineY) .I .I = .d0 := by
   apply DimValue.of_eq
-  apply describes_d0_of_subset_singleton (q := ⟨1, 0⟩)
+  apply describes_d0_of_subset_singleton (q := Point2D.mk 1 0)
   · refine ⟨?_, ?_⟩
     · show _ ∈ lineX.interior
       rw [lineX, LineString.seg_interior]
@@ -82,16 +83,16 @@ theorem crossing_II : matrix (.line lineX) (.line lineY) .I .I = .d0 := by
     change _ ∈ lineY.interior at hY
     rw [lineY, LineString.seg_interior] at hY
     obtain ⟨⟨s, -, hs⟩, -⟩ := hY
-    simp only [Point2D.lerp, Point2D.mk.injEq] at hs
+    simp only [Point2D.lerp, Point2D.mk.injEq, Point2D.x_mk, Point2D.y_mk] at hs
     obtain ⟨h₁, h₂⟩ := hs
-    show (⟨2 * t, 0⟩ : Point2D) = ⟨1, 0⟩
+    show Point2D.mk (2 * t) 0 = Point2D.mk 1 0
     congr 1
     linarith
 
 /-! ## Collinear lines -/
 
 /-- `(1,0)–(3,0)`, overlapping `lineX` between `x = 1` and `x = 2`. -/
-def lineX' : LineString := LineString.seg ⟨1, 0⟩ ⟨3, 0⟩ (by simp)
+def lineX' : LineString := LineString.seg (Point2D.mk 1 0) (Point2D.mk 3 0) (by simp)
 
 /-- A set on a horizontal line has no interior in the plane. -/
 theorem interior_eq_empty_of_horizontal {S : Region} {c : ℝ} (h : ∀ p ∈ S, p.y = c) :
@@ -110,10 +111,8 @@ theorem collinear_II : matrix (.line lineX) (.line lineX') .I .I = .d1 := by
     obtain ⟨t, -, rfl⟩ := mem_lineX_interior hX
     rfl
   · -- The arc from (5/4, 0) to (7/4, 0).
-    refine ⟨fun t => ⟨5 / 4 + t / 2, 0⟩, ?_, ?_, ?_⟩
+    refine ⟨fun t => (Point2D.mk (5 / 4 + t / 2) 0), ?_, ?_, ?_⟩
     · apply Continuous.continuousOn
-      apply continuous_induced_rng.mpr
-      show Continuous fun t : ℝ => ((5 / 4 + t / 2 : ℝ), (0 : ℝ))
       fun_prop
     · intro a _ b _ hab
       simp only [Point2D.mk.injEq] at hab
@@ -123,14 +122,14 @@ theorem collinear_II : matrix (.line lineX) (.line lineX') .I .I = .d1 := by
       · show _ ∈ lineX.interior
         rw [lineX, LineString.seg_interior]
         refine ⟨⟨(5 / 4 + t / 2) / 2, ⟨by linarith, by linarith⟩, ?_⟩, ?_⟩
-        · simp only [Point2D.lerp, o, e2, Point2D.mk.injEq]
+        · simp only [Point2D.lerp, o, e2, Point2D.mk.injEq, Point2D.x_mk, Point2D.y_mk]
           constructor <;> ring
         · simp only [o, e2, Set.mem_insert_iff, Set.mem_singleton_iff, Point2D.mk.injEq]
           rintro (⟨h, -⟩ | ⟨h, -⟩) <;> linarith
       · show _ ∈ lineX'.interior
         rw [lineX', LineString.seg_interior]
         refine ⟨⟨(1 / 4 + t / 2) / 2, ⟨by linarith, by linarith⟩, ?_⟩, ?_⟩
-        · simp only [Point2D.lerp, Point2D.mk.injEq]
+        · simp only [Point2D.lerp, Point2D.mk.injEq, Point2D.x_mk, Point2D.y_mk]
           constructor <;> ring
         · simp only [Set.mem_insert_iff, Set.mem_singleton_iff, Point2D.mk.injEq]
           rintro (⟨h, -⟩ | ⟨h, -⟩) <;> linarith
