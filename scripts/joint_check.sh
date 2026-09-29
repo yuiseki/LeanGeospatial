@@ -69,6 +69,19 @@ example (p q : Geodesy.E2) : Geospatial.distance p q = dist p q := rfl
 /-- LeanGeospatial's coordinates read LeanGeodesy's plane vectors. -/
 example (a b : ℝ) : Geospatial.Point2D.x (Geodesy.Projection.vec2 a b) = a := by
   simp [Geospatial.Point2D.x, Geodesy.Projection.vec2]
+
+/-- Web Mercator's chart image is a LeanGeospatial region. -/
+example : Geospatial.Region := Geodesy.Projection.webMercatorChartImage
+
+/-- Two Mercator maps of one globe at different scales differ by a
+homeomorphism of the plane, so they agree on every RCC8 relation between the
+areas drawn on them. -/
+example (R₁ R₂ : ℝ) (h₁ : R₁ ≠ 0) (h₂ : R₂ ≠ 0) (A B : Geospatial.RegularClosedRegion)
+    (r : Geospatial.RCC8.Relation) :
+    let e := (Geodesy.Projection.mercatorHomeomorph R₁ h₁).symm.trans
+      (Geodesy.Projection.mercatorHomeomorph R₂ h₂)
+    r.holds (A.map e) (B.map e) ↔ r.holds A B :=
+  Geospatial.RCC8.Relation.holds_map_iff _ A B r
 LEAN
 
 cat > False.lean <<'LEAN'

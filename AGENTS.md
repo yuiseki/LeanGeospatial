@@ -57,7 +57,14 @@ What joins them:
   `interior`, `closure` and `frontier`, and `LeanGeospatial/Homeomorph.lean`
   proves that every homeomorphism of the plane preserves touching, the eight
   RCC8 relations and the DE-9IM matrix. Topological relations between areas
-  do not depend on how the plane is moved, stretched or bent.
+  do not depend on how the plane is moved, stretched or bent. On the other
+  side, `LeanGeodesy/Projection/Homeomorph.lean` constructs projections as
+  homeomorphisms on the domains where they are ones: Mercator from the open
+  latitudes onto the whole plane (`mercatorHomeomorph`), and Web Mercator
+  from the globe cut along the antimeridian onto the square
+  (`webMercatorHomeomorph`; without the cut it is discontinuous). Composing
+  two such maps gives a homeomorphism of the plane, and LeanGeospatial's
+  theorems then say the two maps agree on every topological relation.
 
 Checking the link. `scripts/joint_check.sh`, identical in both repositories,
 builds a throwaway project that requires both libraries by path. It fails if
@@ -70,6 +77,9 @@ example (R φ lam : ℝ) (A : Geospatial.Region) : Prop :=
   Geodesy.Projection.mercator R φ lam ∈ A
 example (p q : Geodesy.E2) : Geospatial.distance p q = dist p q := rfl
 ```
+
+and it checks that LeanGeospatial's `RCC8.Relation.holds_map_iff` applies to
+the transition between two Mercator maps built by LeanGeodesy.
 
 It also feeds Lean a deliberately false line and fails if that is accepted,
 so a check that silently stopped running cannot pass. CI runs it in the
