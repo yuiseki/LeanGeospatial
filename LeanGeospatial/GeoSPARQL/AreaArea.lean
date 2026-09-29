@@ -28,7 +28,7 @@ namespace Geospatial.GeoSPARQL
 
 open Geospatial Geospatial.RCC8 Geospatial.DE9IM
 
-variable (A B : RegularClosedRegion)
+variable (A B : RegularClosedRegion Point2D)
 
 /-! ## Cell facts for areas -/
 
@@ -87,31 +87,31 @@ section Sound
 
 variable {A B}
 
-theorem eq_of_rcc8Pattern (h : (rcc8Pattern .eq).Matches A B) : EQ A B := by
+theorem eq_of_rcc8Pattern (h : (rcc8Pattern .eq).Matches (A : Region) B) : EQ A B := by
   simp only [rcc8Pattern_eq_eq, Pattern.Matches, PatternChar.matches_T, PatternChar.matches_F]
     at h
   obtain ⟨-, -, hIE, -, -, hBE, hEI, hEB, -⟩ := h
   exact within_antisymm ((within_iff_cells_of_isClosed A.isClosed B.isClosed).mpr ⟨hIE, hBE⟩)
     ((within_swap_iff A B).mpr ⟨hEI, hEB⟩)
 
-theorem dc_of_rcc8Pattern (h : (rcc8Pattern .dc).Matches A B) : DC A B := by
+theorem dc_of_rcc8Pattern (h : (rcc8Pattern .dc).Matches (A : Region) B) : DC A B := by
   simp only [rcc8Pattern_dc_eq, Pattern.Matches, PatternChar.matches_T, PatternChar.matches_F]
     at h
   obtain ⟨hII, hIB, -, hBI, hBB, -⟩ := h
   exact (A.disjoint_iff_cells B).mpr ⟨hII, hIB, hBI, hBB⟩
 
-theorem ec_of_rcc8Pattern (h : (rcc8Pattern .ec).Matches A B) : EC A B := by
+theorem ec_of_rcc8Pattern (h : (rcc8Pattern .ec).Matches (A : Region) B) : EC A B := by
   simp only [rcc8Pattern_ec_eq, Pattern.Matches, PatternChar.matches_T, PatternChar.matches_F]
     at h
   obtain ⟨hII, -, -, -, hBB, -⟩ := h
   exact (A.touches_iff_cells B).mpr ⟨hII, Or.inr (Or.inr hBB)⟩
 
-theorem po_of_rcc8Pattern (h : (rcc8Pattern .po).Matches A B) : PO A B := by
+theorem po_of_rcc8Pattern (h : (rcc8Pattern .po).Matches (A : Region) B) : PO A B := by
   simp only [rcc8Pattern_po_eq, Pattern.Matches, PatternChar.matches_T] at h
   obtain ⟨hII, -, hIE, -, -, -, hEI, -⟩ := h
   exact (po_iff_cells A B).mpr ⟨hII, hIE, hEI⟩
 
-theorem tpp_of_rcc8Pattern (h : (rcc8Pattern .tpp).Matches A B) : TPP A B := by
+theorem tpp_of_rcc8Pattern (h : (rcc8Pattern .tpp).Matches (A : Region) B) : TPP A B := by
   simp only [rcc8Pattern_tpp_eq, Pattern.Matches, PatternChar.matches_T, PatternChar.matches_F]
     at h
   obtain ⟨-, -, hIE, -, hBB, hBE, hEI, -⟩ := h
@@ -119,24 +119,24 @@ theorem tpp_of_rcc8Pattern (h : (rcc8Pattern .tpp).Matches A B) : TPP A B := by
     fun hN => hBB.ne_empty ((within_interior_iff_cells A B).mp hN).2.2.2⟩
   exact (not_within_swap_iff A B).mpr hEI (by rw [hAB]; exact within_refl _)
 
-theorem ntpp_of_rcc8Pattern (h : (rcc8Pattern .ntpp).Matches A B) : NTPP A B := by
+theorem ntpp_of_rcc8Pattern (h : (rcc8Pattern .ntpp).Matches (A : Region) B) : NTPP A B := by
   simp only [rcc8Pattern_ntpp_eq, Pattern.Matches, PatternChar.matches_T, PatternChar.matches_F]
     at h
   obtain ⟨-, hIB, hIE, -, hBB, hBE, hEI, -⟩ := h
   refine ⟨(within_interior_iff_cells A B).mpr ⟨hIE, hBE, hIB, hBB⟩, fun hAB => ?_⟩
   exact (not_within_swap_iff A B).mpr hEI (by rw [hAB]; exact within_refl _)
 
-theorem tppi_of_rcc8Pattern (h : (rcc8Pattern .tppi).Matches A B) : TPPi A B := by
+theorem tppi_of_rcc8Pattern (h : (rcc8Pattern .tppi).Matches (A : Region) B) : TPPi A B := by
   rw [rcc8Pattern_tppi, Pattern.matches_transpose] at h
   exact tpp_of_rcc8Pattern h
 
-theorem ntppi_of_rcc8Pattern (h : (rcc8Pattern .ntppi).Matches A B) : NTPPi A B := by
+theorem ntppi_of_rcc8Pattern (h : (rcc8Pattern .ntppi).Matches (A : Region) B) : NTPPi A B := by
   rw [rcc8Pattern_ntppi, Pattern.matches_transpose] at h
   exact ntpp_of_rcc8Pattern h
 
 /-- For every RCC8 relation, matching its Table 8 pattern implies the
 relation. -/
-theorem holds_of_rcc8Pattern (r : Relation) (h : (rcc8Pattern r).Matches A B) :
+theorem holds_of_rcc8Pattern (r : Relation) (h : (rcc8Pattern r).Matches (A : Region) B) :
     r.holds A B := by
   cases r
   · exact dc_of_rcc8Pattern h
@@ -161,7 +161,7 @@ private theorem cell_mem {s t : Stratum} {p : Point2D} (hs : p ∈ s.set (A : Re
     (ht : p ∈ t.set (B : Region)) : (cell s t (A : Region) B).Nonempty := ⟨p, hs, ht⟩
 
 theorem rcc8Pattern_of_dc (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty)
-    (h : DC A B) : (rcc8Pattern .dc).Matches A B := by
+    (h : DC A B) : (rcc8Pattern .dc).Matches (A : Region) B := by
   obtain ⟨hII, hIB, hBI, hBB⟩ := (A.disjoint_iff_cells B).mp h
   have hAB : (A : Region) ∩ B = ∅ := h
   have notB : ∀ {p}, p ∈ (A : Region) → p ∉ (B : Region) := fun hpA hpB => by
@@ -202,7 +202,7 @@ theorem rcc8Pattern_of_dc (hA : (A : Region).Nonempty) (hB : (B : Region).Nonemp
       (by show e ∈ exterior (B : Region); rw [eB]; exact he.2)
 
 theorem rcc8Pattern_of_eq (hA : (A : Region).Nonempty) (hU : (A : Region) ≠ Set.univ)
-    (h : EQ A B) : (rcc8Pattern .eq).Matches A B := by
+    (h : EQ A B) : (rcc8Pattern .eq).Matches (A : Region) B := by
   obtain rfl : A = B := SetLike.coe_injective h
   obtain ⟨a, ha⟩ := (A.nonempty_iff_interior_nonempty).mp hA
   obtain ⟨a', ha'⟩ := boundary_nonempty A.isClosed hA hU
@@ -219,7 +219,7 @@ theorem rcc8Pattern_of_eq (hA : (A : Region).Nonempty) (hU : (A : Region) ≠ Se
   · rw [Set.inter_comm]; exact dBE
 
 theorem rcc8Pattern_of_ntpp (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty)
-    (hU : (B : Region) ≠ Set.univ) (h : NTPP A B) : (rcc8Pattern .ntpp).Matches A B := by
+    (hU : (B : Region) ≠ Set.univ) (h : NTPP A B) : (rcc8Pattern .ntpp).Matches (A : Region) B := by
   obtain ⟨hN, hne⟩ := h
   obtain ⟨hIE, hBE, hIB, hBB⟩ := (within_interior_iff_cells A B).mp hN
   have hW : Within (A : Region) B := within_trans hN interior_subset
@@ -246,7 +246,7 @@ theorem rcc8Pattern_of_ntpp (hA : (A : Region).Nonempty) (hB : (B : Region).None
     exact fun heA => he' (hW heA)
 
 theorem rcc8Pattern_of_ntppi (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty)
-    (hU : (A : Region) ≠ Set.univ) (h : NTPPi A B) : (rcc8Pattern .ntppi).Matches A B := by
+    (hU : (A : Region) ≠ Set.univ) (h : NTPPi A B) : (rcc8Pattern .ntppi).Matches (A : Region) B := by
   rw [rcc8Pattern_ntppi, Pattern.matches_transpose]
   exact rcc8Pattern_of_ntpp hB hA hU h
 
@@ -271,7 +271,7 @@ def SF.pred : SF → Region → Region → Prop
   | .overlaps, A, B => Overlaps A B
 
 /-- Some relation of the set holds. -/
-def HoldsAny (S : Finset Relation) (A B : RegularClosedRegion) : Prop := ∃ r ∈ S, r.holds A B
+def HoldsAny (S : Finset Relation) (A B : RegularClosedRegion Point2D) : Prop := ∃ r ∈ S, r.holds A B
 
 section Table5
 
@@ -359,10 +359,10 @@ end Table5
 /-- The `within` row of Table 5, as printed, fails: an area lies within
 itself but is neither `TPP` nor `NTPP` of itself. -/
 theorem table5_within_row_fails :
-    ¬ ∀ A B : RegularClosedRegion, (A : Region).Nonempty → (B : Region).Nonempty →
+    ¬ ∀ A B : RegularClosedRegion Point2D, (A : Region).Nonempty → (B : Region).Nonempty →
       (Within (A : Region) B ↔ HoldsAny (table5 .within) A B) := by
   intro h
-  let A := RCC8.univ
+  let A : RegularClosedRegion Point2D := RCC8.univ
   have hA : (A : Region).Nonempty := ⟨Point2D.mk 0 0, trivial⟩
   obtain ⟨r, hr, hholds⟩ := (h A A hA hA).mp (within_refl _)
   have heq : Relation.eq.holds A A := rfl
@@ -371,10 +371,10 @@ theorem table5_within_row_fails :
   exact absurd hr (by decide)
 
 theorem table5_contains_row_fails :
-    ¬ ∀ A B : RegularClosedRegion, (A : Region).Nonempty → (B : Region).Nonempty →
+    ¬ ∀ A B : RegularClosedRegion Point2D, (A : Region).Nonempty → (B : Region).Nonempty →
       (Contains (A : Region) B ↔ HoldsAny (table5 .contains) A B) := by
   intro h
-  let A := RCC8.univ
+  let A : RegularClosedRegion Point2D := RCC8.univ
   have hA : (A : Region).Nonempty := ⟨Point2D.mk 0 0, trivial⟩
   obtain ⟨r, hr, hholds⟩ := (h A A hA hA).mp (contains_refl _)
   have heq : Relation.eq.holds A A := rfl
@@ -394,7 +394,7 @@ section SFPatterns
 variable {A B}
 
 theorem sf_disjoint_pattern :
-    AnyOf (sfPatterns table6 .disjoint) A B ↔ DC A B := by
+    AnyOf (sfPatterns table6 .disjoint) (A : Region) B ↔ DC A B := by
   rw [show sfPatterns table6 .disjoint = [⟨.F, .F, .any, .F, .F, .any, .any, .any, .any⟩]
     by decide]
   simp only [AnyOf, List.mem_singleton, exists_eq_left, Pattern.Matches,
@@ -402,7 +402,7 @@ theorem sf_disjoint_pattern :
   exact (A.disjoint_iff_cells B).symm
 
 theorem sf_intersects_pattern :
-    AnyOf (sfPatterns table2 .intersects) A B ↔ ¬ DC A B := by
+    AnyOf (sfPatterns table2 .intersects) (A : Region) B ↔ ¬ DC A B := by
   rw [show sfPatterns table2 .intersects =
       [⟨.T, .any, .any, .any, .any, .any, .any, .any, .any⟩,
        ⟨.any, .T, .any, .any, .any, .any, .any, .any, .any⟩,
@@ -414,7 +414,7 @@ theorem sf_intersects_pattern :
   rw [DC, disjoint_iff_not_intersects, not_not, A.intersects_iff_cells B]
 
 theorem sf_touches_pattern :
-    AnyOf (sfPatterns table2 .touches) A B ↔ EC A B := by
+    AnyOf (sfPatterns table2 .touches) (A : Region) B ↔ EC A B := by
   rw [show sfPatterns table2 .touches =
       [⟨.F, .T, .any, .any, .any, .any, .any, .any, .any⟩,
        ⟨.F, .any, .any, .T, .any, .any, .any, .any, .any⟩,
@@ -428,12 +428,12 @@ theorem sf_touches_pattern :
 /-- Table 6's `sfIntersects` rows are the touches rows, so they describe
 `EC`, not `¬ DC`. -/
 theorem sf_intersects_table6_pattern :
-    AnyOf (sfPatterns table6 .intersects) A B ↔ EC A B := by
+    AnyOf (sfPatterns table6 .intersects) (A : Region) B ↔ EC A B := by
   rw [show sfPatterns table6 .intersects = sfPatterns table2 .touches by decide]
   exact sf_touches_pattern
 
 theorem sf_within_pattern (hA : (A : Region).Nonempty) :
-    AnyOf (sfPatterns table2 .within) A B ↔ TPP A B ∨ NTPP A B ∨ EQ A B := by
+    AnyOf (sfPatterns table2 .within) (A : Region) B ↔ TPP A B ∨ NTPP A B ∨ EQ A B := by
   rw [show sfPatterns table2 .within = [⟨.T, .any, .F, .any, .any, .F, .any, .any, .any⟩]
     by decide]
   simp only [AnyOf, List.mem_singleton, exists_eq_left, Pattern.Matches, PatternChar.matches_T,
@@ -441,7 +441,7 @@ theorem sf_within_pattern (hA : (A : Region).Nonempty) :
   rw [← within_iff_rcc8, A.within_iff_cells B hA]
 
 theorem sf_contains_pattern (hB : (B : Region).Nonempty) :
-    AnyOf (sfPatterns table2 .contains) A B ↔ TPPi A B ∨ NTPPi A B ∨ EQ A B := by
+    AnyOf (sfPatterns table2 .contains) (A : Region) B ↔ TPPi A B ∨ NTPPi A B ∨ EQ A B := by
   rw [show sfPatterns table2 .contains = [⟨.T, .any, .any, .any, .any, .any, .F, .F, .any⟩]
     by decide]
   simp only [AnyOf, List.mem_singleton, exists_eq_left, Pattern.Matches, PatternChar.matches_T,
@@ -449,7 +449,7 @@ theorem sf_contains_pattern (hB : (B : Region).Nonempty) :
   rw [← contains_iff_rcc8, A.contains_iff_cells B hB]
 
 theorem sf_overlaps_pattern :
-    AnyOf (sfPatterns table2 .overlaps) A B ↔ PO A B := by
+    AnyOf (sfPatterns table2 .overlaps) (A : Region) B ↔ PO A B := by
   rw [show sfPatterns table2 .overlaps = [⟨.T, .any, .T, .any, .any, .any, .T, .any, .any⟩]
     by decide]
   simp only [AnyOf, List.mem_singleton, exists_eq_left, Pattern.Matches, PatternChar.matches_T,

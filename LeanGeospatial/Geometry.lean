@@ -127,7 +127,7 @@ end LineString
 inductive Geometry where
   | point (p : Point2D)
   | line (l : LineString)
-  | area (A : RegularClosedRegion)
+  | area (A : RegularClosedRegion Point2D)
 
 namespace Geometry
 
@@ -154,7 +154,7 @@ noncomputable def stratum : Geometry → Stratum → Region
   | line l, .E => l.exterior
   | area A, s => s.set A
 
-@[simp] theorem stratum_area (A : RegularClosedRegion) (s : Stratum) :
+@[simp] theorem stratum_area (A : RegularClosedRegion Point2D) (s : Stratum) :
     (area A).stratum s = s.set A := rfl
 
 /-- The exterior is always everything off the geometry. -/
@@ -217,7 +217,7 @@ theorem existsUnique_stratum (g : Geometry) (p : Point2D) : ∃! s : Stratum, p 
 noncomputable def cell (s t : Stratum) (g h : Geometry) : Region := g.stratum s ∩ h.stratum t
 
 /-- For two areas, the cells are the ones of `NineIntersection.lean`. -/
-theorem cell_area_area (s t : Stratum) (A B : RegularClosedRegion) :
+theorem cell_area_area (s t : Stratum) (A B : RegularClosedRegion Point2D) :
     cell s t (area A) (area B) = Geospatial.cell s t (A : Region) B := rfl
 
 end Geometry

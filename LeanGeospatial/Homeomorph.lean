@@ -5,11 +5,12 @@ import Mathlib.Topology.Homeomorph.Lemmas
 /-!
 # Homeomorphisms preserve spatial relations
 
-A homeomorphism of the plane is a continuous bijection with a continuous
-inverse. It may stretch and bend the plane but never tear or glue it. The
-spatial relations of this library are all built from set operations and from
-interior, closure and boundary, and a homeomorphism commutes with every one of
-them. So no relation can tell a configuration from its image.
+A homeomorphism `e : α ≃ₜ β` between two topological spaces is a continuous
+bijection with a continuous inverse. It may stretch and bend a space but never
+tear or glue it. The spatial relations of this library are all built from set
+operations and from interior, closure and boundary, and a homeomorphism
+commutes with every one of them. So no relation can tell a configuration from
+its image, even when the image lies in another space.
 
 The file proves this in the order the relations are built:
 
@@ -24,19 +25,26 @@ The file proves this in the order the relations are built:
    too (`DE9IM.DimValue.of_image`), so for areas the whole DE-9IM matrix is
    unchanged (`DE9IM.matrix_map`).
 
+Steps 1 to 3 and the cells and patterns of step 4 hold for any two spaces
+`α` and `β`. Dimensions are defined for the plane only (`HasArc` looks for
+arcs in `Point2D`), so the last part of step 4 is about homeomorphisms of the
+plane.
+
 Translations, rotations, reflections and every other isometry are
 homeomorphisms, so all of this applies to them.
 -/
 
 namespace Geospatial
 
-variable (e : Point2D ≃ₜ Point2D)
+section General
+
+variable {α β : Type*} [TopologicalSpace α] [TopologicalSpace β] (e : α ≃ₜ β)
 
 /-! ## Regions and their images -/
 
 section Image
 
-variable (A B : Region)
+variable (A B : Set α)
 
 theorem interior_image : interior (e '' A) = e '' interior A :=
   (e.image_interior A).symm
@@ -74,17 +82,17 @@ end Image
 namespace RegularClosedRegion
 
 /-- The image of an area under a homeomorphism, again an area. -/
-def map (A : RegularClosedRegion) : RegularClosedRegion where
+def map (A : RegularClosedRegion α) : RegularClosedRegion β where
   carrier := e '' A
   closure_interior_eq' := by
     rw [← e.image_interior, ← e.image_closure, A.closure_interior_eq]
 
-@[simp] theorem coe_map (A : RegularClosedRegion) :
-    ((A.map e : RegularClosedRegion) : Region) = e '' A := rfl
+@[simp] theorem coe_map (A : RegularClosedRegion α) :
+    ((A.map e : RegularClosedRegion β) : Set β) = e '' A := rfl
 
 /-- Two areas touch exactly when their images under a homeomorphism do. -/
-theorem touches_map_iff (A B : RegularClosedRegion) :
-    Touches (A.map e : Region) (B.map e) ↔ Touches (A : Region) B :=
+theorem touches_map_iff (A B : RegularClosedRegion α) :
+    Touches (A.map e : Set β) (B.map e) ↔ Touches (A : Set α) B :=
   touches_image_iff e A B
 
 end RegularClosedRegion
@@ -93,7 +101,7 @@ end RegularClosedRegion
 
 namespace RCC8
 
-variable (A B : RegularClosedRegion)
+variable (A B : RegularClosedRegion α)
 
 theorem dc_map_iff : DC (A.map e) (B.map e) ↔ DC A B :=
   disjoint_image_iff e A B
@@ -140,7 +148,7 @@ end RCC8
 
 /-! ## DE-9IM -/
 
-theorem Stratum.set_image (s : Stratum) (A : Region) : s.set (e '' A) = e '' s.set A := by
+theorem Stratum.set_image (s : Stratum) (A : Set α) : s.set (e '' A) = e '' s.set A := by
   cases s
   · exact interior_image e A
   · exact boundary_image e A
@@ -148,22 +156,34 @@ theorem Stratum.set_image (s : Stratum) (A : Region) : s.set (e '' A) = e '' s.s
 
 /-- A homeomorphism carries each of the nine cells to the corresponding cell of
 the images. -/
-theorem cell_image (s t : Stratum) (A B : Region) :
+theorem cell_image (s t : Stratum) (A B : Set α) :
     cell s t (e '' A) (e '' B) = e '' cell s t A B := by
   simp only [cell, Stratum.set_image, Set.image_inter e.injective]
 
 namespace DE9IM
 
-theorem PatternChar.matches_image_iff (c : PatternChar) (S : Region) :
+theorem PatternChar.matches_image_iff (c : PatternChar) (S : Set α) :
     c.Matches (e '' S) ↔ c.Matches S := by
   cases c <;> simp only [PatternChar.Matches, Set.image_nonempty, Set.image_eq_empty]
 
 /-- A `T`/`F`/`*` pattern matches two regions exactly when it matches their
 images under a homeomorphism. -/
-theorem Pattern.matches_image_iff (p : Pattern) (A B : Region) :
+theorem Pattern.matches_image_iff (p : Pattern) (A B : Set α) :
     p.Matches (e '' A) (e '' B) ↔ p.Matches A B := by
   simp only [Pattern.Matches, II, IB, IE, BI, BB, BE, EI, EB, EE, cell_image,
     PatternChar.matches_image_iff]
+
+end DE9IM
+
+end General
+
+/-! ## Dimensions in the plane -/
+
+section Plane
+
+variable (e : Point2D ≃ₜ Point2D)
+
+namespace DE9IM
 
 theorem hasArc_image_iff (S : Region) : HasArc (e '' S) ↔ HasArc S := by
   have key : ∀ (f : Point2D ≃ₜ Point2D) (S : Region), HasArc S → HasArc (f '' S) := by
@@ -186,18 +206,20 @@ theorem DimValue.of_image (S : Region) : DimValue.of (e '' S) = DimValue.of S :=
   DimValue.of_eq ((DimValue.describes_image_iff e _ S).mpr (DimValue.of_describes S))
 
 /-- The DE-9IM matrix of two areas is unchanged by a homeomorphism. -/
-theorem matrix_map (A B : RegularClosedRegion) (s t : Stratum) :
+theorem matrix_map (A B : RegularClosedRegion Point2D) (s t : Stratum) :
     matrix (.area (A.map e)) (.area (B.map e)) s t = matrix (.area A) (.area B) s t := by
   simp only [matrix, Geometry.cell_area_area, RegularClosedRegion.coe_map, cell_image,
     DimValue.of_image]
 
 /-- A dimensioned pattern matches two areas exactly when it matches their
 images under a homeomorphism. -/
-theorem DimPattern.matches_map_iff (p : DimPattern) (A B : RegularClosedRegion) :
+theorem DimPattern.matches_map_iff (p : DimPattern) (A B : RegularClosedRegion Point2D) :
     p.Matches (.area (A.map e)) (.area (B.map e)) ↔ p.Matches (.area A) (.area B) := by
   simp only [DimPattern.Matches, DimPatternChar.Matches, Geometry.cell_area_area,
     RegularClosedRegion.coe_map, cell_image, DimValue.of_image]
 
 end DE9IM
+
+end Plane
 
 end Geospatial

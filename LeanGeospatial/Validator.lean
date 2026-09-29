@@ -51,7 +51,7 @@ structure Graph where
   facts : List Fact
 
 /-- An assignment of nonempty areas to features that makes every fact true. -/
-def Graph.Satisfies (g : Graph) (M : FeatureId → RegularClosedRegion) : Prop :=
+def Graph.Satisfies (g : Graph) (M : FeatureId → RegularClosedRegion Point2D) : Prop :=
   (∀ x, (M x : Region).Nonempty) ∧ ∀ f ∈ g.facts, f.rel.holds (M f.a) (M f.b)
 
 /-! ## Reading the graph -/
@@ -68,7 +68,7 @@ def lookupFacts : List Fact → FeatureId → FeatureId → Option Relation
 /-- The stated relation from `a` to `b`. -/
 def Graph.lookup (g : Graph) (a b : FeatureId) : Option Relation := lookupFacts g.facts a b
 
-theorem lookupFacts_sound {M : FeatureId → RegularClosedRegion} {g : List Fact}
+theorem lookupFacts_sound {M : FeatureId → RegularClosedRegion Point2D} {g : List Fact}
     (hM : ∀ f ∈ g, f.rel.holds (M f.a) (M f.b)) {a b : FeatureId} {r : Relation}
     (h : lookupFacts g a b = some r) : r.holds (M a) (M b) := by
   induction g with
@@ -87,7 +87,7 @@ theorem lookupFacts_sound {M : FeatureId → RegularClosedRegion} {g : List Fact
       exact (f.rel.holds_converse _ _).mpr hf
     · exact ih hM' h
 
-theorem Graph.lookup_sound {g : Graph} {M : FeatureId → RegularClosedRegion}
+theorem Graph.lookup_sound {g : Graph} {M : FeatureId → RegularClosedRegion Point2D}
     (hM : g.Satisfies M) {a b : FeatureId} {r : Relation} (h : g.lookup a b = some r) :
     r.holds (M a) (M b) :=
   lookupFacts_sound hM.2 h
@@ -113,7 +113,7 @@ def Graph.derived (g : Graph) (a c : FeatureId) : Finset Relation :=
 
 /-- Whatever relation a model has from `a` to `c` survives every
 intermediate feature. -/
-theorem Graph.mem_constrain {g : Graph} {M : FeatureId → RegularClosedRegion}
+theorem Graph.mem_constrain {g : Graph} {M : FeatureId → RegularClosedRegion Point2D}
     (hM : g.Satisfies M) {a c : FeatureId} {t : Relation} (ht : t.holds (M a) (M c))
     (bs : List FeatureId) : t ∈ g.constrain a c bs := by
   induction bs with
@@ -122,12 +122,12 @@ theorem Graph.mem_constrain {g : Graph} {M : FeatureId → RegularClosedRegion}
     simp only [Graph.constrain]
     split
     · next r s hr hs =>
-      refine Finset.mem_inter.mpr ⟨ih, mem_table_of_mem_compose ?_⟩
+      refine Finset.mem_inter.mpr ⟨ih, mem_table_of_mem_compose (α := Point2D) ?_⟩
       exact ⟨M a, M b, M c, hM.1 a, hM.1 b, hM.1 c,
         Graph.lookup_sound hM hr, Graph.lookup_sound hM hs, ht⟩
     · exact ih
 
-theorem Graph.mem_derived {g : Graph} {M : FeatureId → RegularClosedRegion}
+theorem Graph.mem_derived {g : Graph} {M : FeatureId → RegularClosedRegion Point2D}
     (hM : g.Satisfies M) {a c : FeatureId} {t : Relation} (ht : t.holds (M a) (M c)) :
     t ∈ g.derived a c :=
   Graph.mem_constrain hM ht _
@@ -207,7 +207,7 @@ def statedFacts : List Fact → FeatureId → FeatureId → Finset Relation
 /-- What the stated facts allow between `a` and `b`. -/
 def Graph.stated (g : Graph) (a b : FeatureId) : Finset Relation := statedFacts g.facts a b
 
-theorem mem_statedFacts {M : FeatureId → RegularClosedRegion} (hne : ∀ x, (M x : Region).Nonempty)
+theorem mem_statedFacts {M : FeatureId → RegularClosedRegion Point2D} (hne : ∀ x, (M x : Region).Nonempty)
     {fs : List Fact} (hM : ∀ f ∈ fs, f.rel.holds (M f.a) (M f.b)) {a b : FeatureId}
     {t : Relation} (ht : t.holds (M a) (M b)) : t ∈ statedFacts fs a b := by
   induction fs with
@@ -227,7 +227,7 @@ theorem mem_statedFacts {M : FeatureId → RegularClosedRegion} (hne : ∀ x, (M
 
 /-- Whatever relation a model has between `a` and `b` is allowed by the
 stated facts. -/
-theorem Graph.mem_stated {g : Graph} {M : FeatureId → RegularClosedRegion}
+theorem Graph.mem_stated {g : Graph} {M : FeatureId → RegularClosedRegion Point2D}
     (hM : g.Satisfies M) {a b : FeatureId} {t : Relation} (ht : t.holds (M a) (M b)) :
     t ∈ g.stated a b :=
   mem_statedFacts hM.1 hM.2 ht
@@ -250,7 +250,7 @@ feature, and by the facts stated between `a` and `c` themselves. -/
 def Graph.allowed (g : Graph) (a c : FeatureId) : Finset Relation :=
   g.derived a c ∩ g.stated a c
 
-theorem Graph.mem_allowed {g : Graph} {M : FeatureId → RegularClosedRegion}
+theorem Graph.mem_allowed {g : Graph} {M : FeatureId → RegularClosedRegion Point2D}
     (hM : g.Satisfies M) {a c : FeatureId} {t : Relation} (ht : t.holds (M a) (M c)) :
     t ∈ g.allowed a c :=
   Finset.mem_inter.mpr ⟨Graph.mem_derived hM ht, Graph.mem_stated hM ht⟩
@@ -273,7 +273,7 @@ theorem Graph.check_contradictory {g : Graph} {a c : FeatureId}
 
 /-- An `entailed t` verdict means every model has `t` from `a` to `c`. -/
 theorem Graph.check_entailed {g : Graph} {a c : FeatureId} {t : Relation}
-    (h : g.check a c = .entailed t) {M : FeatureId → RegularClosedRegion}
+    (h : g.check a c = .entailed t) {M : FeatureId → RegularClosedRegion Point2D}
     (hM : g.Satisfies M) : t.holds (M a) (M c) := by
   obtain ⟨t₀, ht₀⟩ := exists_relation (M a) (M c) (hM.1 a) (hM.1 c)
   have hc : ¬ g.conflict = true := fun hc => Graph.no_model_of_conflict hc ⟨M, hM⟩
@@ -284,7 +284,7 @@ theorem Graph.check_entailed {g : Graph} {a c : FeatureId} {t : Relation}
 
 /-- A `possible S` verdict means every model has one of `S` from `a` to `c`. -/
 theorem Graph.check_possible {g : Graph} {a c : FeatureId} {S : Finset Relation}
-    (h : g.check a c = .possible S) {M : FeatureId → RegularClosedRegion}
+    (h : g.check a c = .possible S) {M : FeatureId → RegularClosedRegion Point2D}
     (hM : g.Satisfies M) {t : Relation} (ht : t.holds (M a) (M c)) : t ∈ S := by
   have hc : ¬ g.conflict = true := fun hc => Graph.no_model_of_conflict hc ⟨M, hM⟩
   unfold Graph.check at h
@@ -302,7 +302,7 @@ theorem triangle_realizes {a b c : FeatureId} (hab : a ≠ b) (hac : a ≠ c) (h
     ∃ M, Graph.Satisfies ⟨[⟨a, r, b⟩, ⟨b, s, c⟩]⟩ M ∧ t.holds (M a) (M c) := by
   obtain ⟨A, B, C, hA, hB, hC, hr, hs, htAC⟩ := realizes_of_mem_table r s t ht
   classical
-  let M : FeatureId → RegularClosedRegion := fun x => if x = a then A else if x = b then B else C
+  let M : FeatureId → RegularClosedRegion Point2D := fun x => if x = a then A else if x = b then B else C
   have Ma : M a = A := by simp [M]
   have Mb : M b = B := by simp [M, hab.symm]
   have Mc : M c = C := by simp [M, hac.symm, hbc.symm]

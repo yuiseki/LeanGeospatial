@@ -37,21 +37,21 @@ theorem h1 : s1.xmin < s1.xmax ∧ s1.ymin < s1.ymax := by norm_num [s1]
 theorem h2 : s2.xmin < s2.xmax ∧ s2.ymin < s2.ymax := by norm_num [s2]
 theorem h3 : s3.xmin < s3.xmax ∧ s3.ymin < s3.ymax := by norm_num [s3]
 
-def S1 : RegularClosedRegion := s1.area h1
-def S2 : RegularClosedRegion := s2.area h2
-def S3 : RegularClosedRegion := s3.area h3
+def S1 : RegularClosedRegion Point2D := s1.area h1
+def S2 : RegularClosedRegion Point2D := s2.area h2
+def S3 : RegularClosedRegion Point2D := s3.area h3
 
 theorem S1_nonempty : (S1 : Region).Nonempty := s1.area_nonempty h1
 
-theorem univ_nonempty : (RCC8.univ : Region).Nonempty := ⟨Point2D.mk 0 0, trivial⟩
+theorem univ_nonempty : ((RCC8.univ : RegularClosedRegion Point2D) : Region).Nonempty := ⟨Point2D.mk 0 0, trivial⟩
 
-@[simp] theorem coe_univ : (RCC8.univ : Region) = Set.univ := rfl
+@[simp] theorem coe_univ : ((RCC8.univ : RegularClosedRegion Point2D) : Region) = Set.univ := rfl
 
 /-! ## The whole plane -/
 
 theorem eq_counterexample :
-    ∃ A B : RegularClosedRegion, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
-      EQ A B ∧ ¬ (rcc8Pattern .eq).Matches A B := by
+    ∃ A B : RegularClosedRegion Point2D, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
+      EQ A B ∧ ¬ (rcc8Pattern .eq).Matches (A : Region) B := by
   refine ⟨RCC8.univ, RCC8.univ, univ_nonempty, univ_nonempty, rfl, fun h => ?_⟩
   simp only [rcc8Pattern_eq_eq, Pattern.Matches, PatternChar.matches_T, PatternChar.matches_F]
     at h
@@ -69,8 +69,8 @@ theorem S1_ntpp_univ : NTPP S1 RCC8.univ :=
   ⟨by rw [coe_univ, interior_univ]; exact Set.subset_univ _, S1_ne_univ⟩
 
 theorem ntpp_counterexample :
-    ∃ A B : RegularClosedRegion, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
-      NTPP A B ∧ ¬ (rcc8Pattern .ntpp).Matches A B := by
+    ∃ A B : RegularClosedRegion Point2D, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
+      NTPP A B ∧ ¬ (rcc8Pattern .ntpp).Matches (A : Region) B := by
   refine ⟨S1, RCC8.univ, S1_nonempty, univ_nonempty, S1_ntpp_univ, fun h => ?_⟩
   simp only [rcc8Pattern_ntpp_eq, Pattern.Matches, PatternChar.matches_T,
     PatternChar.matches_F] at h
@@ -80,8 +80,8 @@ theorem ntpp_counterexample :
   exact this
 
 theorem ntppi_counterexample :
-    ∃ A B : RegularClosedRegion, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
-      NTPPi A B ∧ ¬ (rcc8Pattern .ntppi).Matches A B := by
+    ∃ A B : RegularClosedRegion Point2D, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
+      NTPPi A B ∧ ¬ (rcc8Pattern .ntppi).Matches (A : Region) B := by
   refine ⟨RCC8.univ, S1, univ_nonempty, S1_nonempty, S1_ntpp_univ, fun h => ?_⟩
   rw [rcc8Pattern_ntppi, Pattern.matches_transpose] at h
   simp only [rcc8Pattern_ntpp_eq, Pattern.Matches, PatternChar.matches_T,
@@ -99,7 +99,7 @@ def r3 : Rect := ⟨-1, 0, 0, 1⟩
 def r4 : Rect := ⟨1, 2, 0, 1⟩
 
 /-- The frame `[-1,2]² \ (0,1)²`, as four rectangles. -/
-def frame : RegularClosedRegion :=
+def frame : RegularClosedRegion Point2D :=
   (((r1.area (by norm_num [r1])).union (r2.area (by norm_num [r2]))).union
     (r3.area (by norm_num [r3]))).union (r4.area (by norm_num [r4]))
 
@@ -123,8 +123,8 @@ theorem S1_ec_frame : EC S1 frame := by
     rcases this with (⟨-, -, -, h⟩ | ⟨-, -, h, -⟩) | (⟨-, h, -, -⟩ | ⟨h, -, -, -⟩) <;> linarith
 
 theorem ec_counterexample :
-    ∃ A B : RegularClosedRegion, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
-      EC A B ∧ ¬ (rcc8Pattern .ec).Matches A B := by
+    ∃ A B : RegularClosedRegion Point2D, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
+      EC A B ∧ ¬ (rcc8Pattern .ec).Matches (A : Region) B := by
   refine ⟨S1, frame, S1_nonempty, ⟨Point2D.mk 0 0, by rw [mem_frame]; norm_num⟩, S1_ec_frame,
     fun h => ?_⟩
   simp only [rcc8Pattern_ec_eq, Pattern.Matches, PatternChar.matches_T, PatternChar.matches_F]
@@ -148,8 +148,8 @@ theorem ec_counterexample :
 /-! ## Areas in two parts -/
 
 /-- `S₁` and a separate square: a multi-polygon. -/
-def S12 : RegularClosedRegion := S1.union S2
-def S13 : RegularClosedRegion := S1.union S3
+def S12 : RegularClosedRegion Point2D := S1.union S2
+def S13 : RegularClosedRegion Point2D := S1.union S3
 
 theorem S1_S2_apart (p : Point2D) (h₁ : p ∈ (S1 : Region)) (h₂ : p ∈ (S2 : Region)) : False := by
   rw [S1, Rect.mem_area] at h₁
@@ -170,8 +170,8 @@ theorem S2_S3_apart (p : Point2D) (h₂ : p ∈ (S2 : Region)) (h₃ : p ∈ (S3
   linarith [h₂.2.2.2, h₃.2.2.1]
 
 /-- Adding a closed part far away does not add interior points near `S₁`. -/
-theorem interior_union_subset (X Y : RegularClosedRegion) :
-    interior ((X.union Y : RegularClosedRegion) : Region) ⊆
+theorem interior_union_subset (X Y : RegularClosedRegion Point2D) :
+    interior ((X.union Y : RegularClosedRegion Point2D) : Region) ⊆
       interior (X : Region) ∪ (Y : Region) :=
   IsClosed.interior_union_right Y.isClosed
 
@@ -193,8 +193,8 @@ theorem S1_tpp_S12 : TPP S1 S12 := by
       norm_num [s2] at h'
 
 theorem tpp_counterexample :
-    ∃ A B : RegularClosedRegion, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
-      TPP A B ∧ ¬ (rcc8Pattern .tpp).Matches A B := by
+    ∃ A B : RegularClosedRegion Point2D, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
+      TPP A B ∧ ¬ (rcc8Pattern .tpp).Matches (A : Region) B := by
   refine ⟨S1, S12, S1_nonempty, S1_nonempty.mono Set.subset_union_left, S1_tpp_S12,
     fun h => ?_⟩
   simp only [rcc8Pattern_tpp_eq, Pattern.Matches, PatternChar.matches_T, PatternChar.matches_F]
@@ -207,8 +207,8 @@ theorem tpp_counterexample :
   · exact S1_S2_apart p (boundary_subset_of_isClosed S1.isClosed hp) h'
 
 theorem tppi_counterexample :
-    ∃ A B : RegularClosedRegion, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
-      TPPi A B ∧ ¬ (rcc8Pattern .tppi).Matches A B := by
+    ∃ A B : RegularClosedRegion Point2D, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
+      TPPi A B ∧ ¬ (rcc8Pattern .tppi).Matches (A : Region) B := by
   obtain ⟨A, B, hA, hB, h, hno⟩ := tpp_counterexample
   refine ⟨B, A, hB, hA, h, fun hm => hno ?_⟩
   rwa [rcc8Pattern_tppi, Pattern.matches_transpose] at hm
@@ -230,8 +230,8 @@ theorem S12_po_S13 : PO S12 S13 := by
     · exact S2_S3_apart _ h' hp
 
 theorem po_counterexample :
-    ∃ A B : RegularClosedRegion, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
-      PO A B ∧ ¬ (rcc8Pattern .po).Matches A B := by
+    ∃ A B : RegularClosedRegion Point2D, (A : Region).Nonempty ∧ (B : Region).Nonempty ∧
+      PO A B ∧ ¬ (rcc8Pattern .po).Matches (A : Region) B := by
   refine ⟨S12, S13, S1_nonempty.mono Set.subset_union_left,
     S1_nonempty.mono Set.subset_union_left, S12_po_S13, fun h => ?_⟩
   simp only [rcc8Pattern_po_eq, Pattern.Matches, PatternChar.matches_T] at h

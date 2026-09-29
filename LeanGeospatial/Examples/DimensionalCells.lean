@@ -31,8 +31,8 @@ theorem point_point_II (p : Point2D) : matrix (.point p) (.point p) .I .I = .d0 
 
 /-! ## Areas -/
 
-def sqA : RegularClosedRegion := Rect.area ⟨0, 2, 0, 2⟩ (by norm_num)
-def sqC : RegularClosedRegion := Rect.area ⟨1, 3, 0, 2⟩ (by norm_num)
+def sqA : RegularClosedRegion Point2D := Rect.area ⟨0, 2, 0, 2⟩ (by norm_num)
+def sqC : RegularClosedRegion Point2D := Rect.area ⟨1, 3, 0, 2⟩ (by norm_num)
 
 theorem squares_II : matrix (.area sqA) (.area sqC) .I .I = .d2 := by
   rcases area_II_value sqA sqC with h | h

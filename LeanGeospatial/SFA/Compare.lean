@@ -132,7 +132,7 @@ end SetDefs
 
 /-- For a line and a nonempty area, SFA's `Crosses` and LeanGeospatial's agree:
 the dimension condition is automatic. -/
-theorem crosses_line_area_iff (l : LineString) (A : RegularClosedRegion)
+theorem crosses_line_area_iff (l : LineString) (A : RegularClosedRegion Point2D)
     (hA : (A : Region).Nonempty) : SF.Crosses (line l) (area A) ↔ SFA.Crosses (line l) (area A) := by
   refine ⟨crosses_of_sf _ _, fun ⟨hII, h₁, h₂⟩ => ?_⟩
   have hII' : (SF.II (line l) (area A)).Nonempty := Set.nonempty_iff_ne_empty.mpr hII
@@ -149,7 +149,7 @@ theorem crosses_line_area_iff (l : LineString) (A : RegularClosedRegion)
 
 /-- A point at the corner of the square `[0,2]²`. -/
 noncomputable def cornerPoint : Geometry := .point (Point2D.mk 0 0)
-noncomputable def square2 : RegularClosedRegion := Rect.area ⟨0, 2, 0, 2⟩ (by norm_num)
+noncomputable def square2 : RegularClosedRegion Point2D := Rect.area ⟨0, 2, 0, 2⟩ (by norm_num)
 
 theorem within_counterexample :
     SFA.Within cornerPoint (.area square2) ∧ ¬ SF.Within cornerPoint (.area square2) := by
@@ -286,7 +286,7 @@ def sfaCrossesPattern : DimPattern := ⟨.T, .any, .T, .any, .any, .any, .any, .
 theorem parse_sfaCrosses : parseRows ["T*T******"] = some [sfaCrossesPattern] := by decide
 
 /-- For a line and a nonempty area the extra `EI = T` of Table 2 is automatic. -/
-theorem crosses_line_area_patterns (l : LineString) (A : RegularClosedRegion)
+theorem crosses_line_area_patterns (l : LineString) (A : RegularClosedRegion Point2D)
     (hA : (A : Region).Nonempty) :
     Holds .crosses (line l) (area A) ↔ GeoSPARQL.Table2.Holds .crosses (line l) (area A) := by
   rw [holds_iff rfl parse_TTT, anyOf_singleton]

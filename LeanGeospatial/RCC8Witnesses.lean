@@ -31,20 +31,20 @@ namespace Rect
 /-- The area of a rectangle with positive width and height, with the
 positivity packed into one hypothesis. -/
 noncomputable def area (r : Rect) (h : r.xmin < r.xmax ∧ r.ymin < r.ymax) :
-    RegularClosedRegion :=
+    RegularClosedRegion Point2D :=
   r.toRegularClosed h.1 h.2
 
 theorem mem_area (r : Rect) (h : r.xmin < r.xmax ∧ r.ymin < r.ymax) (p : Point2D) :
-    p ∈ ((r.area h : RegularClosedRegion) : Region) ↔
+    p ∈ ((r.area h : RegularClosedRegion Point2D) : Region) ↔
       r.xmin ≤ p.x ∧ p.x ≤ r.xmax ∧ r.ymin ≤ p.y ∧ p.y ≤ r.ymax :=
   Iff.rfl
 
 theorem interior_area (r : Rect) (h : r.xmin < r.xmax ∧ r.ymin < r.ymax) :
-    interior ((r.area h : RegularClosedRegion) : Region) = r.openRegion :=
+    interior ((r.area h : RegularClosedRegion Point2D) : Region) = r.openRegion :=
   interior_toRegion r
 
 theorem area_nonempty (r : Rect) (h : r.xmin < r.xmax ∧ r.ymin < r.ymax) :
-    ((r.area h : RegularClosedRegion) : Region).Nonempty :=
+    ((r.area h : RegularClosedRegion Point2D) : Region).Nonempty :=
   ⟨Point2D.mk r.xmin r.ymin, le_refl _, h.1.le, le_refl _, h.2.le⟩
 
 variable {r s : Rect} (hr : r.xmin < r.xmax ∧ r.ymin < r.ymax)
@@ -54,35 +54,35 @@ variable {r s : Rect} (hr : r.xmin < r.xmax ∧ r.ymin < r.ymax)
 inequalities between coordinates. -/
 
 theorem within_area_iff :
-    Within ((r.area hr : RegularClosedRegion) : Region) (s.area hs) ↔
+    Within ((r.area hr : RegularClosedRegion Point2D) : Region) (s.area hs) ↔
       s.xmin ≤ r.xmin ∧ r.xmax ≤ s.xmax ∧ s.ymin ≤ r.ymin ∧ r.ymax ≤ s.ymax := by
   constructor
   · intro h
-    have h₁ := h (show Point2D.mk r.xmin r.ymin ∈ ((r.area hr : RegularClosedRegion) : Region)
+    have h₁ := h (show Point2D.mk r.xmin r.ymin ∈ ((r.area hr : RegularClosedRegion Point2D) : Region)
       from ⟨le_rfl, hr.1.le, le_rfl, hr.2.le⟩)
-    have h₂ := h (show Point2D.mk r.xmax r.ymax ∈ ((r.area hr : RegularClosedRegion) : Region)
+    have h₂ := h (show Point2D.mk r.xmax r.ymax ∈ ((r.area hr : RegularClosedRegion Point2D) : Region)
       from ⟨hr.1.le, le_rfl, hr.2.le, le_rfl⟩)
     exact ⟨h₁.1, h₂.2.1, h₁.2.2.1, h₂.2.2.2⟩
   · rintro ⟨a, b, c, d⟩
     exact within_of_bounds a b c d
 
 theorem within_interior_area_iff :
-    Within ((r.area hr : RegularClosedRegion) : Region)
-        (interior ((s.area hs : RegularClosedRegion) : Region)) ↔
+    Within ((r.area hr : RegularClosedRegion Point2D) : Region)
+        (interior ((s.area hs : RegularClosedRegion Point2D) : Region)) ↔
       s.xmin < r.xmin ∧ r.xmax < s.xmax ∧ s.ymin < r.ymin ∧ r.ymax < s.ymax := by
   constructor
   · intro h
     rw [interior_area] at h
-    have h₁ := h (show Point2D.mk r.xmin r.ymin ∈ ((r.area hr : RegularClosedRegion) : Region)
+    have h₁ := h (show Point2D.mk r.xmin r.ymin ∈ ((r.area hr : RegularClosedRegion Point2D) : Region)
       from ⟨le_rfl, hr.1.le, le_rfl, hr.2.le⟩)
-    have h₂ := h (show Point2D.mk r.xmax r.ymax ∈ ((r.area hr : RegularClosedRegion) : Region)
+    have h₂ := h (show Point2D.mk r.xmax r.ymax ∈ ((r.area hr : RegularClosedRegion Point2D) : Region)
       from ⟨hr.1.le, le_rfl, hr.2.le, le_rfl⟩)
     exact ⟨h₁.1, h₂.2.1, h₁.2.2.1, h₂.2.2.2⟩
   · rintro ⟨a, b, c, d⟩
     exact within_interior_of_bounds a b c d
 
 theorem intersects_area_iff :
-    Intersects ((r.area hr : RegularClosedRegion) : Region) (s.area hs) ↔
+    Intersects ((r.area hr : RegularClosedRegion Point2D) : Region) (s.area hs) ↔
       r.xmin ≤ s.xmax ∧ s.xmin ≤ r.xmax ∧ r.ymin ≤ s.ymax ∧ s.ymin ≤ r.ymax := by
   constructor
   · rintro ⟨p, ⟨a₁, a₂, a₃, a₄⟩, ⟨b₁, b₂, b₃, b₄⟩⟩
@@ -93,8 +93,8 @@ theorem intersects_area_iff :
       ⟨le_max_right _ _, max_le h₁ hs.1.le, le_max_right _ _, max_le h₃ hs.2.le⟩⟩
 
 theorem intersects_interior_area_iff :
-    Intersects (interior ((r.area hr : RegularClosedRegion) : Region))
-        (interior ((s.area hs : RegularClosedRegion) : Region)) ↔
+    Intersects (interior ((r.area hr : RegularClosedRegion Point2D) : Region))
+        (interior ((s.area hs : RegularClosedRegion Point2D) : Region)) ↔
       r.xmin < s.xmax ∧ s.xmin < r.xmax ∧ r.ymin < s.ymax ∧ s.ymin < r.ymax := by
   rw [interior_area, interior_area]
   constructor
@@ -136,7 +136,7 @@ macro "rect_rcc8" : tactic => `(tactic| (
 is membership in the weak composition `r ⋄ s`, stated here so the witnesses
 do not depend on `Composition.lean`. -/
 def Realizes (r s t : Relation) : Prop :=
-  ∃ A B C : RegularClosedRegion,
+  ∃ A B C : RegularClosedRegion Point2D,
     (A : Region).Nonempty ∧ (B : Region).Nonempty ∧ (C : Region).Nonempty ∧
     r.holds A B ∧ s.holds B C ∧ t.holds A C
 
@@ -191,12 +191,12 @@ theorem hD : rectD.xmin < rectD.xmax ∧ rectD.ymin < rectD.ymax := by norm_num 
 theorem hN : rectN.xmin < rectN.xmax ∧ rectN.ymin < rectN.ymax := by norm_num [rectN]
 theorem hT : rectT.xmin < rectT.xmax ∧ rectT.ymin < rectT.ymax := by norm_num [rectT]
 
-def areaA : RegularClosedRegion := rectA.area hA
-def areaB : RegularClosedRegion := rectB.area hB
-def areaC : RegularClosedRegion := rectC.area hC
-def areaD : RegularClosedRegion := rectD.area hD
-def areaN : RegularClosedRegion := rectN.area hN
-def areaT : RegularClosedRegion := rectT.area hT
+def areaA : RegularClosedRegion Point2D := rectA.area hA
+def areaB : RegularClosedRegion Point2D := rectB.area hB
+def areaC : RegularClosedRegion Point2D := rectC.area hC
+def areaD : RegularClosedRegion Point2D := rectD.area hD
+def areaN : RegularClosedRegion Point2D := rectN.area hN
+def areaT : RegularClosedRegion Point2D := rectT.area hT
 
 theorem A_D_dc : DC areaA areaD := dc_of_rect hA hD (by norm_num [rectA, rectD])
 
@@ -284,7 +284,7 @@ end Witnesses
 open Witnesses in
 /-- Every base relation holds between some pair of nonempty areas. -/
 theorem Relation.realizable (r : Relation) :
-    ∃ A C : RegularClosedRegion, (A : Region).Nonempty ∧ (C : Region).Nonempty ∧
+    ∃ A C : RegularClosedRegion Point2D, (A : Region).Nonempty ∧ (C : Region).Nonempty ∧
       r.holds A C := by
   have nA := rectA.area_nonempty hA
   cases r with

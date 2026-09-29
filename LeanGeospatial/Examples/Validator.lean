@@ -24,7 +24,7 @@ theorem nested_verdict : nested.check "DistrictA" "ProvinceC" = .entailed .ntpp 
 
 /-- In every model, District A is a non-tangential proper part of
 Province C. -/
-theorem nested_entails (M : FeatureId → RegularClosedRegion) (hM : nested.Satisfies M) :
+theorem nested_entails (M : FeatureId → RegularClosedRegion Point2D) (hM : nested.Satisfies M) :
     NTPP (M "DistrictA") (M "ProvinceC") :=
   Graph.check_entailed nested_verdict hM
 
@@ -39,7 +39,7 @@ theorem touching_verdict :
 
 /-- In every model, parcels A and C are in one of six relations; in
 particular they are never `NTPP` or `NTPPi`. -/
-theorem touching_possible (M : FeatureId → RegularClosedRegion) (hM : touching.Satisfies M)
+theorem touching_possible (M : FeatureId → RegularClosedRegion Point2D) (hM : touching.Satisfies M)
     {t : Relation} (ht : t.holds (M "ParcelA") (M "ParcelC")) :
     t ∈ ({.dc, .ec, .po, .eq, .tpp, .tppi} : Finset Relation) :=
   Graph.check_possible touching_verdict hM ht

@@ -141,7 +141,7 @@ theorem backtrack_counterexample :
 
 /-! ## A/A -/
 
-theorem holds_equals_area_self_iff (A : RegularClosedRegion) (hA : (A : Region).Nonempty) :
+theorem holds_equals_area_self_iff (A : RegularClosedRegion Point2D) (hA : (A : Region).Nonempty) :
     Holds .equals (area A) (area A) ↔ (A : Region) ≠ Set.univ := by
   rw [holds_equals_self_iff]
   have hI : ((area A).stratum .I).Nonempty := (A.nonempty_iff_interior_nonempty).mp hA
@@ -156,7 +156,7 @@ theorem holds_equals_area_self_iff (A : RegularClosedRegion) (hA : (A : Region).
     rw [(area A).stratum_E]
     exact Set.nonempty_compl.mpr hU
 
-theorem equals_area_area_iff (A B : RegularClosedRegion) (hA : (A : Region).Nonempty)
+theorem equals_area_area_iff (A B : RegularClosedRegion Point2D) (hA : (A : Region).Nonempty)
     (hU : (A : Region) ≠ Set.univ) :
     SF.Equals (area A) (area B) ↔ Holds .equals (area A) (area B) := by
   constructor
@@ -167,7 +167,7 @@ theorem equals_area_area_iff (A B : RegularClosedRegion) (hA : (A : Region).None
   · exact equals_of_holds _ _
 
 /-- The whole plane as an area. -/
-def planeArea : RegularClosedRegion := ⟨Set.univ, by simp⟩
+def planeArea : RegularClosedRegion Point2D := ⟨Set.univ, by simp⟩
 
 theorem univ_counterexample :
     SF.Equals (area planeArea) (area planeArea) ∧

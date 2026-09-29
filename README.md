@@ -192,6 +192,9 @@ operations, not postulated:
 | `Intersects A B` | `(A ∩ B).Nonempty` |
 | `Disjoint A B` | `A ∩ B = ∅` |
 
+They are defined for sets in any type `α`, so they serve regions of the
+plane and sets of any other space alike.
+
 These four relations ignore boundaries. Two regions that only share an edge
 `Intersect`, and are not `Disjoint`. (The Simple Features `Within` of
 section 6 is stricter.)
@@ -232,7 +235,9 @@ Mathlib's, not new definitions:
 
 `Touches` is the point-set definition: the regions share a point but no
 interior point. It separates "shares an edge" from "overlaps", which
-`Intersects` alone cannot. The plane is connected (`Connected.lean`), so an
+`Intersects` alone cannot. `boundary` and `Touches` are defined for sets in
+any topological space; only rectangles are specific to the plane. The plane
+is connected (`Connected.lean`, which asks for `PreconnectedSpace α`), so an
 area other than the whole plane has a nonempty boundary and exterior.
 
 ### 3. Regular closed areas
@@ -242,20 +247,22 @@ with a stray line attached. A geographic area (a district, a parcel, a lake)
 should be none of those. The type
 
 ```lean
-structure RegularClosedRegion where
-  carrier : Region
+structure RegularClosedRegion (α : Type*) [TopologicalSpace α] where
+  carrier : Set α
   closure_interior_eq' : closure (interior carrier) = carrier
 ```
 
-holds exactly the regions that are the closure of their own interior. Every
-value carries that proof, so theorems about areas do not ask for it again.
-`RegularClosedRegion` is a `SetLike`, so an area can be used wherever a
-`Region` is expected, but not the other way round. Areas may have several
-parts and holes, and may be unbounded; the whole plane is one.
+holds exactly the sets of a topological space `α` that are the closure of
+their own interior. The areas of the plane are `RegularClosedRegion Point2D`.
+Every value carries that proof, so theorems about areas do not ask for it
+again. `RegularClosedRegion α` is a `SetLike`, so an area can be used wherever
+a set of `α` is expected, but not the other way round. Areas may have several
+parts and holes, and may be unbounded; the whole space is one.
 
-A homeomorphism of the plane (`e : Point2D ≃ₜ Point2D`, a continuous bijection
-with a continuous inverse) carries areas to areas: `A.map e` is the image
-`e '' A`, again a `RegularClosedRegion`. A homeomorphism commutes with
+A homeomorphism `e : α ≃ₜ β` (a continuous bijection with a continuous
+inverse, possibly between two different spaces) carries areas to areas:
+`A.map e` is the image `e '' A`, a `RegularClosedRegion β`. A homeomorphism
+commutes with
 interior, closure, boundary and exterior, so no relation in this library can
 tell a configuration from its image. `LeanGeospatial/Homeomorph.lean` proves
 this in the order the relations are built:
@@ -271,18 +278,29 @@ this in the order the relations are built:
 | The DE-9IM matrix of two areas is unchanged | `DE9IM.matrix_map`, `DE9IM.DimPattern.matches_map_iff` |
 
 ```lean
-theorem RCC8.Relation.holds_map_iff (e : Point2D ≃ₜ Point2D)
-    (A B : RegularClosedRegion) (r : Relation) :
+theorem RCC8.Relation.holds_map_iff (e : α ≃ₜ β)
+    (A B : RegularClosedRegion α) (r : Relation) :
     r.holds (A.map e) (B.map e) ↔ r.holds A B
 ```
 
 Translations, rotations and reflections are homeomorphisms, so the relations
-of a map do not depend on where it is placed or which way it faces.
+of a map do not depend on where it is placed or which way it faces. Cell
+dimensions are defined for the plane only, so the last two rows are about
+homeomorphisms of the plane.
+
+Beyond the plane. The areas, the three-part split and nine cells, the RCC8
+relations with `existsUnique_relation`, the converse law and the soundness
+of the composition table all hold in any topological space `α`.
+`Examples/GenericSpace.lean` uses them on the real line, where `[0, 1]` and
+`[1, 2]` are `EC` and nothing else. What changes with the space is which
+configurations exist. In a discrete space every set is open, so no two areas
+are `EC` and none is a `TPP` of another; there the composition table is still
+sound but no longer complete (`table_not_complete_bool`).
 
 ### 4. Nine intersections and DE-9IM patterns
 
 `exterior A` is `interior Aᶜ`, which equals `(closure A)ᶜ`. Interior, boundary
-and exterior split the plane: every point is in exactly one of them
+and exterior split the space: every point is in exactly one of them
 (`existsUnique_stratum`). For two regions this gives nine cells,
 
 ```lean
@@ -379,8 +397,8 @@ within one another.
 
 ### 7. RCC8
 
-The eight base relations of the Region Connection Calculus, for areas, are
-defined from the relations above (`a`, `b` are the point sets of `A`, `B`):
+The eight base relations of the Region Connection Calculus, for areas of any
+topological space, are defined from the relations above (`a`, `b` are the point sets of `A`, `B`):
 
 | Relation | Definition |
 | --- | --- |
@@ -392,17 +410,19 @@ defined from the relations above (`a`, `b` are the point sets of `A`, `B`):
 | `NTPP A B` | `Within a (interior b)`, `a ≠ b` |
 | `TPPi A B`, `NTPPi A B` | `TPP B A`, `NTPP B A` |
 
-`NTPP` includes `a ≠ b` because the whole plane is an area that lies within
-its own interior; without it the plane would be both `EQ` and `NTPP` with
-itself.
+`NTPP` includes `a ≠ b` because the whole space is an area that lies within
+its own interior; without it the whole space would be both `EQ` and `NTPP`
+with itself.
 
 ### 8. Weak composition
 
 ```lean
-r ⋄ s = {t | ∃ A B C nonempty areas, r A B ∧ s B C ∧ t A C}
+compose α r s = {t | ∃ A B C nonempty areas of α, r A B ∧ s B C ∧ t A C}
 ```
 
-This is the meaning of an entry in the RCC8 composition table. No table is
+This is the meaning of an entry in the RCC8 composition table. It depends on
+the space `α`, because it asks which configurations exist there; for the
+plane it is written `r ⋄ s`, short for `compose Point2D r s`. No table is
 assumed: each entry has to be proved from the definitions, in both
 directions. Showing `t ∈ r ⋄ s` needs three concrete areas; showing
 `t ∉ r ⋄ s` needs an argument that works for all areas.
@@ -419,7 +439,9 @@ theorem compose_ec_ntpp : Relation.ec ⋄ Relation.ntpp = ↑({.po, .tpp, .ntpp}
 They all come from `compose_eq_table : r ⋄ s = ↑(table r s)`, proved in two
 halves.
 
-- Exclusion, `r ⋄ s ⊆ table r s`, is one argument for every cell. Each
+- Exclusion, `r ⋄ s ⊆ table r s`, is one argument for every cell, and it
+  holds in every topological space (`mem_table_of_mem_compose` is stated for
+  `compose α`). Each
   relation fixes six facts about a pair of areas (meet, interiors meet, within
   either way, within the other's interior either way). Nine laws connect the
   facts of the three pairs of a triangle, for example "X ⊆ Y ⊆ int Z gives
@@ -429,7 +451,8 @@ halves.
   the closure of their interior; without them five cells would be looser
   (`EC ⋄ EC` would admit `NTPP` and `NTPPi`, and `EC ⋄ NTPP`, `EC ⋄ NTPPi`,
   `NTPP ⋄ EC`, `NTPPi ⋄ EC` would admit `EC`).
-- Realisation, `table r s ⊆ r ⋄ s`, uses three rectangles per entry. Of the
+- Realisation, `table r s ⊆ r ⋄ s`, is about the plane: it uses three
+  rectangles per entry. Of the
   193 entries, the 15 in the `EQ` row and column follow from the identity
   laws, and the converse law pairs the rest, so 112 witnesses cover all
   entries. `rect_rcc8` checks each relation between rectangles by reducing it
@@ -777,7 +800,9 @@ For the checker and the prover:
 contains no `sorry`, no `admit` and no `axiom` of its own.
 `Examples/Axioms.lean` pins the main theorems to Lean's three standard axioms
 (`propext`, `Classical.choice`, `Quot.sound`, which come with Mathlib's real
-numbers), or a subset of them, so adding an axiom or an unfinished proof
+numbers), or a subset of them. Some results about sets of any type need
+fewer: `within_trans` needs none, and `intersects_symm` does without
+`Classical.choice`. Adding an axiom or an unfinished proof
 makes the build fail. CI also greps for `sorry` and `admit`.
 
 ### 17. Repository layout
@@ -821,6 +846,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/Measurement.lean` | Distance and area on concrete coordinates |
 | `LeanGeospatial/Examples/Touches.lean` | Two squares that touch, and two that overlap; their shared edge is not an area |
 | `LeanGeospatial/Examples/Homeomorph.lean` | The example areas keep their Touches, RCC8 and DE-9IM relations after a slide, a reflection, or any homeomorphism |
+| `LeanGeospatial/Examples/GenericSpace.lean` | Areas and RCC8 on the real line, in discrete spaces (where the table is sound but not complete), and carried from the plane into `ℝ × ℝ` |
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |

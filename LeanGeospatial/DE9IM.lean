@@ -23,6 +23,8 @@ namespace Geospatial.DE9IM
 
 open Geospatial
 
+variable {α : Type*}
+
 /-- A pattern character, without dimensions. -/
 inductive PatternChar where
   /-- `T`: nonempty. -/
@@ -34,15 +36,15 @@ inductive PatternChar where
   deriving DecidableEq
 
 /-- What a pattern character asks of a cell. -/
-def PatternChar.Matches : PatternChar → Region → Prop
+def PatternChar.Matches : PatternChar → Set α → Prop
   | .T, S => S.Nonempty
   | .F, S => S = ∅
   | .any, _ => True
 
-@[simp] theorem PatternChar.matches_T (S : Region) : PatternChar.T.Matches S ↔ S.Nonempty :=
+@[simp] theorem PatternChar.matches_T (S : Set α) : PatternChar.T.Matches S ↔ S.Nonempty :=
   Iff.rfl
-@[simp] theorem PatternChar.matches_F (S : Region) : PatternChar.F.Matches S ↔ S = ∅ := Iff.rfl
-@[simp] theorem PatternChar.matches_any (S : Region) : PatternChar.any.Matches S ↔ True :=
+@[simp] theorem PatternChar.matches_F (S : Set α) : PatternChar.F.Matches S ↔ S = ∅ := Iff.rfl
+@[simp] theorem PatternChar.matches_any (S : Set α) : PatternChar.any.Matches S ↔ True :=
   Iff.rfl
 
 /-- A 9-cell pattern, one field per cell. -/
@@ -59,7 +61,7 @@ structure Pattern where
   deriving DecidableEq
 
 /-- `A` and `B` match the pattern when each cell meets its character. -/
-def Pattern.Matches (p : Pattern) (A B : Region) : Prop :=
+def Pattern.Matches [TopologicalSpace α] (p : Pattern) (A B : Set α) : Prop :=
   p.ii.Matches (II A B) ∧ p.ib.Matches (IB A B) ∧ p.ie.Matches (IE A B) ∧
   p.bi.Matches (BI A B) ∧ p.bb.Matches (BB A B) ∧ p.be.Matches (BE A B) ∧
   p.ei.Matches (EI A B) ∧ p.eb.Matches (EB A B) ∧ p.ee.Matches (EE A B)
@@ -68,14 +70,14 @@ def Pattern.Matches (p : Pattern) (A B : Region) : Prop :=
 def Pattern.transpose (p : Pattern) : Pattern :=
   ⟨p.ii, p.bi, p.ei, p.ib, p.bb, p.eb, p.ie, p.be, p.ee⟩
 
-theorem Pattern.matches_transpose (p : Pattern) (A B : Region) :
+theorem Pattern.matches_transpose [TopologicalSpace α] (p : Pattern) (A B : Set α) :
     p.transpose.Matches A B ↔ p.Matches B A := by
   simp only [Pattern.Matches, Pattern.transpose, II, IB, IE, BI, BB, BE, EI, EB, EE,
     cell_swap _ _ A B]
   tauto
 
 /-- Several patterns, read as "any of them" (a multi-row pattern). -/
-def AnyOf (ps : List Pattern) (A B : Region) : Prop := ∃ p ∈ ps, p.Matches A B
+def AnyOf [TopologicalSpace α] (ps : List Pattern) (A B : Set α) : Prop := ∃ p ∈ ps, p.Matches A B
 
 /-! ## The 9-character notation -/
 

@@ -200,8 +200,8 @@ def Pattern.toDim (p : Pattern) : DimPattern :=
     p.eb.toDim, p.ee.toDim⟩
 
 /-- On two areas, a `T`/`F`/`*` pattern means exactly what it meant before. -/
-theorem Pattern.toDim_matches_area (p : Pattern) (A B : RegularClosedRegion) :
-    p.toDim.Matches (.area A) (.area B) ↔ p.Matches A B := by
+theorem Pattern.toDim_matches_area (p : Pattern) (A B : RegularClosedRegion Point2D) :
+    p.toDim.Matches (.area A) (.area B) ↔ p.Matches (A : Region) B := by
   simp only [DimPattern.Matches, Pattern.toDim, Pattern.Matches, PatternChar.toDim_matches,
     Geometry.cell_area_area]
 
@@ -223,7 +223,7 @@ theorem point_cell_value (p : Point2D) (s : Stratum) (hs : s ≠ .E) (h : Geomet
   · exact Or.inl ((DimValue.of_eq_F_iff _).mpr (Set.not_nonempty_iff_eq_empty.mp hne))
 
 /-- The interiors of two areas meet in `F` or `2`: their intersection is open. -/
-theorem area_II_value (A B : RegularClosedRegion) :
+theorem area_II_value (A B : RegularClosedRegion Point2D) :
     matrix (.area A) (.area B) .I .I = .F ∨ matrix (.area A) (.area B) .I .I = .d2 := by
   have hopen : IsOpen (Geometry.cell .I .I (.area A) (.area B)) :=
     isOpen_interior.inter isOpen_interior

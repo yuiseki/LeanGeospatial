@@ -9,13 +9,16 @@ import Mathlib.Data.Set.Lattice.Order
 /-!
 # Regions and spatial relations
 
-A `Region` is any set of points. It carries no geometry of its own: a region may
-be a polygon's interior, an administrative area whose exact boundary we do not
-know, or an arbitrary set. That is what lets us reason about places like
-"District A" without ever loading their coordinates.
+A `Region` is any set of points of the plane. It carries no geometry of its
+own: a region may be a polygon's interior, an administrative area whose exact
+boundary we do not know, or an arbitrary set. That is what lets us reason
+about places like "District A" without ever loading their coordinates.
 
-The four relations below are defined by set operations alone. Nothing here is
-an axiom, so every theorem in this file holds for every region.
+The four relations below are defined by set operations alone, for sets in
+any type `α`, so they apply to regions of the plane and to sets of any other
+space alike. Nothing here is an axiom, so every theorem in this file holds
+for every set. Only `intersects_not_transitive` is about the plane: its
+counterexample needs two distinct points.
 -/
 
 namespace Geospatial
@@ -23,23 +26,25 @@ namespace Geospatial
 /-- A region is a set of points in the plane. -/
 abbrev Region := Set Point2D
 
+variable {α : Type*}
+
 /-- Every point of `A` is a point of `B`. -/
-def Within (A B : Region) : Prop := A ⊆ B
+def Within (A B : Set α) : Prop := A ⊆ B
 
 /-- Every point of `B` is a point of `A`. -/
-def Contains (A B : Region) : Prop := B ⊆ A
+def Contains (A B : Set α) : Prop := B ⊆ A
 
 /-- `A` and `B` share at least one point. -/
-def Intersects (A B : Region) : Prop := (A ∩ B).Nonempty
+def Intersects (A B : Set α) : Prop := (A ∩ B).Nonempty
 
 /-- `A` and `B` share no point. -/
-def Disjoint (A B : Region) : Prop := A ∩ B = ∅
+def Disjoint (A B : Set α) : Prop := A ∩ B = ∅
 
-variable {A B C : Region}
+variable {A B C : Set α}
 
 /-! ## Within -/
 
-theorem within_refl (A : Region) : Within A A :=
+theorem within_refl (A : Set α) : Within A A :=
   Set.Subset.refl A
 
 theorem within_trans (hAB : Within A B) (hBC : Within B C) : Within A C :=
@@ -49,7 +54,7 @@ theorem within_antisymm (hAB : Within A B) (hBA : Within B A) : A = B :=
   Set.Subset.antisymm hAB hBA
 
 /-- A point of a region is a point of every region containing it. -/
-theorem Within.mem {p : Point2D} (h : Within A B) (hp : p ∈ A) : p ∈ B :=
+theorem Within.mem {p : α} (h : Within A B) (hp : p ∈ A) : p ∈ B :=
   h hp
 
 /-! ## Contains -/
@@ -57,7 +62,7 @@ theorem Within.mem {p : Point2D} (h : Within A B) (hp : p ∈ A) : p ∈ B :=
 theorem contains_iff_within : Contains A B ↔ Within B A :=
   Iff.rfl
 
-theorem contains_refl (A : Region) : Contains A A :=
+theorem contains_refl (A : Set α) : Contains A A :=
   within_refl A
 
 theorem contains_trans (hAB : Contains A B) (hBC : Contains B C) : Contains A C :=

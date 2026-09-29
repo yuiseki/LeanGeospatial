@@ -16,7 +16,7 @@ For an ordered pair of areas `(X, Y)`, record six facts as booleans, its
 | `m` | `Within Y (interior X)` |
 
 Each RCC8 relation between nonempty areas fixes the signature
-(`sigOf_mem_sigs`), except that `EQ` leaves `n = m` open: the whole plane lies
+(`sigOf_mem_sigs`), except that `EQ` leaves `n = m` open: the whole space lies
 within its own interior, other areas do not.
 
 Nine laws link the signatures of the three pairs of a triangle `X, Y, Z`
@@ -24,7 +24,8 @@ Nine laws link the signatures of the three pairs of a triangle `X, Y, Z`
 them use that areas are the closure of their interior. `table r s` keeps the
 relations `t` for which some choice of signatures for `r`, `s`, `t` satisfies
 the nine laws around every orientation of the triangle. It is computed by
-`decide`, and `mem_table_of_mem_compose` proves `r ⋄ s ⊆ table r s`.
+`decide`, and `mem_table_of_mem_compose` proves `compose α r s ⊆ table r s`
+in every topological space `α`: the laws use nothing about the plane.
 
 No composition table is assumed. The other inclusion is proved separately, by
 witnesses, in `CompositionTable/Complete.lean`.
@@ -33,6 +34,8 @@ witnesses, in `CompositionTable/Complete.lean`.
 namespace Geospatial.RCC8
 
 open Geospatial
+
+variable {α : Type*} [TopologicalSpace α]
 
 /-- The six facts about an ordered pair of areas. -/
 structure Sig where
@@ -94,14 +97,14 @@ def table (r s : Relation) : Finset Relation := Relation.all.filter fun t => adm
 
 open Classical in
 /-- The signature of an ordered pair of areas. -/
-noncomputable def sigOf (X Y : RegularClosedRegion) : Sig :=
-  ⟨decide (Intersects (X : Region) Y),
-    decide (Intersects (interior (X : Region)) (interior (Y : Region))),
-    decide (Within (X : Region) Y), decide (Within (Y : Region) X),
-    decide (Within (X : Region) (interior (Y : Region))),
-    decide (Within (Y : Region) (interior (X : Region)))⟩
+noncomputable def sigOf (X Y : RegularClosedRegion α) : Sig :=
+  ⟨decide (Intersects (X : Set α) Y),
+    decide (Intersects (interior (X : Set α)) (interior (Y : Set α))),
+    decide (Within (X : Set α) Y), decide (Within (Y : Set α) X),
+    decide (Within (X : Set α) (interior (Y : Set α))),
+    decide (Within (Y : Set α) (interior (X : Set α)))⟩
 
-theorem sigOf_swap (X Y : RegularClosedRegion) : sigOf Y X = (sigOf X Y).swap := by
+theorem sigOf_swap (X Y : RegularClosedRegion α) : sigOf Y X = (sigOf X Y).swap := by
   simp only [sigOf, Sig.swap, Sig.mk.injEq]
   exact ⟨decide_eq_decide.mpr intersects_comm, decide_eq_decide.mpr intersects_comm,
     trivial, trivial, trivial, trivial⟩
@@ -118,7 +121,7 @@ private theorem bimpN {P Q R : Prop} {_ : Decidable P} {_ : Decidable Q} {_ : De
   by_cases hp : P <;> by_cases hq : Q <;> simp [hp, hq]
   exact h hp hq
 
-variable (X Y Z : RegularClosedRegion)
+variable (X Y Z : RegularClosedRegion α)
 
 theorem schema_sigOf : schema (sigOf X Y) (sigOf Y Z) (sigOf X Z) = true := by
   simp only [schema, sigOf, Bool.and_eq_true]
@@ -130,7 +133,7 @@ theorem schema_sigOf : schema (sigOf X Y) (sigOf Y Z) (sigOf X Z) = true := by
   · -- S6: X ⊆ int Y and a point of X ∩ Z give a point of int Y ∩ int Z,
     -- because Z is the closure of its interior and int Y is open.
     obtain ⟨p, hpX, hpZ⟩ := h₃
-    have hp : p ∈ closure (interior (Z : Region)) := by
+    have hp : p ∈ closure (interior (Z : Set α)) := by
       rw [Z.closure_interior_eq]
       exact hpZ
     obtain ⟨q, hqY, hqZ⟩ := mem_closure_iff.mp hp _ isOpen_interior (h₁ hpX)
@@ -138,7 +141,7 @@ theorem schema_sigOf : schema (sigOf X Y) (sigOf Y Z) (sigOf X Z) = true := by
   · -- S7: a point of X ∩ Y lies in int Z, and X is the closure of its
     -- interior, so int X meets int Z.
     obtain ⟨p, hpX, hpY⟩ := h₁
-    have hp : p ∈ closure (interior (X : Region)) := by
+    have hp : p ∈ closure (interior (X : Set α)) := by
       rw [X.closure_interior_eq]
       exact hpX
     obtain ⟨q, hqZ, hqX⟩ := mem_closure_iff.mp hp _ isOpen_interior (h₂ hpY)
@@ -152,83 +155,84 @@ theorem consistent_sigOf : consistent (sigOf X Y) (sigOf Y Z) (sigOf X Z) = true
 /-! ## Each relation fixes the signature -/
 
 open Classical in
-theorem sigOf_mem_sigs {X Y : RegularClosedRegion} (hX : (X : Region).Nonempty)
-    (hY : (Y : Region).Nonempty) {r : Relation} (h : r.holds X Y) :
+theorem sigOf_mem_sigs {X Y : RegularClosedRegion α} (hX : (X : Set α).Nonempty)
+    (hY : (Y : Set α).Nonempty) {r : Relation} (h : r.holds X Y) :
     sigOf X Y ∈ r.sigs := by
   -- Facts linking the six building blocks for nonempty areas.
-  have hPO : Within (X : Region) Y →
-      Intersects (interior (X : Region)) (interior (Y : Region)) :=
+  have hPO : Within (X : Set α) Y →
+      Intersects (interior (X : Set α)) (interior (Y : Set α)) :=
     fun h => ((X.within_iff_cells Y hX).mp h).1
-  have hQO : Within (Y : Region) X →
-      Intersects (interior (X : Region)) (interior (Y : Region)) :=
+  have hQO : Within (Y : Set α) X →
+      Intersects (interior (X : Set α)) (interior (Y : Set α)) :=
     fun h => intersects_symm ((Y.within_iff_cells X hY).mp h).1
-  have hOC : Intersects (interior (X : Region)) (interior (Y : Region)) →
-      Intersects (X : Region) Y :=
+  have hOC : Intersects (interior (X : Set α)) (interior (Y : Set α)) →
+      Intersects (X : Set α) Y :=
     fun h => (h.mono_left interior_subset).mono_right interior_subset
-  have hNP : Within (X : Region) (interior (Y : Region)) → Within (X : Region) Y :=
+  have hNP : Within (X : Set α) (interior (Y : Set α)) → Within (X : Set α) Y :=
     fun h => within_trans h interior_subset
-  have hMQ : Within (Y : Region) (interior (X : Region)) → Within (Y : Region) X :=
+  have hMQ : Within (Y : Set α) (interior (X : Set α)) → Within (Y : Set α) X :=
     fun h => within_trans h interior_subset
-  have hanti : Within (X : Region) Y → Within (Y : Region) X → (X : Region) = Y :=
+  have hanti : Within (X : Set α) Y → Within (Y : Set α) X → (X : Set α) = Y :=
     within_antisymm
   -- In each case, settle all six facts, then read off the signature.
   cases r with
   | dc =>
-    have hc : ¬ Intersects (X : Region) Y := disjoint_iff_not_intersects.mp h
-    have ho : ¬ Intersects (interior (X : Region)) (interior (Y : Region)) :=
+    have hc : ¬ Intersects (X : Set α) Y := disjoint_iff_not_intersects.mp h
+    have ho : ¬ Intersects (interior (X : Set α)) (interior (Y : Set α)) :=
       fun h => hc (hOC h)
-    have hp : ¬ Within (X : Region) Y := fun h => ho (hPO h)
-    have hq : ¬ Within (Y : Region) X := fun h => ho (hQO h)
-    have hn : ¬ Within (X : Region) (interior (Y : Region)) := fun h => hp (hNP h)
-    have hm : ¬ Within (Y : Region) (interior (X : Region)) := fun h => hq (hMQ h)
+    have hp : ¬ Within (X : Set α) Y := fun h => ho (hPO h)
+    have hq : ¬ Within (Y : Set α) X := fun h => ho (hQO h)
+    have hn : ¬ Within (X : Set α) (interior (Y : Set α)) := fun h => hp (hNP h)
+    have hm : ¬ Within (Y : Set α) (interior (X : Set α)) := fun h => hq (hMQ h)
     simp [sigOf, Relation.sigs, hc, ho, hp, hq, hn, hm]
   | ec =>
     obtain ⟨hc, ho⟩ := h
-    have ho : ¬ Intersects (interior (X : Region)) (interior (Y : Region)) :=
+    have ho : ¬ Intersects (interior (X : Set α)) (interior (Y : Set α)) :=
       disjoint_iff_not_intersects.mp ho
-    have hp : ¬ Within (X : Region) Y := fun h => ho (hPO h)
-    have hq : ¬ Within (Y : Region) X := fun h => ho (hQO h)
-    have hn : ¬ Within (X : Region) (interior (Y : Region)) := fun h => hp (hNP h)
-    have hm : ¬ Within (Y : Region) (interior (X : Region)) := fun h => hq (hMQ h)
+    have hp : ¬ Within (X : Set α) Y := fun h => ho (hPO h)
+    have hq : ¬ Within (Y : Set α) X := fun h => ho (hQO h)
+    have hn : ¬ Within (X : Set α) (interior (Y : Set α)) := fun h => hp (hNP h)
+    have hm : ¬ Within (Y : Set α) (interior (X : Set α)) := fun h => hq (hMQ h)
     simp [sigOf, Relation.sigs, hc, ho, hp, hq, hn, hm]
   | po =>
     obtain ⟨ho, hp, hq⟩ := h
-    have hn : ¬ Within (X : Region) (interior (Y : Region)) := fun h => hp (hNP h)
-    have hm : ¬ Within (Y : Region) (interior (X : Region)) := fun h => hq (hMQ h)
+    have hn : ¬ Within (X : Set α) (interior (Y : Set α)) := fun h => hp (hNP h)
+    have hm : ¬ Within (Y : Set α) (interior (X : Set α)) := fun h => hq (hMQ h)
     simp [sigOf, Relation.sigs, hOC ho, ho, hp, hq, hn, hm]
   | eq =>
     obtain rfl := eq_iff.mp h
-    have hp : Within (X : Region) X := within_refl _
-    by_cases hn : Within (X : Region) (interior (X : Region))
+    have hp : Within (X : Set α) X := within_refl _
+    by_cases hn : Within (X : Set α) (interior (X : Set α))
     · simp [sigOf, Relation.sigs, hn, hOC (hPO hp), hPO hp, hp]
     · simp [sigOf, Relation.sigs, hn, hOC (hPO hp), hPO hp, hp]
   | tpp =>
     obtain ⟨hp, hne, hn⟩ := h
-    have hq : ¬ Within (Y : Region) X := fun hq => hne (hanti hp hq)
-    have hm : ¬ Within (Y : Region) (interior (X : Region)) := fun h => hq (hMQ h)
+    have hq : ¬ Within (Y : Set α) X := fun hq => hne (hanti hp hq)
+    have hm : ¬ Within (Y : Set α) (interior (X : Set α)) := fun h => hq (hMQ h)
     simp [sigOf, Relation.sigs, hOC (hPO hp), hPO hp, hp, hq, hn, hm]
   | ntpp =>
     obtain ⟨hn, hne⟩ := h
     have hp := hNP hn
-    have hq : ¬ Within (Y : Region) X := fun hq => hne (hanti hp hq)
-    have hm : ¬ Within (Y : Region) (interior (X : Region)) := fun h => hq (hMQ h)
+    have hq : ¬ Within (Y : Set α) X := fun hq => hne (hanti hp hq)
+    have hm : ¬ Within (Y : Set α) (interior (X : Set α)) := fun h => hq (hMQ h)
     simp [sigOf, Relation.sigs, hOC (hPO hp), hPO hp, hp, hq, hn, hm]
   | tppi =>
     obtain ⟨hq, hne, hm⟩ := h
-    have hp : ¬ Within (X : Region) Y := fun hp => hne (hanti hp hq).symm
-    have hn : ¬ Within (X : Region) (interior (Y : Region)) := fun h => hp (hNP h)
+    have hp : ¬ Within (X : Set α) Y := fun hp => hne (hanti hp hq).symm
+    have hn : ¬ Within (X : Set α) (interior (Y : Set α)) := fun h => hp (hNP h)
     simp [sigOf, Relation.sigs, hOC (hQO hq), hQO hq, hp, hq, hn, hm]
   | ntppi =>
     obtain ⟨hm, hne⟩ := h
     have hq := hMQ hm
-    have hp : ¬ Within (X : Region) Y := fun hp => hne (hanti hp hq).symm
-    have hn : ¬ Within (X : Region) (interior (Y : Region)) := fun h => hp (hNP h)
+    have hp : ¬ Within (X : Set α) Y := fun hp => hne (hanti hp hq).symm
+    have hn : ¬ Within (X : Set α) (interior (Y : Set α)) := fun h => hp (hNP h)
     simp [sigOf, Relation.sigs, hOC (hQO hq), hQO hq, hp, hq, hn, hm]
 
 /-! ## Soundness -/
 
 /-- Everything in the weak composition is in the computed table. -/
-theorem mem_table_of_mem_compose {r s t : Relation} (h : t ∈ r ⋄ s) : t ∈ table r s := by
+theorem mem_table_of_mem_compose {r s t : Relation} (h : t ∈ compose α r s) :
+    t ∈ table r s := by
   obtain ⟨A, B, C, hA, hB, hC, hr, hs, ht⟩ := h
   simp only [table, Finset.mem_filter, Relation.mem_all, true_and, admits, List.any_eq_true]
   exact ⟨sigOf A B, sigOf_mem_sigs hA hB hr, sigOf B C, sigOf_mem_sigs hB hC hs,

@@ -41,7 +41,7 @@ theorem A_B_BB_nonempty : (BB (areaA : Region) areaB).Nonempty :=
 /-! ## Separated squares: the four non-exterior cells are empty -/
 
 def squareD : Rect := ⟨5, 6, 0, 2⟩
-def areaD : RegularClosedRegion :=
+def areaD : RegularClosedRegion Point2D :=
   squareD.toRegularClosed (by norm_num [squareD]) (by norm_num [squareD])
 
 theorem A_disjoint_D : Geospatial.Disjoint (areaA : Region) areaD := by
@@ -58,7 +58,7 @@ theorem A_D_cells :
 /-! ## A nested square -/
 
 def squareN : Rect := ⟨1 / 2, 3 / 2, 1 / 2, 3 / 2⟩
-def areaN : RegularClosedRegion :=
+def areaN : RegularClosedRegion Point2D :=
   squareN.toRegularClosed (by norm_num [squareN]) (by norm_num [squareN])
 
 theorem N_within_A : Within (areaN : Region) areaA :=
@@ -79,9 +79,9 @@ theorem N_A_cells :
 
 /-- The empty area lies within every area, yet its interior meets nothing. So
 the nonemptiness hypothesis of `within_iff_cells` cannot be dropped. -/
-theorem empty_within_but_II_empty (B : RegularClosedRegion) :
-    Within ((⊥ : RegularClosedRegion) : Region) B ∧
-    II ((⊥ : RegularClosedRegion) : Region) B = ∅ := by
+theorem empty_within_but_II_empty (B : RegularClosedRegion Point2D) :
+    Within ((⊥ : RegularClosedRegion Point2D) : Region) B ∧
+    II ((⊥ : RegularClosedRegion Point2D) : Region) B = ∅ := by
   refine ⟨?_, ?_⟩
   · intro p hp
     exact absurd hp (Set.notMem_empty p)

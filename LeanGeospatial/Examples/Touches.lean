@@ -62,9 +62,9 @@ theorem edgePoint_on_both_boundaries :
 
 /-- Squares A and B as areas. Building them needs only positive width and
 height. -/
-def areaA : RegularClosedRegion :=
+def areaA : RegularClosedRegion Point2D :=
   squareA.toRegularClosed (by norm_num [squareA]) (by norm_num [squareA])
-def areaB : RegularClosedRegion :=
+def areaB : RegularClosedRegion Point2D :=
   squareB.toRegularClosed (by norm_num [squareB]) (by norm_num [squareB])
 
 theorem areaA_touches_areaB : Touches (areaA : Region) areaB := A_touches_B
@@ -77,7 +77,7 @@ theorem A_inter_B_subset_boundaries :
 
 /-- The shared edge of A and B is a `Region` but not an area. -/
 theorem shared_edge_not_area :
-    ¬ ∃ C : RegularClosedRegion, (C : Region) = (areaA : Region) ∩ areaB :=
+    ¬ ∃ C : RegularClosedRegion Point2D, (C : Region) = (areaA : Region) ∩ areaB :=
   areaA_touches_areaB.not_exists_regularClosed_inter
 
 /-- `(3/2, 1)` is inside both A and C. -/

@@ -9,6 +9,7 @@ import LeanGeospatial.Examples.NineIntersection
 import LeanGeospatial.RCC8
 import LeanGeospatial.Examples.RCC8
 import LeanGeospatial.Examples.Homeomorph
+import LeanGeospatial.Examples.GenericSpace
 import LeanGeospatial.Composition
 import LeanGeospatial.CompositionTable.Cells
 import LeanGeospatial.Examples.PublishedTable
@@ -22,33 +23,36 @@ import LeanGeospatial.Examples.Prover
 /-!
 # Axiom audit
 
-Each theorem below may depend only on Lean's three standard axioms. They come
-in through Mathlib's construction of the real numbers. If anything in this
+Each theorem below may depend only on Lean's three standard axioms
+(`propext`, `Classical.choice`, `Quot.sound`). Results about the plane use all
+three; they come in through Mathlib's construction of the real numbers. Some
+results stated for sets in any type need fewer: `within_trans` needs none,
+and `intersects_symm` does without `Classical.choice`. If anything in this
 project adds an `axiom` or leaves a proof unfinished (which shows up as
 `sorryAx`), the expected messages stop matching and `lake build` fails.
 -/
 
-/-- info: 'Geospatial.within_refl' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'Geospatial.within_refl' does not depend on any axioms -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.within_refl
 
-/-- info: 'Geospatial.within_trans' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'Geospatial.within_trans' does not depend on any axioms -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.within_trans
 
-/-- info: 'Geospatial.contains_iff_within' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'Geospatial.contains_iff_within' does not depend on any axioms -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.contains_iff_within
 
-/-- info: 'Geospatial.intersects_symm' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'Geospatial.intersects_symm' depends on axioms: [propext, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.intersects_symm
 
-/-- info: 'Geospatial.disjoint_symm' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'Geospatial.disjoint_symm' depends on axioms: [propext, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.disjoint_symm
 
-/-- info: 'Geospatial.Disjoint.not_intersects' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'Geospatial.Disjoint.not_intersects' depends on axioms: [propext, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Disjoint.not_intersects
 
@@ -72,7 +76,7 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.Measurement.area_square
 
-/-- info: 'Geospatial.touches_symm' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'Geospatial.touches_symm' depends on axioms: [propext, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.touches_symm
 
@@ -176,7 +180,7 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.RCC8.jointly_exhaustive
 
-/-- info: 'Geospatial.RCC8.Relation.holds_converse' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'Geospatial.RCC8.Relation.holds_converse' depends on axioms: [propext, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.RCC8.Relation.holds_converse
 
@@ -200,11 +204,11 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.RCC8.A_C_only_po
 
-/-- info: 'Geospatial.RCC8.mem_compose_converse' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'Geospatial.RCC8.mem_compose_converse' depends on axioms: [propext, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.RCC8.mem_compose_converse
 
-/-- info: 'Geospatial.RCC8.compose_converse' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'Geospatial.RCC8.compose_converse' depends on axioms: [propext, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.RCC8.compose_converse
 
@@ -683,3 +687,19 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.Homeomorph.map_A_C_only_po' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.Homeomorph.map_A_C_only_po
+
+/-- info: 'Geospatial.RCC8.eq_compose_of_realizable' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.eq_compose_of_realizable
+
+/-- info: 'Geospatial.Examples.GenericSpace.line_only_ec' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.GenericSpace.line_only_ec
+
+/-- info: 'Geospatial.Examples.GenericSpace.table_not_complete_bool' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.GenericSpace.table_not_complete_bool
+
+/-- info: 'Geospatial.Examples.GenericSpace.squares_ec_in_prod' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.GenericSpace.squares_ec_in_prod

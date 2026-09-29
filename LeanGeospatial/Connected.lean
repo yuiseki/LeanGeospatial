@@ -2,30 +2,36 @@ import LeanGeospatial.NineIntersection
 import Mathlib.Topology.Connected.Clopen
 
 /-!
-# The plane is connected
+# Connected spaces
 
-`Point2D`, Mathlib's Euclidean plane, is connected (every real normed space is
-path-connected, and Mathlib provides the instance), so the only sets that are
-both open and closed are `∅` and the whole plane. Consequences used for DE-9IM:
+In a connected space the only sets that are both open and closed are `∅` and
+the whole space. Consequences used for DE-9IM:
 
-- an area other than the whole plane has a nonempty boundary;
-- a closed region other than the whole plane has a nonempty exterior;
-- two disjoint nonempty closed regions never cover the plane.
+- an area other than the whole space has a nonempty boundary;
+- a closed set other than the whole space has a nonempty exterior;
+- two disjoint nonempty closed sets never cover the space.
+
+The theorems ask for `PreconnectedSpace α`. `Point2D`, Mathlib's Euclidean
+plane, is one (every real normed space is path-connected, and Mathlib provides
+the instance). A discrete space with two points is not, and there an area can
+be clopen, with no boundary at all.
 -/
 
 namespace Geospatial
+
+variable {α : Type*} [TopologicalSpace α]
 
 /-- The plane is connected. Mathlib already knows this: a real normed space is
 path-connected. -/
 example : PreconnectedSpace Point2D := inferInstance
 
-theorem boundary_subset_of_isClosed {A : Region} (hA : IsClosed A) : boundary A ⊆ A := by
+theorem boundary_subset_of_isClosed {A : Set α} (hA : IsClosed A) : boundary A ⊆ A := by
   rw [boundary_eq, hA.closure_eq]
   exact Set.sdiff_subset
 
-/-- A nonempty closed region with empty boundary is the whole plane. -/
-theorem eq_univ_of_boundary_eq_empty {A : Region} (hA : IsClosed A) (hne : A.Nonempty)
-    (h : boundary A = ∅) : A = Set.univ := by
+/-- A nonempty closed set with empty boundary is the whole space. -/
+theorem eq_univ_of_boundary_eq_empty [PreconnectedSpace α] {A : Set α} (hA : IsClosed A)
+    (hne : A.Nonempty) (h : boundary A = ∅) : A = Set.univ := by
   have hopen : IsOpen A := by
     have : interior A = A := by
       apply Set.Subset.antisymm interior_subset
@@ -42,18 +48,18 @@ theorem eq_univ_of_boundary_eq_empty {A : Region} (hA : IsClosed A) (hne : A.Non
   · exact absurd h' hne.ne_empty
   · exact h'
 
-/-- A nonempty closed region other than the whole plane has boundary points. -/
-theorem boundary_nonempty {A : Region} (hA : IsClosed A) (hne : A.Nonempty)
+/-- A nonempty closed set other than the whole space has boundary points. -/
+theorem boundary_nonempty [PreconnectedSpace α] {A : Set α} (hA : IsClosed A) (hne : A.Nonempty)
     (hU : A ≠ Set.univ) : (boundary A).Nonempty :=
   Set.nonempty_iff_ne_empty.mpr fun h => hU (eq_univ_of_boundary_eq_empty hA hne h)
 
-/-- A closed region has exterior points exactly when it is not the plane. -/
-theorem exterior_nonempty_iff {A : Region} (hA : IsClosed A) :
+/-- A closed set has exterior points exactly when it is not the whole space. -/
+theorem exterior_nonempty_iff {A : Set α} (hA : IsClosed A) :
     (exterior A).Nonempty ↔ A ≠ Set.univ := by
   rw [exterior_eq_of_isClosed hA, Set.nonempty_compl]
 
-/-- Two disjoint nonempty closed regions leave part of the plane uncovered. -/
-theorem union_ne_univ {A B : Region} (hA : IsClosed A) (hB : IsClosed B)
+/-- Two disjoint nonempty closed sets leave part of the space uncovered. -/
+theorem union_ne_univ [PreconnectedSpace α] {A B : Set α} (hA : IsClosed A) (hB : IsClosed B)
     (hAne : A.Nonempty) (hBne : B.Nonempty) (hAB : A ∩ B = ∅) : A ∪ B ≠ Set.univ := by
   intro hU
   have hAc : A = Bᶜ := by

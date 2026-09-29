@@ -30,7 +30,7 @@ theorem of_I_point (p : Point2D) : DimValue.of ((point p).stratum .I) = .d0 :=
 theorem of_I_line (l : LineString) : DimValue.of ((line l).stratum .I) = .d1 :=
   of_stratum_I (line l) (line_carrier_nonempty l)
 
-theorem of_I_area (A : RegularClosedRegion) (hA : (A : Region).Nonempty) :
+theorem of_I_area (A : RegularClosedRegion Point2D) (hA : (A : Region).Nonempty) :
     DimValue.of ((area A).stratum .I) = .d2 :=
   of_stratum_I (area A) hA
 
@@ -61,7 +61,7 @@ theorem subset_of_II_point (p : Point2D) (g : Geometry) (h : (Geometry.cell .I .
 
 /-! ## overlaps -/
 
-theorem area_II_d2_iff (A B : RegularClosedRegion) :
+theorem area_II_d2_iff (A B : RegularClosedRegion Point2D) :
     DimValue.of (Geometry.cell .I .I (area A) (area B)) = .d2 ↔ (Geometry.cell .I .I (area A) (area B)).Nonempty := by
   constructor
   · intro h2
@@ -71,7 +71,7 @@ theorem area_II_d2_iff (A B : RegularClosedRegion) :
   · intro hne
     exact (area_II_value A B).resolve_left fun hF => hne.ne_empty ((DimValue.of_eq_F_iff _).mp hF)
 
-theorem overlaps_area_area (A B : RegularClosedRegion) (hA : (A : Region).Nonempty)
+theorem overlaps_area_area (A B : RegularClosedRegion Point2D) (hA : (A : Region).Nonempty)
     (hB : (B : Region).Nonempty) :
     SF.Overlaps (area A) (area B) ↔ Holds .overlaps (area A) (area B) := by
   rw [holds_iff rfl parse_TTT, anyOf_singleton]
@@ -163,7 +163,7 @@ theorem crosses_line_line_table6 (l m : LineString) :
   · rintro ⟨h0, -⟩
     exact key.mpr h0
 
-theorem crosses_line_area (l : LineString) (A : RegularClosedRegion) (hA : (A : Region).Nonempty) :
+theorem crosses_line_area (l : LineString) (A : RegularClosedRegion Point2D) (hA : (A : Region).Nonempty) :
     SF.Crosses (line l) (area A) ↔ Holds .crosses (line l) (area A) := by
   rw [holds_iff rfl parse_TTT, anyOf_singleton]
   have hAnot : ¬ (area A).carrier ⊆ (line l).carrier := by
@@ -204,7 +204,7 @@ theorem crosses_point_line (p : Point2D) (l : LineString) :
   rw [holds_iff rfl parse_TTT, anyOf_singleton]
   exact crosses_point p (line l)
 
-theorem crosses_point_area (p : Point2D) (A : RegularClosedRegion) :
+theorem crosses_point_area (p : Point2D) (A : RegularClosedRegion Point2D) :
     ¬ SF.Crosses (point p) (area A) ∧ ¬ Holds .crosses (point p) (area A) := by
   rw [holds_iff rfl parse_TTT, anyOf_singleton]
   exact crosses_point p (area A)
@@ -215,7 +215,7 @@ theorem not_equals_of_kind_ne {g h : Geometry} (hk : g.kind ≠ h.kind) (hg : g.
     (hh : h.carrier.Nonempty) : ¬ SF.Equals g h := by
   have lineArc : ∀ l : LineString, HasArc l.carrier := fun l =>
     l.hasArc_interior.mono Set.sdiff_subset
-  have areaInt : ∀ A : RegularClosedRegion, (A : Region).Nonempty →
+  have areaInt : ∀ A : RegularClosedRegion Point2D, (A : Region).Nonempty →
       (interior (A : Region)).Nonempty := fun A hA => (A.nonempty_iff_interior_nonempty).mp hA
   intro he
   cases g with

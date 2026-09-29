@@ -4,7 +4,7 @@ import LeanGeospatial.NineIntersection
 # RCC8
 
 The eight base relations of the Region Connection Calculus, for areas
-(`RegularClosedRegion`). Each is defined from the relations and topology that
+(`RegularClosedRegion α`) of any topological space `α`. Each is defined from the relations and topology that
 already exist, not postulated and not read off a table:
 
 | Relation | Meaning | Definition |
@@ -20,7 +20,7 @@ already exist, not postulated and not read off a table:
 The main theorem, `existsUnique_relation`, says that for nonempty areas
 exactly one of the eight holds.
 
-`NTPP` includes `a ≠ b` on purpose: the whole plane is an area that lies
+`NTPP` includes `a ≠ b` on purpose: the whole space is an area that lies
 within its own interior, and without that clause it would be both `EQ` and
 `NTPP` with itself (`univ_eq_and_within_interior`).
 -/
@@ -29,28 +29,30 @@ namespace Geospatial.RCC8
 
 open Geospatial
 
-variable (A B : RegularClosedRegion)
+variable {α : Type*} [TopologicalSpace α]
+
+variable (A B : RegularClosedRegion α)
 
 /-- Disconnected. -/
-def DC : Prop := Geospatial.Disjoint (A : Region) B
+def DC : Prop := Geospatial.Disjoint (A : Set α) B
 
 /-- Externally connected. -/
-def EC : Prop := Touches (A : Region) B
+def EC : Prop := Touches (A : Set α) B
 
 /-- Partially overlapping. -/
 def PO : Prop :=
-  Intersects (interior (A : Region)) (interior (B : Region)) ∧
-    ¬ Within (A : Region) B ∧ ¬ Within (B : Region) A
+  Intersects (interior (A : Set α)) (interior (B : Set α)) ∧
+    ¬ Within (A : Set α) B ∧ ¬ Within (B : Set α) A
 
 /-- Equal. -/
-def EQ : Prop := (A : Region) = B
+def EQ : Prop := (A : Set α) = B
 
 /-- Tangential proper part. -/
 def TPP : Prop :=
-  Within (A : Region) B ∧ (A : Region) ≠ B ∧ ¬ Within (A : Region) (interior (B : Region))
+  Within (A : Set α) B ∧ (A : Set α) ≠ B ∧ ¬ Within (A : Set α) (interior (B : Set α))
 
 /-- Non-tangential proper part. -/
-def NTPP : Prop := Within (A : Region) (interior (B : Region)) ∧ (A : Region) ≠ B
+def NTPP : Prop := Within (A : Set α) (interior (B : Set α)) ∧ (A : Set α) ≠ B
 
 /-- Tangential proper part, inverse. -/
 def TPPi : Prop := TPP B A
@@ -60,9 +62,9 @@ def NTPPi : Prop := NTPP B A
 
 /-! ## Agreement with the existing relations -/
 
-theorem dc_iff_disjoint : DC A B ↔ Geospatial.Disjoint (A : Region) B := Iff.rfl
+theorem dc_iff_disjoint : DC A B ↔ Geospatial.Disjoint (A : Set α) B := Iff.rfl
 
-theorem ec_iff_touches : EC A B ↔ Touches (A : Region) B := Iff.rfl
+theorem ec_iff_touches : EC A B ↔ Touches (A : Set α) B := Iff.rfl
 
 theorem tppi_iff_tpp : TPPi A B ↔ TPP B A := Iff.rfl
 
@@ -83,43 +85,43 @@ theorem eq_symm : EQ A B → EQ B A := Eq.symm
 
 /-- `DC` in terms of the nine cells. -/
 theorem dc_iff_cells :
-    DC A B ↔ II A B = ∅ ∧ IB A B = ∅ ∧ BI A B = ∅ ∧ BB A B = ∅ :=
+    DC A B ↔ II (A : Set α) B = ∅ ∧ IB (A : Set α) B = ∅ ∧ BI (A : Set α) B = ∅ ∧ BB (A : Set α) B = ∅ :=
   A.disjoint_iff_cells B
 
 /-- `EC` in terms of the nine cells. -/
 theorem ec_iff_cells :
-    EC A B ↔ II A B = ∅ ∧ ((IB A B).Nonempty ∨ (BI A B).Nonempty ∨ (BB A B).Nonempty) :=
+    EC A B ↔ II (A : Set α) B = ∅ ∧ ((IB (A : Set α) B).Nonempty ∨ (BI (A : Set α) B).Nonempty ∨ (BB (A : Set α) B).Nonempty) :=
   A.touches_iff_cells B
 
 /-- An area fails to lie within a closed region exactly when some interior
 point of the area is exterior to it. -/
 theorem not_within_iff_IE_nonempty :
-    ¬ Within (A : Region) B ↔ (IE A B).Nonempty := by
+    ¬ Within (A : Set α) B ↔ (IE (A : Set α) B).Nonempty := by
   constructor
   · intro h
     obtain ⟨p, hpA, hpB⟩ := Set.not_subset.mp h
-    have hpE : p ∈ exterior (B : Region) := by
+    have hpE : p ∈ exterior (B : Set α) := by
       rw [exterior_eq_of_isClosed B.isClosed]
       exact hpB
-    have hp : p ∈ closure (interior (A : Region)) := by
+    have hp : p ∈ closure (interior (A : Set α)) := by
       rw [A.closure_interior_eq]
       exact hpA
     obtain ⟨q, hqE, hqI⟩ :=
-      mem_closure_iff.mp hp (exterior (B : Region)) (isOpen_exterior _) hpE
+      mem_closure_iff.mp hp (exterior (B : Set α)) (isOpen_exterior _) hpE
     exact ⟨q, hqI, hqE⟩
   · rintro ⟨p, hpI, hpE⟩ h
-    change p ∈ interior (A : Region) at hpI
-    change p ∈ exterior (B : Region) at hpE
+    change p ∈ interior (A : Set α) at hpI
+    change p ∈ exterior (B : Set α) at hpE
     rw [exterior_eq_of_isClosed B.isClosed] at hpE
     exact hpE (h (interior_subset hpI))
 
 /-- `PO` in terms of the nine cells: each interior meets the other's interior
 and the other's exterior. -/
 theorem po_iff_cells :
-    PO A B ↔ (II A B).Nonempty ∧ (IE A B).Nonempty ∧ (EI A B).Nonempty := by
+    PO A B ↔ (II (A : Set α) B).Nonempty ∧ (IE (A : Set α) B).Nonempty ∧ (EI (A : Set α) B).Nonempty := by
   unfold PO
   rw [not_within_iff_IE_nonempty, not_within_iff_IE_nonempty,
-    show IE (B : Region) A = EI (A : Region) B from cell_swap _ _ _ _]
+    show IE (B : Set α) A = EI (A : Set α) B from cell_swap _ _ _ _]
   exact Iff.rfl
 
 /-! ## The eight relations as one type -/
@@ -130,7 +132,7 @@ inductive Relation where
   deriving DecidableEq
 
 /-- Whether a base relation holds between two areas. -/
-def Relation.holds : Relation → RegularClosedRegion → RegularClosedRegion → Prop
+def Relation.holds : Relation → RegularClosedRegion α → RegularClosedRegion α → Prop
   | .dc, A, B => DC A B
   | .ec, A, B => EC A B
   | .po, A, B => PO A B
@@ -168,17 +170,17 @@ theorem Relation.holds_converse (r : Relation) :
 /-! ## Exactly one relation holds -/
 
 /-- The facts about the building blocks that the case analysis needs. -/
-private theorem facts (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty) :
-    (Geospatial.Disjoint (A : Region) B ↔ ¬ Intersects (A : Region) B) ∧
-    (Touches (A : Region) B ↔
-      Intersects (A : Region) B ∧ ¬ Intersects (interior (A : Region)) (interior (B : Region))) ∧
-    (Intersects (interior (A : Region)) (interior (B : Region)) → Intersects (A : Region) B) ∧
-    (Within (A : Region) B → Intersects (interior (A : Region)) (interior (B : Region))) ∧
-    (Within (B : Region) A → Intersects (interior (A : Region)) (interior (B : Region))) ∧
-    (Within (A : Region) (interior (B : Region)) → Within (A : Region) B) ∧
-    (Within (B : Region) (interior (A : Region)) → Within (B : Region) A) ∧
-    ((A : Region) = B ↔ Within (A : Region) B ∧ Within (B : Region) A) ∧
-    ((B : Region) = A ↔ (A : Region) = B) := by
+private theorem facts (hA : (A : Set α).Nonempty) (hB : (B : Set α).Nonempty) :
+    (Geospatial.Disjoint (A : Set α) B ↔ ¬ Intersects (A : Set α) B) ∧
+    (Touches (A : Set α) B ↔
+      Intersects (A : Set α) B ∧ ¬ Intersects (interior (A : Set α)) (interior (B : Set α))) ∧
+    (Intersects (interior (A : Set α)) (interior (B : Set α)) → Intersects (A : Set α) B) ∧
+    (Within (A : Set α) B → Intersects (interior (A : Set α)) (interior (B : Set α))) ∧
+    (Within (B : Set α) A → Intersects (interior (A : Set α)) (interior (B : Set α))) ∧
+    (Within (A : Set α) (interior (B : Set α)) → Within (A : Set α) B) ∧
+    (Within (B : Set α) (interior (A : Set α)) → Within (B : Set α) A) ∧
+    ((A : Set α) = B ↔ Within (A : Set α) B ∧ Within (B : Set α) A) ∧
+    ((B : Set α) = A ↔ (A : Set α) = B) := by
   refine ⟨disjoint_iff_not_intersects, ?_, ?_, ?_, ?_, ?_, ?_, ?_, eq_comm⟩
   · unfold Touches
     rw [disjoint_iff_not_intersects]
@@ -194,24 +196,24 @@ private theorem facts (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty) 
       fun ⟨h₁, h₂⟩ => within_antisymm h₁ h₂⟩
 
 /-- Jointly exhaustive: some base relation holds. -/
-theorem exists_relation (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty) :
+theorem exists_relation (hA : (A : Set α).Nonempty) (hB : (B : Set α).Nonempty) :
     ∃ r : Relation, r.holds A B := by
   obtain ⟨hDC, hEC, -, -, -, -, -, hEQ, hEQ'⟩ := facts A B hA hB
-  by_cases hC : Intersects (A : Region) B
+  by_cases hC : Intersects (A : Set α) B
   swap
   · exact ⟨.dc, hDC.mpr hC⟩
-  by_cases hO : Intersects (interior (A : Region)) (interior (B : Region))
+  by_cases hO : Intersects (interior (A : Set α)) (interior (B : Set α))
   swap
   · exact ⟨.ec, hEC.mpr ⟨hC, hO⟩⟩
-  by_cases hE : (A : Region) = B
+  by_cases hE : (A : Set α) = B
   · exact ⟨.eq, hE⟩
-  by_cases hP : Within (A : Region) B
-  · by_cases hN : Within (A : Region) (interior (B : Region))
+  by_cases hP : Within (A : Set α) B
+  · by_cases hN : Within (A : Set α) (interior (B : Set α))
     · exact ⟨.ntpp, hN, hE⟩
     · exact ⟨.tpp, hP, hE, hN⟩
-  by_cases hQ : Within (B : Region) A
-  · have hE' : (B : Region) ≠ A := fun h => hE (hEQ'.mp h)
-    by_cases hN : Within (B : Region) (interior (A : Region))
+  by_cases hQ : Within (B : Set α) A
+  · have hE' : (B : Set α) ≠ A := fun h => hE (hEQ'.mp h)
+    by_cases hN : Within (B : Set α) (interior (A : Set α))
     · exact ⟨.ntppi, hN, hE'⟩
     · exact ⟨.tppi, hQ, hE', hN⟩
   exact ⟨.po, hO, hP, hQ⟩
@@ -221,17 +223,17 @@ equal? within? within the interior? It is only a proof device; the relations
 themselves are the definitions above. -/
 noncomputable def classify : Relation :=
   open Classical in
-  if ¬ Intersects (A : Region) B then .dc
-  else if ¬ Intersects (interior (A : Region)) (interior (B : Region)) then .ec
-  else if (A : Region) = B then .eq
-  else if Within (A : Region) B then
-    (if Within (A : Region) (interior (B : Region)) then .ntpp else .tpp)
-  else if Within (B : Region) A then
-    (if Within (B : Region) (interior (A : Region)) then .ntppi else .tppi)
+  if ¬ Intersects (A : Set α) B then .dc
+  else if ¬ Intersects (interior (A : Set α)) (interior (B : Set α)) then .ec
+  else if (A : Set α) = B then .eq
+  else if Within (A : Set α) B then
+    (if Within (A : Set α) (interior (B : Set α)) then .ntpp else .tpp)
+  else if Within (B : Set α) A then
+    (if Within (B : Set α) (interior (A : Set α)) then .ntppi else .tppi)
   else .po
 
 /-- Whichever base relation holds is the one the decision tree picks. -/
-theorem classify_eq_of_holds (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty)
+theorem classify_eq_of_holds (hA : (A : Set α).Nonempty) (hB : (B : Set α).Nonempty)
     {r : Relation} (hr : r.holds A B) : classify A B = r := by
   obtain ⟨hDC, hEC, hOC, hPO, hQO, hNP, hNQ, hEQ, hEQ'⟩ := facts A B hA hB
   have nn : ∀ {P : Prop}, P → ¬ ¬ P := fun h h' => h' h
@@ -241,7 +243,7 @@ theorem classify_eq_of_holds (hA : (A : Region).Nonempty) (hB : (B : Region).Non
     obtain ⟨hc, ho⟩ := hEC.mp hr
     rw [classify, ite_eq_right (nn hc), ite_eq_left ho]
   | eq =>
-    change (A : Region) = B at hr
+    change (A : Set α) = B at hr
     have ho := hPO (hEQ.mp hr).1
     rw [classify, ite_eq_right (nn (hOC ho)), ite_eq_right (nn ho), ite_eq_left hr]
   | tpp =>
@@ -255,54 +257,55 @@ theorem classify_eq_of_holds (hA : (A : Region).Nonempty) (hB : (B : Region).Non
     rw [classify, ite_eq_right (nn (hOC ho)), ite_eq_right (nn ho), ite_eq_right he, ite_eq_left hp, ite_eq_left hn]
   | tppi =>
     obtain ⟨hq, he', hn⟩ := hr
-    have he : (A : Region) ≠ B := fun h => he' (hEQ'.mpr h)
-    have hp : ¬ Within (A : Region) B := fun hp => he (hEQ.mpr ⟨hp, hq⟩)
+    have he : (A : Set α) ≠ B := fun h => he' (hEQ'.mpr h)
+    have hp : ¬ Within (A : Set α) B := fun hp => he (hEQ.mpr ⟨hp, hq⟩)
     have ho := hQO hq
     rw [classify, ite_eq_right (nn (hOC ho)), ite_eq_right (nn ho), ite_eq_right he, ite_eq_right hp, ite_eq_left hq,
       ite_eq_right hn]
   | ntppi =>
     obtain ⟨hn, he'⟩ := hr
     have hq := hNQ hn
-    have he : (A : Region) ≠ B := fun h => he' (hEQ'.mpr h)
-    have hp : ¬ Within (A : Region) B := fun hp => he (hEQ.mpr ⟨hp, hq⟩)
+    have he : (A : Set α) ≠ B := fun h => he' (hEQ'.mpr h)
+    have hp : ¬ Within (A : Set α) B := fun hp => he (hEQ.mpr ⟨hp, hq⟩)
     have ho := hQO hq
     rw [classify, ite_eq_right (nn (hOC ho)), ite_eq_right (nn ho), ite_eq_right he, ite_eq_right hp, ite_eq_left hq,
       ite_eq_left hn]
   | po =>
     obtain ⟨ho, hp, hq⟩ := hr
-    have he : (A : Region) ≠ B := fun h => hp (hEQ.mp h).1
+    have he : (A : Set α) ≠ B := fun h => hp (hEQ.mp h).1
     rw [classify, ite_eq_right (nn (hOC ho)), ite_eq_right (nn ho), ite_eq_right he, ite_eq_right hp, ite_eq_right hq]
 
 /-- Pairwise disjoint: at most one base relation holds. -/
-theorem relation_unique (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty)
+theorem relation_unique (hA : (A : Set α).Nonempty) (hB : (B : Set α).Nonempty)
     {r s : Relation} (hr : r.holds A B) (hs : s.holds A B) : r = s :=
   (classify_eq_of_holds A B hA hB hr).symm.trans (classify_eq_of_holds A B hA hB hs)
 
 /-- Pairwise disjoint, stated for two different relations. -/
-theorem pairwise_disjoint (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty)
+theorem pairwise_disjoint (hA : (A : Set α).Nonempty) (hB : (B : Set α).Nonempty)
     {r s : Relation} (hrs : r ≠ s) : ¬ (r.holds A B ∧ s.holds A B) :=
   fun ⟨hr, hs⟩ => hrs (relation_unique A B hA hB hr hs)
 
 /-- Jointly exhaustive, under its usual name. -/
-theorem jointly_exhaustive (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty) :
+theorem jointly_exhaustive (hA : (A : Set α).Nonempty) (hB : (B : Set α).Nonempty) :
     ∃ r : Relation, r.holds A B :=
   exists_relation A B hA hB
 
 /-- For nonempty areas, exactly one of the eight base relations holds. -/
-theorem existsUnique_relation (hA : (A : Region).Nonempty) (hB : (B : Region).Nonempty) :
+theorem existsUnique_relation (hA : (A : Set α).Nonempty) (hB : (B : Set α).Nonempty) :
     ∃! r : Relation, r.holds A B := by
   obtain ⟨r, hr⟩ := exists_relation A B hA hB
   exact ⟨r, hr, fun s hs => relation_unique A B hA hB hs hr⟩
 
 /-! ## Why `NTPP` excludes equality -/
 
-/-- The whole plane, as an area. -/
-def univ : RegularClosedRegion := ⟨Set.univ, by simp⟩
+/-- The whole space, as an area. -/
+def univ : RegularClosedRegion α := ⟨Set.univ, by simp⟩
 
-/-- The whole plane equals itself and lies within its own interior. Without
+/-- The whole space equals itself and lies within its own interior. Without
 the `a ≠ b` clause in `NTPP`, it would be both `EQ` and `NTPP` with itself. -/
 theorem univ_eq_and_within_interior :
-    EQ univ univ ∧ Within (univ : Region) (interior (univ : Region)) :=
+    EQ (univ : RegularClosedRegion α) univ ∧
+      Within ((univ : RegularClosedRegion α) : Set α) (interior ((univ : RegularClosedRegion α) : Set α)) :=
   ⟨rfl, by simp [univ, Within]⟩
 
 end Geospatial.RCC8

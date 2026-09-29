@@ -11,7 +11,9 @@ records that it is the same space as the coordinate pair `(x, y)` in `ℝ × ℝ
 with the product topology.
 
 With that in place, a region's interior, closure and boundary are Mathlib's
-`interior`, `closure` and `frontier`. Nothing is postulated.
+`interior`, `closure` and `frontier`. Nothing is postulated. `boundary` and
+`Touches` are defined for sets in any topological space; only the rectangles
+at the end are about the plane.
 
 `Touches` is the point-set definition: the regions share a point, but their
 interiors share none. It is not the DE-9IM matrix.
@@ -52,19 +54,23 @@ def Point2D.homeomorphProd : Point2D ≃ₜ ℝ × ℝ where
 @[simp] theorem Point2D.homeomorphProd_symm_apply (q : ℝ × ℝ) :
     Point2D.homeomorphProd.symm q = Point2D.mk q.1 q.2 := rfl
 
+section General
+
+variable {α : Type*} [TopologicalSpace α]
+
 /-! ## Interior, closure, boundary -/
 
 /-- The boundary of a region: Mathlib's `frontier` under its GIS name. -/
-abbrev boundary (A : Region) : Region := frontier A
+abbrev boundary (A : Set α) : Set α := frontier A
 
 /-- The boundary is what the closure adds to the interior. -/
-theorem boundary_eq (A : Region) : boundary A = closure A \ interior A := rfl
+theorem boundary_eq (A : Set α) : boundary A = closure A \ interior A := rfl
 
-theorem isClosed_boundary (A : Region) : IsClosed (boundary A) :=
+theorem isClosed_boundary (A : Set α) : IsClosed (boundary A) :=
   isClosed_frontier
 
 /-- The interior and the boundary never overlap. -/
-theorem interior_disjoint_boundary (A : Region) :
+theorem interior_disjoint_boundary (A : Set α) :
     Geospatial.Disjoint (interior A) (boundary A) := by
   unfold Geospatial.Disjoint
   rw [boundary_eq, Set.eq_empty_iff_forall_notMem]
@@ -72,17 +78,17 @@ theorem interior_disjoint_boundary (A : Region) :
   exact hp' hp
 
 /-- A closed region is its interior together with its boundary. -/
-theorem interior_union_boundary_of_isClosed {A : Region} (hA : IsClosed A) :
+theorem interior_union_boundary_of_isClosed {A : Set α} (hA : IsClosed A) :
     interior A ∪ boundary A = A := by
   rw [boundary_eq, hA.closure_eq, Set.union_sdiff_cancel interior_subset]
 
 /-! ## Touches -/
 
 /-- `A` touches `B` when they share a point but their interiors share none. -/
-def Touches (A B : Region) : Prop :=
+def Touches (A B : Set α) : Prop :=
   Intersects A B ∧ Geospatial.Disjoint (interior A) (interior B)
 
-variable {A B : Region}
+variable {A B : Set α}
 
 theorem Touches.intersects (h : Touches A B) : Intersects A B := h.1
 
@@ -112,7 +118,7 @@ theorem Touches.inter_subset_boundary
     A ∩ B ⊆ boundary A ∩ boundary B := by
   have hA' : IsClosed A := hA ▸ isClosed_closure
   have hB' : IsClosed B := hB ▸ isClosed_closure
-  have key : ∀ {S T : Region}, closure (interior T) = T →
+  have key : ∀ {S T : Set α}, closure (interior T) = T →
       Geospatial.Disjoint (interior S) (interior T) → ∀ p ∈ T, p ∉ interior S := by
     intro S T hT hST p hpT hpS
     have hp : p ∈ closure (interior T) := hT.symm ▸ hpT
@@ -127,6 +133,8 @@ theorem Touches.inter_subset_boundary
     exact ⟨hpA, key hB h.2 p hpB⟩
   · rw [boundary_eq, hB'.closure_eq]
     exact ⟨hpB, key hA (disjoint_symm h.2) p hpA⟩
+
+end General
 
 /-! ## Rectangles -/
 

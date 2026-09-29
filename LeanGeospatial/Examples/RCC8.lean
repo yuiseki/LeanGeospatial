@@ -40,16 +40,16 @@ open Geospatial.Examples.Touches Geospatial.Examples.NineIntersection
 
 noncomputable section
 
-def areaC : RegularClosedRegion :=
+def areaC : RegularClosedRegion Point2D :=
   squareC.toRegularClosed (by norm_num [squareC]) (by norm_num [squareC])
 
 def squareT : Rect := ⟨0, 1, 0, 1⟩
-def areaT : RegularClosedRegion :=
+def areaT : RegularClosedRegion Point2D :=
   squareT.toRegularClosed (by norm_num [squareT]) (by norm_num [squareT])
 
 /-- Membership in a rectangle's area, as inequalities. -/
 theorem mem_area (r : Rect) (hx : r.xmin < r.xmax) (hy : r.ymin < r.ymax) (p : Point2D) :
-    p ∈ ((r.toRegularClosed hx hy : RegularClosedRegion) : Region) ↔
+    p ∈ ((r.toRegularClosed hx hy : RegularClosedRegion Point2D) : Region) ↔
       r.xmin ≤ p.x ∧ p.x ≤ r.xmax ∧ r.ymin ≤ p.y ∧ p.y ≤ r.ymax :=
   Iff.rfl
 
