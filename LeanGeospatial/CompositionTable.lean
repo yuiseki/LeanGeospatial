@@ -30,6 +30,7 @@ entry of the table being realised in `α` (`rcc8Complete_iff_table_subset`).
 - Weak composition is a topological invariant (`compose_eq_of_homeomorph`),
   so homeomorphic spaces are complete together or not at all
   (`RCC8Complete.homeomorph`); `ℝ × ℝ` is complete because the plane is.
+  The composition table, in other words, is a fact about topology alone.
 -/
 
 namespace Geospatial.RCC8
@@ -83,7 +84,17 @@ theorem RCC8.mem_compose_of_homeomorph (e : α ≃ₜ β) {r s t : Relation}
     (Relation.holds_map_iff e A C t).mpr ht⟩
 
 /-- Weak composition is a topological invariant: homeomorphic spaces have the
-same weak compositions. -/
+same weak compositions.
+
+This is what the composition table is about. Its entries are defined by the
+existence of areas, and a homeomorphism carries areas to areas and every RCC8
+relation to itself, in both directions. So `compose α r s` depends on `α` only
+up to homeomorphism: the table is a fact about the topology of the space, not
+about its coordinates, distances or straight lines. Stretch the plane, bend
+it, or rewrite it as `ℝ × ℝ`, and the table stays where it was.
+
+It is an invariant, not a classification: nothing here says that spaces with
+the same table are homeomorphic. -/
 theorem RCC8.compose_eq_of_homeomorph (e : α ≃ₜ β) (r s : Relation) :
     compose α r s = compose β r s :=
   Set.ext fun _ => ⟨mem_compose_of_homeomorph e, mem_compose_of_homeomorph e.symm⟩
