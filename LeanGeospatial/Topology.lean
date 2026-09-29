@@ -164,6 +164,11 @@ theorem isClosed_toRegion (r : Rect) : IsClosed r.toRegion := by
   rw [toRegion_eq_preimage]
   exact (isClosed_Icc.prod isClosed_Icc).preimage Point2D.homeomorphProd.continuous
 
+/-- A closed rectangle is compact. -/
+theorem isCompact_toRegion (r : Rect) : IsCompact r.toRegion := by
+  rw [toRegion_eq_preimage]
+  exact Point2D.homeomorphProd.isCompact_preimage.mpr (isCompact_Icc.prod isCompact_Icc)
+
 theorem closure_toRegion (r : Rect) : closure r.toRegion = r.toRegion :=
   r.isClosed_toRegion.closure_eq
 

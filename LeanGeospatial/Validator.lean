@@ -300,7 +300,7 @@ verdict on a single triangle lists exactly the relations that can occur. -/
 theorem triangle_realizes {a b c : FeatureId} (hab : a ≠ b) (hac : a ≠ c) (hbc : b ≠ c)
     {r s t : Relation} (ht : t ∈ table r s) :
     ∃ M, Graph.Satisfies ⟨[⟨a, r, b⟩, ⟨b, s, c⟩]⟩ M ∧ t.holds (M a) (M c) := by
-  obtain ⟨A, B, C, hA, hB, hC, hr, hs, htAC⟩ := realizes_of_mem_table r s t ht
+  obtain ⟨A, B, C, -, -, -, hA, hB, hC, hr, hs, htAC⟩ := realizes_of_mem_table r s t ht
   classical
   let M : FeatureId → RegularClosedRegion Point2D := fun x => if x = a then A else if x = b then B else C
   have Ma : M a = A := by simp [M]

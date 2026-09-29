@@ -35,14 +35,16 @@ entry of the table being realised in `α` (`rcc8Complete_iff_table_subset`).
 
 namespace Geospatial.RCC8
 
-theorem mem_compose_iff_realizes {r s t : Relation} : t ∈ r ⋄ s ↔ Realizes r s t :=
-  Iff.rfl
+/-- A compact witness is a witness. -/
+theorem Realizes.mem_compose {r s t : Relation} (h : Realizes r s t) : t ∈ r ⋄ s :=
+  let ⟨A, B, C, _, _, _, hA, hB, hC, hr, hs, ht⟩ := h
+  ⟨A, B, C, hA, hB, hC, hr, hs, ht⟩
 
 /-- The weak composition of two base relations is the computed table. -/
 theorem compose_eq_table (r s : Relation) : r ⋄ s = ↑(table r s) := by
   ext t
   rw [Finset.mem_coe]
-  exact ⟨mem_table_of_mem_compose, realizes_of_mem_table r s t⟩
+  exact ⟨mem_table_of_mem_compose, fun h => (realizes_of_mem_table r s t h).mem_compose⟩
 
 end Geospatial.RCC8
 

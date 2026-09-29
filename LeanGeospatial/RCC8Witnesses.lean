@@ -132,11 +132,15 @@ macro "rect_rcc8" : tactic => `(tactic| (
     Rect.intersects_interior_area_iff] <;>
   norm_num))
 
-/-- Some nonempty areas `A`, `B`, `C` have `r A B`, `s B C` and `t A C`. This
-is membership in the weak composition `r ⋄ s`, stated here so the witnesses
-do not depend on `Composition.lean`. -/
+/-- Some nonempty compact areas `A`, `B`, `C` have `r A B`, `s B C` and
+`t A C`. Forgetting compactness, this is membership in the weak composition
+`r ⋄ s`; it is stated here so the witnesses do not depend on
+`Composition.lean`. The witnesses are rectangles, so they are compact, and
+compact witnesses can be carried into any space that contains a copy of the
+plane (`CompositionTable/Embedding.lean`). -/
 def Realizes (r s t : Relation) : Prop :=
   ∃ A B C : RegularClosedRegion Point2D,
+    IsCompact (A : Region) ∧ IsCompact (B : Region) ∧ IsCompact (C : Region) ∧
     (A : Region).Nonempty ∧ (B : Region).Nonempty ∧ (C : Region).Nonempty ∧
     r.holds A B ∧ s.holds B C ∧ t.holds A C
 
@@ -146,13 +150,14 @@ theorem realizes_of_rects {r s t : Relation} (a b c : Rect)
     (hc : c.xmin < c.xmax ∧ c.ymin < c.ymax)
     (h₁ : r.holds (a.area ha) (b.area hb)) (h₂ : s.holds (b.area hb) (c.area hc))
     (h₃ : t.holds (a.area ha) (c.area hc)) : Realizes r s t :=
-  ⟨_, _, _, a.area_nonempty ha, b.area_nonempty hb, c.area_nonempty hc, h₁, h₂, h₃⟩
+  ⟨_, _, _, a.isCompact_toRegion, b.isCompact_toRegion, c.isCompact_toRegion,
+    a.area_nonempty ha, b.area_nonempty hb, c.area_nonempty hc, h₁, h₂, h₃⟩
 
 /-- Reading a witness backwards gives a witness for the converses. -/
 theorem Realizes.converse {r s t : Relation} (h : Realizes r s t) :
     Realizes s.converse r.converse t.converse := by
-  obtain ⟨A, B, C, hA, hB, hC, hr, hs, ht⟩ := h
-  exact ⟨C, B, A, hC, hB, hA, (s.holds_converse C B).mpr hs,
+  obtain ⟨A, B, C, kA, kB, kC, hA, hB, hC, hr, hs, ht⟩ := h
+  exact ⟨C, B, A, kC, kB, kA, hC, hB, hA, (s.holds_converse C B).mpr hs,
     (r.holds_converse B A).mpr hr, (t.holds_converse C A).mpr ht⟩
 
 /-- A rectangle strictly inside another is a non-tangential proper part of it. -/
@@ -282,30 +287,39 @@ end
 end Witnesses
 
 open Witnesses in
+/-- Every base relation holds between some pair of nonempty compact areas. -/
+theorem Relation.realizable_compact (r : Relation) :
+    ∃ A C : RegularClosedRegion Point2D, IsCompact (A : Region) ∧ IsCompact (C : Region) ∧
+      (A : Region).Nonempty ∧ (C : Region).Nonempty ∧ r.holds A C := by
+  have nA := rectA.area_nonempty hA
+  have kA : IsCompact (areaA : Region) := rectA.isCompact_toRegion
+  cases r with
+  | dc => exact ⟨areaA, areaD, kA, rectD.isCompact_toRegion, nA, rectD.area_nonempty hD, A_D_dc⟩
+  | ec => exact ⟨areaA, areaB, kA, rectB.isCompact_toRegion, nA, rectB.area_nonempty hB, A_B_ec⟩
+  | po => exact ⟨areaA, areaC, kA, rectC.isCompact_toRegion, nA, rectC.area_nonempty hC, A_C_po⟩
+  | eq => exact ⟨areaA, areaA, kA, kA, nA, nA, A_A_eq⟩
+  | tpp => exact ⟨areaT, areaA, rectT.isCompact_toRegion, kA, rectT.area_nonempty hT, nA, T_A_tpp⟩
+  | ntpp => exact ⟨areaN, areaA, rectN.isCompact_toRegion, kA, rectN.area_nonempty hN, nA, N_A_ntpp⟩
+  | tppi => exact ⟨areaA, areaT, kA, rectT.isCompact_toRegion, nA, rectT.area_nonempty hT, A_T_tppi⟩
+  | ntppi =>
+    exact ⟨areaA, areaN, kA, rectN.isCompact_toRegion, nA, rectN.area_nonempty hN, A_N_ntppi⟩
+
 /-- Every base relation holds between some pair of nonempty areas. -/
 theorem Relation.realizable (r : Relation) :
     ∃ A C : RegularClosedRegion Point2D, (A : Region).Nonempty ∧ (C : Region).Nonempty ∧
-      r.holds A C := by
-  have nA := rectA.area_nonempty hA
-  cases r with
-  | dc => exact ⟨areaA, areaD, nA, rectD.area_nonempty hD, A_D_dc⟩
-  | ec => exact ⟨areaA, areaB, nA, rectB.area_nonempty hB, A_B_ec⟩
-  | po => exact ⟨areaA, areaC, nA, rectC.area_nonempty hC, A_C_po⟩
-  | eq => exact ⟨areaA, areaA, nA, nA, A_A_eq⟩
-  | tpp => exact ⟨areaT, areaA, rectT.area_nonempty hT, nA, T_A_tpp⟩
-  | ntpp => exact ⟨areaN, areaA, rectN.area_nonempty hN, nA, N_A_ntpp⟩
-  | tppi => exact ⟨areaA, areaT, nA, rectT.area_nonempty hT, A_T_tppi⟩
-  | ntppi => exact ⟨areaA, areaN, nA, rectN.area_nonempty hN, A_N_ntppi⟩
+      r.holds A C :=
+  let ⟨A, C, _, _, hA, hC, h⟩ := r.realizable_compact
+  ⟨A, C, hA, hC, h⟩
 
 /-- `EQ` then `s` realises `s`. -/
 theorem realizes_eq_left (s : Relation) : Realizes .eq s s := by
-  obtain ⟨A, C, hA, hC, h⟩ := s.realizable
-  exact ⟨A, A, C, hA, hA, hC, rfl, h, h⟩
+  obtain ⟨A, C, kA, kC, hA, hC, h⟩ := s.realizable_compact
+  exact ⟨A, A, C, kA, kA, kC, hA, hA, hC, rfl, h, h⟩
 
 /-- `r` then `EQ` realises `r`. -/
 theorem realizes_eq_right (r : Relation) : Realizes r .eq r := by
-  obtain ⟨A, C, hA, hC, h⟩ := r.realizable
-  exact ⟨A, C, C, hA, hC, hC, h, rfl, h⟩
+  obtain ⟨A, C, kA, kC, hA, hC, h⟩ := r.realizable_compact
+  exact ⟨A, C, C, kA, kC, kC, hA, hC, hC, h, rfl, h⟩
 
 end RCC8
 
