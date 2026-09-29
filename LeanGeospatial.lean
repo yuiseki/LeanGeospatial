@@ -10,6 +10,8 @@ import LeanGeospatial.RCC8Witnesses
 import LeanGeospatial.Composition
 import LeanGeospatial.CompositionTable
 import LeanGeospatial.CompositionTable.Cells
+import LeanGeospatial.CompositionTable.Embedding
+import LeanGeospatial.Manifold
 import LeanGeospatial.Validator
 import LeanGeospatial.ValidatorText
 import LeanGeospatial.Connected

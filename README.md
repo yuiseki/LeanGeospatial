@@ -475,10 +475,22 @@ entry is realised in `α` (`rcc8Complete_iff_table_subset`).
 | `Bool` | no | `not_rcc8Complete_bool`, from `table_not_complete_bool` |
 | Any space homeomorphic to a complete one, such as `ℝ × ℝ` | yes | `RCC8Complete.homeomorph : RCC8Complete α ↔ RCC8Complete β`, from `compose_eq_of_homeomorph` |
 | Any discrete space | no | `not_rcc8Complete_of_discrete` |
+| Any Hausdorff space containing an open copy of the plane | yes | `rcc8Complete_of_isOpenEmbedding` |
+| Any nonempty open subset of the plane, such as a disk or the plane without a point | yes | `rcc8Complete_of_isOpen` |
+| Any nonempty Hausdorff 2-manifold, such as the sphere | yes | `rcc8Complete_of_chartedSpace` |
 
 Weak composition is a topological invariant (`compose_eq_of_homeomorph`):
 homeomorphic spaces have the same table. A discrete space fails because its
 areas have no boundary, so no two are `EC`, while `EC` is in `DC ⋄ DC`.
+
+Completeness is local. The plane's witnesses are rectangles, so compact
+(`Realizes` asks for compact areas). An open embedding commutes with interior
+and keeps every relation, and in a Hausdorff space the image of a compact area
+is closed, so it is an area again (`RegularClosedRegion.mapCompact`). So one
+open copy of the plane anywhere in a Hausdorff space is enough. A 2-manifold
+has one inside any chart: a small disk, which is homeomorphic to the plane.
+`Examples/Manifold.lean` applies this to the sphere, the unit disk and the
+punctured plane.
 
 `scripts/gen_rcc8_table.py` searches for the rectangles and writes the
 generated files; `data/rcc8_witnesses.tsv` lists them one per line. The script
@@ -837,6 +849,8 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Topology.lean` | The plane's topology, `boundary`, `Touches`, interior and boundary of a `Rect` |
 | `LeanGeospatial/RegularClosed.lean` | `RegularClosedRegion`, the type of areas |
 | `LeanGeospatial/Homeomorph.lean` | Homeomorphisms preserve touching, the RCC8 relations and the DE-9IM matrix |
+| `LeanGeospatial/CompositionTable/Embedding.lean` | Open embeddings keep relations between compact areas; completeness is local |
+| `LeanGeospatial/Manifold.lean` | Nonempty Hausdorff 2-manifolds and open subsets of the plane are complete |
 | `LeanGeospatial/NineIntersection.lean` | `exterior`, the three-part split, the nine cells, relations as cell conditions |
 | `LeanGeospatial/RCC8.lean` | The eight RCC8 base relations and the proof that exactly one holds |
 | `LeanGeospatial/RCC8Witnesses.lean` | Squares realising each RCC8 relation, used by weak composition |
@@ -869,6 +883,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/Touches.lean` | Two squares that touch, and two that overlap; their shared edge is not an area |
 | `LeanGeospatial/Examples/Homeomorph.lean` | The example areas keep their Touches, RCC8 and DE-9IM relations after a slide, a reflection, or any homeomorphism |
 | `LeanGeospatial/Examples/GenericSpace.lean` | Areas and RCC8 on the real line, in discrete spaces (where the table is sound but not complete), and carried from the plane into `ℝ × ℝ` |
+| `LeanGeospatial/Examples/Manifold.lean` | The table is complete on the sphere, the open unit disk and the punctured plane |
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |
