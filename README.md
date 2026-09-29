@@ -458,6 +458,27 @@ halves.
   entries. `rect_rcc8` checks each relation between rectangles by reducing it
   to coordinate inequalities.
 
+Because weak composition depends on the space, "the table is right" is a
+property of a space:
+
+```lean
+def RCC8Complete (α : Type*) [TopologicalSpace α] : Prop :=
+  ∀ r s, compose α r s = table r s
+```
+
+The table is sound in every space, so `RCC8Complete α` says exactly that every
+entry is realised in `α` (`rcc8Complete_iff_table_subset`).
+
+| Space | Complete? | Theorem |
+| --- | --- | --- |
+| The plane `Point2D` | yes | `rcc8Complete_point2D` |
+| Any space homeomorphic to a complete one, such as `ℝ × ℝ` | yes | `RCC8Complete.of_homeomorph`, from `compose_eq_of_homeomorph` |
+| Any discrete space, such as `Bool` | no | `not_rcc8Complete_of_discrete` |
+
+Weak composition is a topological invariant (`compose_eq_of_homeomorph`):
+homeomorphic spaces have the same table. A discrete space fails because its
+areas have no boundary, so no two are `EC`, while `EC` is in `DC ⋄ DC`.
+
 `scripts/gen_rcc8_table.py` searches for the rectangles and writes the
 generated files; `data/rcc8_witnesses.tsv` lists them one per line. The script
 is not trusted: Lean checks every witness, and CI checks that the generated

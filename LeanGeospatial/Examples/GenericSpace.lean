@@ -16,7 +16,8 @@ over and what does not.
   areas are ever `EC`, and none is ever a `TPP` of another. The composition
   table is still sound there (`mem_table_of_mem_compose` holds in every
   space), but it is no longer complete: `DC ⋄ DC` in `Bool` misses `EC`, which
-  the plane realises.
+  the plane realises. In the terms of `RCC8Complete`, the plane and `ℝ × ℝ`
+  are complete and `Bool` is not.
 - A homeomorphism between two different spaces carries areas and their RCC8
   relations across. `Point2D.homeomorphProd` takes the touching squares of
   `Examples.Touches` into `ℝ × ℝ`, where they still touch.
@@ -57,29 +58,11 @@ theorem line_only_ec (r : Relation) : r.holds unitLeft unitRight ↔ r = .ec := 
   · rintro rfl
     exact line_ec
 
-/-! ## Discrete spaces -/
+/-! ## Discrete spaces
 
-section Discrete
-
-variable {α : Type*} [TopologicalSpace α] [DiscreteTopology α]
-
-/-- In a discrete space no two areas are externally connected. -/
-theorem not_ec_of_discrete (A B : RegularClosedRegion α) : ¬ EC A B := by
-  rintro ⟨⟨p, hpA, hpB⟩, h⟩
-  have hp : p ∈ interior (A : Set α) ∩ interior (B : Set α) := by
-    rw [(isOpen_discrete _).interior_eq, (isOpen_discrete _).interior_eq]
-    exact ⟨hpA, hpB⟩
-  rw [h] at hp
-  exact hp
-
-/-- In a discrete space no area is a tangential proper part of another. -/
-theorem not_tpp_of_discrete (A B : RegularClosedRegion α) : ¬ TPP A B := by
-  rintro ⟨hW, -, hN⟩
-  apply hN
-  rw [(isOpen_discrete _).interior_eq]
-  exact hW
-
-end Discrete
+`RCC8.not_ec_of_discrete` and `RCC8.not_tpp_of_discrete`: in a discrete space
+every set is open, so no two areas are `EC` and none is a `TPP` of another.
+-/
 
 /-- `EC` is in no weak composition over `Bool`. -/
 theorem ec_not_mem_compose_bool (r s : Relation) : Relation.ec ∉ compose Bool r s :=
@@ -101,5 +84,16 @@ connected. -/
 theorem squares_ec_in_prod :
     EC (Touches.areaA.map Point2D.homeomorphProd) (Touches.areaB.map Point2D.homeomorphProd) :=
   (ec_map_iff Point2D.homeomorphProd _ _).mpr Touches.areaA_touches_areaB
+
+/-! ## Which spaces the table is complete for -/
+
+/-- The plane: every entry of the table is realised. -/
+example : RCC8Complete Point2D := rcc8Complete_point2D
+
+/-- `ℝ × ℝ` is homeomorphic to the plane, so the table is complete there too. -/
+example : RCC8Complete (ℝ × ℝ) := rcc8Complete_point2D.of_homeomorph Point2D.homeomorphProd
+
+/-- `Bool`, like every discrete space, is not. -/
+example : ¬ RCC8Complete Bool := not_rcc8Complete_of_discrete Bool
 
 end Geospatial.Examples.GenericSpace

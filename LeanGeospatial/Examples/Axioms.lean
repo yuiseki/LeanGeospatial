@@ -703,3 +703,19 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.GenericSpace.squares_ec_in_prod' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.GenericSpace.squares_ec_in_prod
+
+/-- info: 'Geospatial.rcc8Complete_point2D' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.rcc8Complete_point2D
+
+/-- info: 'Geospatial.not_rcc8Complete_of_discrete' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.not_rcc8Complete_of_discrete
+
+/-- info: 'Geospatial.RCC8Complete.of_homeomorph' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8Complete.of_homeomorph
+
+/-- info: 'Geospatial.RCC8.compose_eq_of_homeomorph' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.compose_eq_of_homeomorph
