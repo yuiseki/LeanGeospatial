@@ -99,7 +99,7 @@ def Pattern.ofString? (s : String) : Option Pattern :=
   | _ => none
 
 def Pattern.toString (p : Pattern) : String :=
-  String.mk ([p.ii, p.ib, p.ie, p.bi, p.bb, p.be, p.ei, p.eb, p.ee].map PatternChar.toChar)
+  String.ofList ([p.ii, p.ib, p.ie, p.bi, p.bb, p.be, p.ei, p.eb, p.ee].map PatternChar.toChar)
 
 /-- A pattern from a string known to be well formed; an ill-formed literal is a
 compile-time error. -/

@@ -14,7 +14,7 @@ def main : IO Unit := do
   repeat do
     let line ← stdin.getLine
     if line.isEmpty then break
-    let line := line.trimRight
+    let line := line.trimAsciiEnd.copy
     unless line.isEmpty do
       stdout.putStrLn (handleLine line).compress
       stdout.flush

@@ -199,7 +199,7 @@ theorem mem_segB_interior {p : Point2D} (t : ℝ) (ht₀ : 1 < t) (ht₁ : t < 3
   exact ⟨by linarith, by linarith⟩
 
 theorem segA_segB_hasArc : HasArc (Geometry.cell .I .I (line segA) (line segB)) := by
-  have hne : (⟨5 / 4, 0⟩ : Point2D) ≠ ⟨7 / 4, 0⟩ := by simp [Point2D.ext_iff]; norm_num
+  have hne : (⟨5 / 4, 0⟩ : Point2D) ≠ ⟨7 / 4, 0⟩ := by norm_num [Point2D.ext_iff]
   apply (hasArc_segment_diff hne Set.finite_empty).mono
   rintro p ⟨⟨t, ⟨h₀, h₁⟩, rfl⟩, -⟩
   have hp : (⟨5 / 4, 0⟩ : Point2D).lerp ⟨7 / 4, 0⟩ t = ⟨5 / 4 + t / 2, 0⟩ := by
