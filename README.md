@@ -255,15 +255,29 @@ parts and holes, and may be unbounded; the whole plane is one.
 
 A homeomorphism of the plane (`e : Point2D ≃ₜ Point2D`, a continuous bijection
 with a continuous inverse) carries areas to areas: `A.map e` is the image
-`e '' A`, again a `RegularClosedRegion`. Such maps cannot change topological
-relations, and the first theorem to say so is
+`e '' A`, again a `RegularClosedRegion`. A homeomorphism commutes with
+interior, closure, boundary and exterior, so no relation in this library can
+tell a configuration from its image. `LeanGeospatial/Homeomorph.lean` proves
+this in the order the relations are built:
+
+| Step | Theorem |
+| --- | --- |
+| The image of an area is an area | `RegularClosedRegion.map` |
+| Touching is preserved | `RegularClosedRegion.touches_map_iff`, from `touches_image_iff` |
+| Every RCC8 relation is preserved | `RCC8.Relation.holds_map_iff` |
+| Each DE-9IM cell goes to the matching cell | `cell_image` |
+| `T`/`F`/`*` patterns are preserved | `DE9IM.Pattern.matches_image_iff` |
+| Cell dimensions are preserved | `DE9IM.DimValue.of_image` |
+| The DE-9IM matrix of two areas is unchanged | `DE9IM.matrix_map`, `DE9IM.DimPattern.matches_map_iff` |
 
 ```lean
-theorem touches_map_iff (e : Point2D ≃ₜ Point2D) (A B : RegularClosedRegion) :
-    Touches (A.map e : Region) (B.map e) ↔ Touches (A : Region) B
+theorem RCC8.Relation.holds_map_iff (e : Point2D ≃ₜ Point2D)
+    (A B : RegularClosedRegion) (r : Relation) :
+    r.holds (A.map e) (B.map e) ↔ r.holds A B
 ```
 
-It rests on `touches_image_iff`, the same statement for arbitrary regions.
+Translations, rotations and reflections are homeomorphisms, so the relations
+of a map do not depend on where it is placed or which way it faces.
 
 ### 4. Nine intersections and DE-9IM patterns
 
@@ -713,6 +727,10 @@ For areas:
 - `Touches.not_exists_regularClosed_inter`: what two touching regions share
   is never an area. In `Examples/Touches.lean`, the shared edge of the two
   squares is a `Region` but not a `RegularClosedRegion`.
+- `RCC8.Relation.holds_map_iff`, `DE9IM.Pattern.matches_image_iff`,
+  `DE9IM.matrix_map`: a homeomorphism of the plane changes no RCC8 relation,
+  no `T`/`F`/`*` pattern and no DE-9IM matrix entry. `Examples/Homeomorph.lean`
+  moves the example areas by a slide and a reflection.
 - `RegularClosedRegion.union`: the union of two areas is an area. The
   intersection is not, by the previous point.
 
@@ -771,7 +789,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Polygon.lean` | `Polygon` (vertex data, shoelace area), `Rect` (a shape with a defined region) |
 | `LeanGeospatial/Topology.lean` | The plane's topology, `boundary`, `Touches`, interior and boundary of a `Rect` |
 | `LeanGeospatial/RegularClosed.lean` | `RegularClosedRegion`, the type of areas |
-| `LeanGeospatial/Homeomorph.lean` | `RegularClosedRegion.map` and `touches_map_iff`: homeomorphisms preserve touching |
+| `LeanGeospatial/Homeomorph.lean` | Homeomorphisms preserve touching, the RCC8 relations and the DE-9IM matrix |
 | `LeanGeospatial/NineIntersection.lean` | `exterior`, the three-part split, the nine cells, relations as cell conditions |
 | `LeanGeospatial/RCC8.lean` | The eight RCC8 base relations and the proof that exactly one holds |
 | `LeanGeospatial/RCC8Witnesses.lean` | Squares realising each RCC8 relation, used by weak composition |
@@ -802,7 +820,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
 | `LeanGeospatial/Examples/Measurement.lean` | Distance and area on concrete coordinates |
 | `LeanGeospatial/Examples/Touches.lean` | Two squares that touch, and two that overlap; their shared edge is not an area |
-| `LeanGeospatial/Examples/Homeomorph.lean` | The touching squares still touch after any homeomorphism, and after a slide of ten units |
+| `LeanGeospatial/Examples/Homeomorph.lean` | The example areas keep their Touches, RCC8 and DE-9IM relations after a slide, a reflection, or any homeomorphism |
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |

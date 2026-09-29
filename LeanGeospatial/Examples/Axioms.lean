@@ -660,6 +660,26 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.RegularClosedRegion.touches_map_iff
 
+/-- info: 'Geospatial.RCC8.Relation.holds_map_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Relation.holds_map_iff
+
+/-- info: 'Geospatial.DE9IM.Pattern.matches_image_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.Pattern.matches_image_iff
+
+/-- info: 'Geospatial.DE9IM.matrix_map' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.matrix_map
+
+/-- info: 'Geospatial.DE9IM.DimPattern.matches_map_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM.DimPattern.matches_map_iff
+
 /-- info: 'Geospatial.Examples.Homeomorph.slid_squares_touch' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.Homeomorph.slid_squares_touch
+
+/-- info: 'Geospatial.Examples.Homeomorph.map_A_C_only_po' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Homeomorph.map_A_C_only_po
