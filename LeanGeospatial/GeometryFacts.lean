@@ -58,7 +58,7 @@ theorem segment_comm (a b : Point2D) : segment a b = segment b a := by
 theorem interior_line_eq_empty (a u : Point2D) (hu : u.x ≠ 0 ∨ u.y ≠ 0) :
     interior {p : Point2D | u.x * (p.y - a.y) - u.y * (p.x - a.x) = 0} = ∅ := by
   set L := {p : Point2D | u.x * (p.y - a.y) - u.y * (p.x - a.x) = 0}
-  rw [Set.eq_empty_iff_forall_not_mem]
+  rw [Set.eq_empty_iff_forall_notMem]
   intro p hp
   -- Move off the line along the normal direction.
   let g : ℝ → Point2D := fun t => ⟨p.x - t * u.y, p.y + t * u.x⟩
@@ -107,7 +107,7 @@ theorem interior_iUnion_eq_empty {ι : Type*} [Fintype ι] (f : ι → Region)
     intro s
     induction s using Finset.induction_on with
     | empty => simp
-    | insert _ ih =>
+    | insert _ _ _ ih =>
       rw [Finset.set_biUnion_insert, Set.union_comm,
         interior_union_isClosed_of_interior_empty
           (by simpa using (Finset.finite_toSet _).isClosed_biUnion fun i _ => hc i) (hi _), ih]
@@ -211,7 +211,7 @@ theorem boundary_subset_closure_interior : l.boundary ⊆ closure l.interior := 
   intro p hp
   unfold boundary at hp
   split_ifs at hp with hring
-  · exact absurd hp (Set.not_mem_empty p)
+  · exact absurd hp (Set.notMem_empty p)
   rcases hp with rfl | rfl
   · exact closure_mono (hsub 0) (left_mem_closure_segment_diff (l.distinct 0) l.boundary_finite)
   · have := closure_mono (hsub (Fin.last l.n))
@@ -262,7 +262,7 @@ theorem inter_eq_cells :
   tauto
 
 theorem subset_iff_cells : g.carrier ⊆ h.carrier ↔ cell .I .E g h = ∅ ∧ cell .B .E g h = ∅ := by
-  simp only [cell, h.stratum_E, Set.eq_empty_iff_forall_not_mem, Set.mem_inter_iff,
+  simp only [cell, h.stratum_E, Set.eq_empty_iff_forall_notMem, Set.mem_inter_iff,
     Set.mem_compl_iff]
   rw [← g.stratum_I_union_B]
   constructor

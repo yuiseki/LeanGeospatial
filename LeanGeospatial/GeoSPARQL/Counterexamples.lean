@@ -114,7 +114,7 @@ theorem S1_ec_frame : EC S1 frame := by
   refine ⟨⟨⟨0, 0⟩, ?_, ?_⟩, ?_⟩
   · rw [S1, Rect.mem_area]; norm_num [s1]
   · rw [mem_frame]; norm_num
-  · rw [Geospatial.Disjoint, Set.eq_empty_iff_forall_not_mem]
+  · rw [Geospatial.Disjoint, Set.eq_empty_iff_forall_notMem]
     rintro p ⟨hpA, hpB⟩
     rw [S1, Rect.interior_area] at hpA
     obtain ⟨a₁, a₂, a₃, a₄⟩ := hpA

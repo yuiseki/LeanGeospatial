@@ -37,7 +37,7 @@ def sqC : RegularClosedRegion := Rect.area ⟨1, 3, 0, 2⟩ (by norm_num)
 theorem squares_II : matrix (.area sqA) (.area sqC) .I .I = .d2 := by
   rcases area_II_value sqA sqC with h | h
   · exfalso
-    rw [matrix, DimValue.of_eq_F_iff, Set.eq_empty_iff_forall_not_mem] at h
+    rw [matrix, DimValue.of_eq_F_iff, Set.eq_empty_iff_forall_notMem] at h
     apply h ⟨3 / 2, 1⟩
     show _ ∈ interior (sqA : Region) ∧ _ ∈ interior (sqC : Region)
     rw [sqA, sqC, Rect.interior_area, Rect.interior_area]

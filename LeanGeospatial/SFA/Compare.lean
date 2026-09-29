@@ -158,7 +158,7 @@ theorem within_counterexample :
   refine ⟨⟨?_, ?_⟩, ?_⟩
   · show {(⟨0, 0⟩ : Point2D)} ∩ (square2 : Region) = {⟨0, 0⟩}
     exact Set.inter_eq_left.mpr (Set.singleton_subset_iff.mpr hmem)
-  · rw [Set.eq_empty_iff_forall_not_mem]
+  · rw [Set.eq_empty_iff_forall_notMem]
     rintro p ⟨hp, hpE⟩
     have hp' : p = ⟨0, 0⟩ := hp
     subst hp'

@@ -43,7 +43,7 @@ theorem A_intersects_B : Intersects squareA.toRegion squareB.toRegion :=
 theorem interiors_A_B_disjoint :
     Geospatial.Disjoint (interior squareA.toRegion) (interior squareB.toRegion) := by
   rw [Geospatial.Disjoint, Rect.interior_toRegion, Rect.interior_toRegion,
-    Set.eq_empty_iff_forall_not_mem]
+    Set.eq_empty_iff_forall_notMem]
   rintro p ⟨⟨_, hA, _⟩, ⟨hB, _⟩⟩
   simp only [squareA, squareB] at hA hB
   linarith

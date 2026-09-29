@@ -40,7 +40,7 @@ theorem B_intersects_C : Intersects stripB.toRegion stripC.toRegion :=
     norm_num⟩
 
 theorem A_disjoint_C : Geospatial.Disjoint stripA.toRegion stripC.toRegion := by
-  rw [Geospatial.Disjoint, Set.eq_empty_iff_forall_not_mem]
+  rw [Geospatial.Disjoint, Set.eq_empty_iff_forall_notMem]
   rintro p ⟨⟨_, hA, _⟩, ⟨hC, _⟩⟩
   simp only [stripA, stripC] at hA hC
   linarith

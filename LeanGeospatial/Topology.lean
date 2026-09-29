@@ -58,7 +58,7 @@ theorem isClosed_boundary (A : Region) : IsClosed (boundary A) :=
 theorem interior_disjoint_boundary (A : Region) :
     Geospatial.Disjoint (interior A) (boundary A) := by
   unfold Geospatial.Disjoint
-  rw [boundary_eq, Set.eq_empty_iff_forall_not_mem]
+  rw [boundary_eq, Set.eq_empty_iff_forall_notMem]
   rintro p ⟨hp, -, hp'⟩
   exact hp' hp
 

@@ -169,7 +169,7 @@ theorem dc_of_rect {r s : Rect} (hr : r.xmin < r.xmax ∧ r.ymin < r.ymax)
     (hs : s.xmin < s.xmax ∧ s.ymin < s.ymax) (hgap : r.xmax < s.xmin) :
     DC (r.area hr) (s.area hs) := by
   unfold DC Geospatial.Disjoint
-  rw [Set.eq_empty_iff_forall_not_mem]
+  rw [Set.eq_empty_iff_forall_notMem]
   rintro p ⟨⟨-, h₁, -⟩, ⟨h₂, -⟩⟩
   linarith
 
@@ -205,7 +205,7 @@ theorem A_B_ec : EC areaA areaB := by
   · rw [areaA, Rect.mem_area]; norm_num [rectA]
   · rw [areaB, Rect.mem_area]; norm_num [rectB]
   · rw [Geospatial.Disjoint, areaA, areaB, Rect.interior_area, Rect.interior_area,
-      Set.eq_empty_iff_forall_not_mem]
+      Set.eq_empty_iff_forall_notMem]
     rintro p ⟨⟨-, h₁, -⟩, ⟨h₂, -⟩⟩
     simp only [rectA, rectB] at h₁ h₂
     linarith

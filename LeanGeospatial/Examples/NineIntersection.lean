@@ -45,7 +45,7 @@ def areaD : RegularClosedRegion :=
   squareD.toRegularClosed (by norm_num [squareD]) (by norm_num [squareD])
 
 theorem A_disjoint_D : Geospatial.Disjoint (areaA : Region) areaD := by
-  rw [Geospatial.Disjoint, Set.eq_empty_iff_forall_not_mem]
+  rw [Geospatial.Disjoint, Set.eq_empty_iff_forall_notMem]
   rintro p ⟨⟨_, hA, _⟩, ⟨hD, _⟩⟩
   simp only [squareA, squareD] at hA hD
   linarith
@@ -84,7 +84,7 @@ theorem empty_within_but_II_empty (B : RegularClosedRegion) :
     II ((⊥ : RegularClosedRegion) : Region) B = ∅ := by
   refine ⟨?_, ?_⟩
   · intro p hp
-    exact absurd hp (Set.not_mem_empty p)
+    exact absurd hp (Set.notMem_empty p)
   · simp [cell, Stratum.set]
 
 /-- A segment on the left edge of square A: closed and nonempty, but not an
@@ -104,7 +104,7 @@ theorem segment_within_but_II_empty :
       (by norm_num [segment, squareA]) (by norm_num [segment, squareA])
       (by norm_num [segment, squareA])
   · have hempty : segment.openRegion = ∅ := by
-      rw [Set.eq_empty_iff_forall_not_mem]
+      rw [Set.eq_empty_iff_forall_notMem]
       rintro p ⟨h₁, h₂, -, -⟩
       simp only [segment] at h₁ h₂
       linarith

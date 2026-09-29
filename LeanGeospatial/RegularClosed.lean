@@ -149,7 +149,7 @@ theorem segment_not_regularClosed :
     closure (interior (⟨0, 0, 0, 1⟩ : Rect).toRegion) ≠ (⟨0, 0, 0, 1⟩ : Rect).toRegion := by
   rw [interior_toRegion]
   have hempty : (⟨0, 0, 0, 1⟩ : Rect).openRegion = ∅ := by
-    rw [Set.eq_empty_iff_forall_not_mem]
+    rw [Set.eq_empty_iff_forall_notMem]
     rintro p ⟨h₁, h₂, -, -⟩
     exact lt_asymm h₁ h₂
   rw [hempty, closure_empty]

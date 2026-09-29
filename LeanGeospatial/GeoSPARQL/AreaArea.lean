@@ -51,7 +51,7 @@ theorem within_interior_iff_cells :
   · intro h
     have hW : Within (A : Region) B := within_trans h interior_subset
     obtain ⟨h₁, h₂⟩ := (within_iff_cells_of_isClosed hAc hBc).mp hW
-    refine ⟨h₁, h₂, ?_, ?_⟩ <;> rw [Set.eq_empty_iff_forall_not_mem]
+    refine ⟨h₁, h₂, ?_, ?_⟩ <;> rw [Set.eq_empty_iff_forall_notMem]
     · rintro p ⟨hpA, hpB⟩
       exact hpB.2 (h (interior_subset hpA))
     · rintro p ⟨hpA, hpB⟩

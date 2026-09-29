@@ -46,14 +46,14 @@ theorem interior_union_boundary_union_exterior (A : Region) :
 theorem interior_disjoint_exterior (A : Region) :
     Geospatial.Disjoint (interior A) (exterior A) := by
   unfold Geospatial.Disjoint
-  rw [exterior_eq_compl_closure, Set.eq_empty_iff_forall_not_mem]
+  rw [exterior_eq_compl_closure, Set.eq_empty_iff_forall_notMem]
   rintro p ⟨hp, hp'⟩
   exact hp' (interior_subset_closure hp)
 
 theorem boundary_disjoint_exterior (A : Region) :
     Geospatial.Disjoint (boundary A) (exterior A) := by
   unfold Geospatial.Disjoint
-  rw [boundary_eq, exterior_eq_compl_closure, Set.eq_empty_iff_forall_not_mem]
+  rw [boundary_eq, exterior_eq_compl_closure, Set.eq_empty_iff_forall_notMem]
   rintro p ⟨⟨hp, -⟩, hp'⟩
   exact hp' hp
 
@@ -143,7 +143,7 @@ theorem iUnion_cell (A B : Region) : ⋃ (s : Stratum) (t : Stratum), cell s t A
 theorem cell_disjoint {s t s' t' : Stratum} (h : (s, t) ≠ (s', t')) (A B : Region) :
     Geospatial.Disjoint (cell s t A B) (cell s' t' A B) := by
   unfold Geospatial.Disjoint
-  rw [Set.eq_empty_iff_forall_not_mem]
+  rw [Set.eq_empty_iff_forall_notMem]
   rintro p ⟨⟨hs, ht⟩, ⟨hs', ht'⟩⟩
   obtain ⟨_, -, huA⟩ := existsUnique_stratum A p
   obtain ⟨_, -, huB⟩ := existsUnique_stratum B p
@@ -205,7 +205,7 @@ theorem touches_iff_cells_of_isClosed (hA : IsClosed A) (hB : IsClosed B) :
 boundary point of `A` is exterior to `B`. -/
 theorem within_iff_cells_of_isClosed (hA : IsClosed A) (hB : IsClosed B) :
     Within A B ↔ IE A B = ∅ ∧ BE A B = ∅ := by
-  simp only [cell, Stratum.set, exterior_eq_of_isClosed hB, Set.eq_empty_iff_forall_not_mem,
+  simp only [cell, Stratum.set, exterior_eq_of_isClosed hB, Set.eq_empty_iff_forall_notMem,
     Set.mem_inter_iff, Set.mem_compl_iff]
   constructor
   · intro h

@@ -27,12 +27,12 @@ theorem holds_equals_self_iff (g : Geometry) :
       (g.stratum .I).Nonempty ∧ (g.stratum .B).Nonempty ∧ (g.stratum .E).Nonempty := by
   have hIB := g.stratum_I_inter_B
   have hIE : g.stratum .I ∩ g.stratum .E = ∅ := by
-    rw [Set.eq_empty_iff_forall_not_mem]
+    rw [Set.eq_empty_iff_forall_notMem]
     rintro p ⟨hI, hE⟩
     rw [g.stratum_E] at hE
     exact hE (g.stratum_I_subset hI)
   have hBE : g.stratum .B ∩ g.stratum .E = ∅ := by
-    rw [Set.eq_empty_iff_forall_not_mem]
+    rw [Set.eq_empty_iff_forall_notMem]
     rintro p ⟨hB, hE⟩
     rw [g.stratum_E] at hE
     exact hE (g.stratum_B_subset hB)

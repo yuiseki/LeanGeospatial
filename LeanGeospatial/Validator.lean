@@ -74,7 +74,7 @@ theorem lookupFacts_sound {M : FeatureId → RegularClosedRegion} {g : List Fact
   induction g with
   | nil => simp [lookupFacts] at h
   | cons f g ih =>
-    have hf : f.rel.holds (M f.a) (M f.b) := hM f (List.mem_cons_self _ _)
+    have hf : f.rel.holds (M f.a) (M f.b) := hM f List.mem_cons_self
     have hM' : ∀ f' ∈ g, f'.rel.holds (M f'.a) (M f'.b) :=
       fun f' hf' => hM f' (List.mem_cons_of_mem _ hf')
     simp only [lookupFacts] at h
@@ -213,7 +213,7 @@ theorem mem_statedFacts {M : FeatureId → RegularClosedRegion} (hne : ∀ x, (M
   induction fs with
   | nil => exact Relation.mem_all t
   | cons f fs ih =>
-    have hf : f.rel.holds (M f.a) (M f.b) := hM f (List.mem_cons_self _ _)
+    have hf : f.rel.holds (M f.a) (M f.b) := hM f List.mem_cons_self
     have ih' := ih fun f' hf' => hM f' (List.mem_cons_of_mem _ hf')
     simp only [statedFacts]
     split_ifs with h₁ h₂
@@ -243,7 +243,7 @@ theorem Graph.no_model_of_conflict {g : Graph} (h : g.conflict = true) :
   obtain ⟨f, hf, hempty⟩ := List.any_eq_true.mp h
   have hmem := Graph.mem_stated hM (hM.2 f hf)
   rw [of_decide_eq_true hempty] at hmem
-  exact Finset.not_mem_empty _ hmem
+  exact Finset.notMem_empty _ hmem
 
 /-- The relations allowed between `a` and `c`: through every intermediate
 feature, and by the facts stated between `a` and `c` themselves. -/
