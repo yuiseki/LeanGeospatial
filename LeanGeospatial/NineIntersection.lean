@@ -41,7 +41,7 @@ theorem exterior_eq_of_isClosed (hA : IsClosed A) : exterior A = Aᶜ := by
 theorem interior_union_boundary_union_exterior (A : Region) :
     interior A ∪ boundary A ∪ exterior A = Set.univ := by
   rw [boundary_eq, exterior_eq_compl_closure,
-    Set.union_diff_cancel interior_subset_closure, Set.union_compl_self]
+    Set.union_sdiff_cancel interior_subset_closure, Set.union_compl_self]
 
 theorem interior_disjoint_exterior (A : Region) :
     Geospatial.Disjoint (interior A) (exterior A) := by

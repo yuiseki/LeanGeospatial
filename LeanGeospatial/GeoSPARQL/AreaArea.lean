@@ -278,7 +278,7 @@ section Table5
 variable {A B}
 
 theorem overlaps_iff_po : Overlaps (A : Region) B ↔ PO A B := by
-  simp only [Overlaps, PO, Set.diff_nonempty]
+  simp only [Overlaps, PO, Set.sdiff_nonempty]
   rfl
 
 theorem within_iff_rcc8 : Within (A : Region) B ↔ TPP A B ∨ NTPP A B ∨ EQ A B := by

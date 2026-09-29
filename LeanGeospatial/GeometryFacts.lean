@@ -90,7 +90,7 @@ theorem interior_line_eq_empty (a u : Point2D) (hu : u.x ≠ 0 ∨ u.y ≠ 0) :
 theorem interior_segment (a b : Point2D) (h : a ≠ b) : interior (segment a b) = ∅ := by
   have hu : (b.x - a.x) ≠ 0 ∨ (b.y - a.y) ≠ 0 := by
     by_contra hc
-    push_neg at hc
+    push Not at hc
     exact h (Point2D.ext (by linarith [hc.1]) (by linarith [hc.2]))
   apply Set.eq_empty_of_subset_empty
   refine (interior_mono ?_).trans
@@ -125,7 +125,7 @@ theorem hasArc_segment_diff {a b : Point2D} (h : a ≠ b) {F : Set Point2D} (hF 
     HasArc (segment a b \ F) := by
   set T := a.lerp b ⁻¹' F
   have hT : T.Finite := finite_lerp_preimage h hF
-  obtain ⟨x, hxI, hxT⟩ := ((Set.Ioo_infinite (zero_lt_one' ℝ)).diff hT).nonempty
+  obtain ⟨x, hxI, hxT⟩ := ((Set.Ioo_infinite (zero_lt_one' ℝ)).sdiff hT).nonempty
   have hU : IsOpen (Set.Ioo (0 : ℝ) 1 \ T) := isOpen_Ioo.sdiff hT.isClosed
   obtain ⟨δ, hδ, hball⟩ := Metric.isOpen_iff.mp hU x ⟨hxI, hxT⟩
   set ε := δ / 2 with hεdef
@@ -160,7 +160,7 @@ theorem left_mem_closure_segment_diff {a b : Point2D} (h : a ≠ b) {F : Set Poi
   obtain ⟨δ, hδ, hball⟩ := Metric.isOpen_iff.mp hV 0 h0
   have hT := finite_lerp_preimage h hF
   have hpos : 0 < min δ 1 := lt_min hδ zero_lt_one
-  obtain ⟨t, ⟨ht₀, ht₁⟩, htT⟩ := ((Set.Ioo_infinite hpos).diff hT).nonempty
+  obtain ⟨t, ⟨ht₀, ht₁⟩, htT⟩ := ((Set.Ioo_infinite hpos).sdiff hT).nonempty
   refine ⟨a.lerp b t, hball ?_, ⟨t, ⟨ht₀.le, ht₁.le.trans (min_le_right _ _)⟩, rfl⟩, htT⟩
   rw [Metric.mem_ball, Real.dist_eq, sub_zero, abs_of_pos ht₀]
   exact ht₁.trans_le (min_le_left _ _)
@@ -250,7 +250,7 @@ theorem boundary_subset_closure_interior : g.stratum .B ⊆ closure (g.stratum .
 where
   boundary_subset_of_isClosed' {X : Region} (hX : IsClosed X) : boundary X ⊆ X := by
     rw [boundary_eq, hX.closure_eq]
-    exact Set.diff_subset
+    exact Set.sdiff_subset
 
 theorem cell_swap (s t : Stratum) : cell s t g h = cell t s h g := Set.inter_comm _ _
 
@@ -303,7 +303,7 @@ theorem of_stratum_I (hne : g.carrier.Nonempty) : DimValue.of (g.stratum .I) = g
   | point p => exact DimValue.of_eq (describes_d0_of_subset_singleton rfl subset_rfl)
   | line l =>
     exact DimValue.of_eq ⟨Set.eq_empty_of_subset_empty
-      ((interior_mono (Set.diff_subset)).trans l.interior_carrier.subset), l.hasArc_interior⟩
+      ((interior_mono (Set.sdiff_subset)).trans l.interior_carrier.subset), l.hasArc_interior⟩
   | area A =>
     apply DimValue.of_eq
     show (interior (interior (A : Region))).Nonempty

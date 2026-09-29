@@ -214,7 +214,7 @@ theorem crosses_point_area (p : Point2D) (A : RegularClosedRegion) :
 theorem not_equals_of_kind_ne {g h : Geometry} (hk : g.kind ≠ h.kind) (hg : g.carrier.Nonempty)
     (hh : h.carrier.Nonempty) : ¬ SF.Equals g h := by
   have lineArc : ∀ l : LineString, HasArc l.carrier := fun l =>
-    l.hasArc_interior.mono Set.diff_subset
+    l.hasArc_interior.mono Set.sdiff_subset
   have areaInt : ∀ A : RegularClosedRegion, (A : Region).Nonempty →
       (interior (A : Region)).Nonempty := fun A hA => (A.nonempty_iff_interior_nonempty).mp hA
   intro he

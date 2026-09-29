@@ -31,7 +31,7 @@ namespace RegularClosedRegion
 
 instance : SetLike RegularClosedRegion Point2D where
   coe := carrier
-  coe_injective' A B h := by
+  coe_injective A B h := by
     cases A
     cases B
     congr

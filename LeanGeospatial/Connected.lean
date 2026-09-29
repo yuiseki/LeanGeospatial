@@ -23,7 +23,7 @@ instance : PreconnectedSpace Point2D :=
 
 theorem boundary_subset_of_isClosed {A : Region} (hA : IsClosed A) : boundary A ⊆ A := by
   rw [boundary_eq, hA.closure_eq]
-  exact Set.diff_subset
+  exact Set.sdiff_subset
 
 /-- A nonempty closed region with empty boundary is the whole plane. -/
 theorem eq_univ_of_boundary_eq_empty {A : Region} (hA : IsClosed A) (hne : A.Nonempty)

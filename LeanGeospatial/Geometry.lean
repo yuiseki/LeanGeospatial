@@ -168,14 +168,14 @@ theorem stratum_E (g : Geometry) : g.stratum .E = g.carrierᶜ := by
 theorem stratum_I_union_B (g : Geometry) : g.stratum .I ∪ g.stratum .B = g.carrier := by
   cases g with
   | point p => simp [stratum, carrier]
-  | line l => exact Set.diff_union_of_subset l.boundary_subset
+  | line l => exact Set.sdiff_union_of_subset l.boundary_subset
   | area A => exact interior_union_boundary_of_isClosed A.isClosed
 
 /-- Interior and boundary share no point. -/
 theorem stratum_I_inter_B (g : Geometry) : g.stratum .I ∩ g.stratum .B = ∅ := by
   cases g with
   | point p => simp [stratum]
-  | line l => exact Set.diff_inter_self
+  | line l => exact Set.sdiff_inter_self
   | area A => exact interior_disjoint_boundary (A : Region)
 
 /-- Every point of the plane is in exactly one of the three strata. -/
@@ -247,7 +247,7 @@ theorem interior_singleton_eq_empty (p : Point2D) : interior ({p} : Region) = �
 /-- The topological frontier of a point is the point itself, while its
 Simple Features boundary is empty. -/
 theorem point_frontier (p : Point2D) : frontier ({p} : Region) = {p} := by
-  rw [frontier, closure_singleton, interior_singleton_eq_empty, Set.diff_empty]
+  rw [frontier, closure_singleton, interior_singleton_eq_empty, Set.sdiff_empty]
 
 theorem point_boundary_ne_frontier (p : Point2D) :
     (Geometry.point p).stratum .B ≠ frontier ({p} : Region) := by

@@ -56,7 +56,7 @@ theorem A_touches_B : Touches squareA.toRegion squareB.toRegion :=
 theorem edgePoint_on_both_boundaries :
     edgePoint ∈ boundary squareA.toRegion ∩ boundary squareB.toRegion := by
   rw [Rect.boundary_toRegion, Rect.boundary_toRegion]
-  simp only [Set.mem_inter_iff, Set.mem_diff, Rect.toRegion, Rect.openRegion,
+  simp only [Set.mem_inter_iff, Set.mem_sdiff, Rect.toRegion, Rect.openRegion,
     squareA, squareB, edgePoint, Set.mem_setOf_eq]
   norm_num
 
