@@ -1,21 +1,21 @@
-{"status":"entailed","id":"string-id","claim":"touches"}
-{"status":"entailed","id":42,"claim":"touches"}
-{"status":"entailed","id":null,"claim":"touches"}
-{"status":"entailed","id":"before-bad","claim":"intersects"}
-{"status":"error","id":null,"error":"malformed JSON: offset 12: unexpected end of input"}
-{"status":"refuted","id":"after-bad","claim":"disjoint"}
-{"status":"entailed","relation":"NTPP","id":"case-insensitive"}
-{"status":"entailed","relation":"NTPP","id":"converse-fact"}
-{"status":"entailed","id":"sf-alias","claim":"touches"}
-{"status":"error","id":"lowercase-matrix","error":"not a DE-9IM matrix (9 characters of F 0 1 2): ff2f11212"}
-{"status":"error","id":"pattern-not-matrix","error":"not a DE-9IM matrix (9 characters of F 0 1 2): FF*F11212"}
-{"status":"error","id":"missing-claim","error":"String expected"}
-{"status":"error","id":"missing-query","error":"property not found: query"}
-{"status":"refuted","id":"crlf","claim":"within"}
-{"status":"entailed","relation":"NTPP","id":"direct-fact"}
-{"status":"entailed","relation":"NTPPi","id":"direct-fact-reversed-query"}
-{"status":"entailed","relation":"NTPP","id":"duplicate-fact"}
-{"status":"entailed","relation":"TPP","id":"converse-equivalent"}
-{"status":"contradictory","id":"conflicting-facts"}
-{"status":"contradictory","id":"conflict-elsewhere"}
-{"status":"error","id":"facts-and-matrix","error":"ambiguous request: has both facts (RCC8) and matrix (DE-9IM)"}
+{"claim":"touches","id":"string-id","status":"entailed"}
+{"claim":"touches","id":42,"status":"entailed"}
+{"claim":"touches","id":null,"status":"entailed"}
+{"claim":"intersects","id":"before-bad","status":"entailed"}
+{"error":"malformed JSON: offset 12: unexpected end of input","id":null,"status":"error"}
+{"claim":"disjoint","id":"after-bad","status":"refuted"}
+{"id":"case-insensitive","relation":"NTPP","status":"entailed"}
+{"id":"converse-fact","relation":"NTPP","status":"entailed"}
+{"claim":"touches","id":"sf-alias","status":"entailed"}
+{"error":"not a DE-9IM matrix (9 characters of F 0 1 2): ff2f11212","id":"lowercase-matrix","status":"error"}
+{"error":"not a DE-9IM matrix (9 characters of F 0 1 2): FF*F11212","id":"pattern-not-matrix","status":"error"}
+{"error":"String expected","id":"missing-claim","status":"error"}
+{"error":"property not found: query","id":"missing-query","status":"error"}
+{"claim":"within","id":"crlf","status":"refuted"}
+{"id":"direct-fact","relation":"NTPP","status":"entailed"}
+{"id":"direct-fact-reversed-query","relation":"NTPPi","status":"entailed"}
+{"id":"duplicate-fact","relation":"NTPP","status":"entailed"}
+{"id":"converse-equivalent","relation":"TPP","status":"entailed"}
+{"id":"conflicting-facts","status":"contradictory"}
+{"id":"conflict-elsewhere","status":"contradictory"}
+{"error":"ambiguous request: has both facts (RCC8) and matrix (DE-9IM)","id":"facts-and-matrix","status":"error"}

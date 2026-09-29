@@ -313,7 +313,7 @@ theorem triangle_realizes {a b c : FeatureId} (hab : a ≠ b) (hac : a ≠ c) (h
     · exact hB
     · exact hC
   · intro f hf
-    simp only [List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false] at hf
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at hf
     rcases hf with rfl | rfl
     · rw [Ma, Mb]; exact hr
     · rw [Mb, Mc]; exact hs

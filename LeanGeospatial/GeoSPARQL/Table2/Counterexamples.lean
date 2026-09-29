@@ -41,7 +41,7 @@ theorem holds_equals_self_iff (g : Geometry) :
     DimPatternChar.matches_F, Geometry.cell, Set.inter_self]
   rw [Set.inter_comm (g.stratum .B) (g.stratum .I), Set.inter_comm (g.stratum .E) (g.stratum .I),
     Set.inter_comm (g.stratum .E) (g.stratum .B)]
-  simp only [hIB, hIE, hBE, and_true, true_and]
+  simp only [hIB, hIE, hBE, true_and]
 
 /-! ## P/P -/
 

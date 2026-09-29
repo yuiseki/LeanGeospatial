@@ -70,11 +70,15 @@ theorem within_of_bounds {r s : Rect}
 /-- The shoelace area of a rectangle is width times height. -/
 theorem area_toPolygon (r : Rect) :
     polygonArea r.toPolygon = |(r.xmax - r.xmin) * (r.ymax - r.ymin)| := by
-  simp only [polygonArea, signedArea2, toPolygon, cross, List.rotate]
-  norm_num
-  rw [show ∀ a : ℝ, |a| / 2 = |a / 2| from fun a => by
-    rw [abs_div, abs_two]]
-  congr 1
+  have h : signedArea2 r.toPolygon.vertices =
+      2 * ((r.xmax - r.xmin) * (r.ymax - r.ymin)) := by
+    have hr : r.toPolygon.vertices.rotate 1 =
+        [⟨r.xmax, r.ymin⟩, ⟨r.xmax, r.ymax⟩, ⟨r.xmin, r.ymax⟩, ⟨r.xmin, r.ymin⟩] := rfl
+    rw [signedArea2, hr]
+    simp only [toPolygon, List.zip_cons_cons, List.zip_nil_left, List.map_cons, List.map_nil,
+      List.sum_cons, List.sum_nil, cross]
+    ring
+  rw [polygonArea, h, abs_mul, abs_two]
   ring
 
 end Rect

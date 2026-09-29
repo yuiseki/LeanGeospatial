@@ -408,7 +408,7 @@ theorem sf_intersects_pattern :
        ⟨.any, .T, .any, .any, .any, .any, .any, .any, .any⟩,
        ⟨.any, .any, .any, .T, .any, .any, .any, .any, .any⟩,
        ⟨.any, .any, .any, .any, .T, .any, .any, .any, .any⟩] by decide]
-  simp only [AnyOf, List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false,
+  simp only [AnyOf, List.mem_cons, List.not_mem_nil, or_false,
     exists_eq_or_imp, exists_eq_left, Pattern.Matches, PatternChar.matches_T,
     PatternChar.matches_any, and_true, true_and]
   rw [DC, disjoint_iff_not_intersects, not_not, A.intersects_iff_cells B]
@@ -419,7 +419,7 @@ theorem sf_touches_pattern :
       [⟨.F, .T, .any, .any, .any, .any, .any, .any, .any⟩,
        ⟨.F, .any, .any, .T, .any, .any, .any, .any, .any⟩,
        ⟨.F, .any, .any, .any, .T, .any, .any, .any, .any⟩] by decide]
-  simp only [AnyOf, List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false,
+  simp only [AnyOf, List.mem_cons, List.not_mem_nil, or_false,
     exists_eq_or_imp, exists_eq_left, Pattern.Matches, PatternChar.matches_T,
     PatternChar.matches_F, PatternChar.matches_any, and_true, true_and]
   rw [EC, A.touches_iff_cells B]

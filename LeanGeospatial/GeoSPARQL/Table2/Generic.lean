@@ -53,7 +53,7 @@ theorem parse_intersects :
 
 theorem intersects_iff : SF.Intersects g h ↔ Holds .intersects g h := by
   rw [holds_iff (rows_intersects _ _) parse_intersects]
-  simp only [AnyOf, List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false,
+  simp only [AnyOf, List.mem_cons, List.not_mem_nil, or_false,
     exists_eq_or_imp, exists_eq_left, DimPattern.Matches, DimPatternChar.matches_T,
     DimPatternChar.matches_any, and_true, true_and, SF.Intersects, Geometry.inter_eq_cells,
     Set.union_nonempty]
@@ -74,7 +74,7 @@ theorem parse_touches :
 theorem touches_iff (hk : ¬ (g.kind = .P ∧ h.kind = .P)) :
     SF.Touches g h ↔ Holds .touches g h := by
   rw [holds_iff (rows_touches hk) parse_touches]
-  simp only [AnyOf, List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false,
+  simp only [AnyOf, List.mem_cons, List.not_mem_nil, or_false,
     exists_eq_or_imp, exists_eq_left, DimPattern.Matches, DimPatternChar.matches_T,
     DimPatternChar.matches_F, DimPatternChar.matches_any, and_true, true_and, SF.Touches,
     SF.Intersects, SF.II, Geometry.inter_eq_cells, Set.union_nonempty]

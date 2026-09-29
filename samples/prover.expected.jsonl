@@ -1,24 +1,24 @@
-{"status":"entailed","relation":"NTPP","id":"rcc8-nested"}
-{"status":"possible","relations":["DC","EC","PO","EQ","TPP","TPPi"],"id":"rcc8-touching"}
-{"status":"contradictory","id":"rcc8-inconsistent"}
-{"status":"entailed","id":"de9im-touches","claim":"touches"}
-{"status":"entailed","id":"de9im-intersects","claim":"intersects"}
-{"status":"refuted","id":"de9im-within","claim":"within"}
-{"status":"entailed","id":"de9im-disjoint","claim":"disjoint"}
-{"status":"error","id":null,"error":"malformed JSON: offset 26: unexpected end of input"}
-{"status":"error","id":"bad-relation","error":"unknown relation: NEAR"}
-{"status":"error","id":"bad-matrix","error":"not a DE-9IM matrix (9 characters of F 0 1 2): FF2F1121"}
-{"status":"error","id":"bad-claim","error":"unsupported claim: near"}
-{"status":"entailed","id":"equals-same-point","claim":"equals"}
-{"status":"entailed","id":"equals-same-line","claim":"equals"}
-{"status":"entailed","id":"equals-ring","claim":"equals"}
-{"status":"refuted","id":"equals-touching-areas","claim":"equals"}
-{"status":"entailed","id":"crosses-crossing-lines","claim":"crosses"}
-{"status":"refuted","id":"overlaps-crossing-lines","claim":"overlaps"}
-{"status":"entailed","id":"overlaps-collinear-lines","claim":"overlaps"}
-{"status":"refuted","id":"crosses-collinear-lines","claim":"crosses"}
-{"status":"entailed","id":"overlaps-areas","claim":"overlaps"}
-{"status":"entailed","id":"crosses-line-area","claim":"crosses"}
-{"status":"error","id":"overlaps-without-kinds","error":"claim overlaps needs a_kind and b_kind (point, line or area)"}
-{"status":"error","id":"bad-kind","error":"unknown a_kind: volume (expected point, line or area)"}
-{"status":"entailed","id":"kinds-ignored-for-touches","claim":"touches"}
+{"id":"rcc8-nested","relation":"NTPP","status":"entailed"}
+{"id":"rcc8-touching","relations":["DC","EC","PO","EQ","TPP","TPPi"],"status":"possible"}
+{"id":"rcc8-inconsistent","status":"contradictory"}
+{"claim":"touches","id":"de9im-touches","status":"entailed"}
+{"claim":"intersects","id":"de9im-intersects","status":"entailed"}
+{"claim":"within","id":"de9im-within","status":"refuted"}
+{"claim":"disjoint","id":"de9im-disjoint","status":"entailed"}
+{"error":"malformed JSON: offset 26: unexpected end of input","id":null,"status":"error"}
+{"error":"unknown relation: NEAR","id":"bad-relation","status":"error"}
+{"error":"not a DE-9IM matrix (9 characters of F 0 1 2): FF2F1121","id":"bad-matrix","status":"error"}
+{"error":"unsupported claim: near","id":"bad-claim","status":"error"}
+{"claim":"equals","id":"equals-same-point","status":"entailed"}
+{"claim":"equals","id":"equals-same-line","status":"entailed"}
+{"claim":"equals","id":"equals-ring","status":"entailed"}
+{"claim":"equals","id":"equals-touching-areas","status":"refuted"}
+{"claim":"crosses","id":"crosses-crossing-lines","status":"entailed"}
+{"claim":"overlaps","id":"overlaps-crossing-lines","status":"refuted"}
+{"claim":"overlaps","id":"overlaps-collinear-lines","status":"entailed"}
+{"claim":"crosses","id":"crosses-collinear-lines","status":"refuted"}
+{"claim":"overlaps","id":"overlaps-areas","status":"entailed"}
+{"claim":"crosses","id":"crosses-line-area","status":"entailed"}
+{"error":"claim overlaps needs a_kind and b_kind (point, line or area)","id":"overlaps-without-kinds","status":"error"}
+{"error":"unknown a_kind: volume (expected point, line or area)","id":"bad-kind","status":"error"}
+{"claim":"touches","id":"kinds-ignored-for-touches","status":"entailed"}

@@ -138,7 +138,7 @@ def Claim.rows : Claim → List DimPattern
 /-- Two points never match the touches rows: points have no boundary. -/
 theorem not_anyOf_touches_point_point (p q : Point2D) :
     ¬ AnyOf (Claim.rows .touches) (.point p) (.point q) := by
-  simp only [GeoSPARQL.Table2.AnyOf, Claim.rows, List.mem_cons, List.mem_singleton,
+  simp only [GeoSPARQL.Table2.AnyOf, Claim.rows, List.mem_cons,
     List.not_mem_nil, or_false, exists_eq_or_imp, exists_eq_left, DimPattern.Matches,
     DimPatternChar.matches_T, DimPatternChar.matches_F, DimPatternChar.matches_any, and_true,
     true_and]
@@ -189,7 +189,7 @@ theorem allF_matches_iff (g h : Geometry) :
 
 /-- `Equals` is `T*F**FFF*`, or both geometries empty. -/
 theorem equals_iff_rows (g h : Geometry) : SF.Equals g h ↔ AnyOf (Claim.rows .equals) g h := by
-  simp only [GeoSPARQL.Table2.AnyOf, Claim.rows, List.mem_cons, List.mem_singleton,
+  simp only [GeoSPARQL.Table2.AnyOf, Claim.rows, List.mem_cons,
     List.not_mem_nil, or_false, exists_eq_or_imp, exists_eq_left]
   rw [allF_matches_iff]
   unfold SF.Equals
