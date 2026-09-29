@@ -18,6 +18,9 @@ import LeanGeospatial.Line
 import LeanGeospatial.CompositionTable.Product
 import LeanGeospatial.Euclidean
 import LeanGeospatial.ConnectedComplete
+import LeanGeospatial.Circle.Cells
+import LeanGeospatial.Circle.Witnesses
+import LeanGeospatial.Circle
 import LeanGeospatial.Validator
 import LeanGeospatial.ValidatorText
 import LeanGeospatial.Connected

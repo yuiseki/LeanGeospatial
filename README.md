@@ -514,7 +514,8 @@ of `β`: with a bounded factor such as `[0, 1]`, its boundary would break
 (`rcc8Complete_euclideanSpace`), space itself included, and the plane a second
 time without rectangles.
 
-Asking for connected areas gives a sharper property, which sees dimension:
+Asking for connected areas gives a sharper property, which tells the line from
+the plane:
 
 ```lean
 def RCC8ConnectedComplete (α : Type*) [TopologicalSpace α] : Prop :=
@@ -527,6 +528,7 @@ where `composeConnected` is weak composition over connected areas.
 | --- | --- | --- |
 | The line `ℝ` | no | `not_rcc8ConnectedComplete_real` |
 | The plane `Point2D` | yes | `rcc8ConnectedComplete_plane` |
+| The circle `Circle`, and `Real.Angle` | yes | `rcc8ConnectedComplete_circle`, `rcc8ConnectedComplete_angle` |
 | A complete space times a connected space | yes | `RCC8ConnectedComplete.prod_right`, `RCC8ConnectedComplete.prod_left` |
 | Euclidean space of every dimension from two up, such as `EuclideanSpace ℝ (Fin 3)` | yes | `rcc8ConnectedComplete_euclideanSpace`, `rcc8ConnectedComplete_euclideanSpace3` |
 
@@ -537,6 +539,16 @@ intervals could only meet by reaching across it. So `EC ⋄ EC ∋ EC` has no
 connected witness on the line, although it has one made of unit cells. The
 property implies `RCC8Complete` and is a topological invariant
 (`RCC8ConnectedComplete.homeomorph`).
+
+It is not decided by dimension. The circle, one-dimensional like the line, is
+complete for connected areas: it closes up, so three arcs can touch one
+another pairwise, each meeting the next at an end. `Circle.lean` wraps the line
+onto `AddCircle 6`, whose six cells lift to periodic sets of the line; the
+projection is continuous, open and onto, so relations are read off preimages
+and computed mod `6` (`cycRel`). For each of the 193 entries
+`scripts/gen_circle_witnesses.py` finds three arcs (`data/circle_witnesses.tsv`),
+Lean checks them by `decide`, and homeomorphisms carry the result to
+`Real.Angle`, LeanGeodesy's longitudes, and to Mathlib's `Circle`.
 
 `scripts/gen_rcc8_table.py` searches for the rectangles and writes the
 generated files; `data/rcc8_witnesses.tsv` lists them one per line. The script
@@ -903,6 +915,9 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/CompositionTable/Product.lean` | `A ×ˢ univ` keeps every relation; completeness passes to products with nonempty spaces |
 | `LeanGeospatial/Euclidean.lean` | The table is complete in Euclidean space of every dimension from one up |
 | `LeanGeospatial/ConnectedComplete.lean` | Completeness with connected areas: not on the line, yes in the plane and in every dimension from two |
+| `LeanGeospatial/Circle/Cells.lean` | Areas of the circle made of cells; relations read off periodic preimages |
+| `LeanGeospatial/Circle/Witnesses.lean` | Generated: three arcs for each table entry |
+| `LeanGeospatial/Circle.lean` | The circle is complete for connected areas |
 | `LeanGeospatial/NineIntersection.lean` | `exterior`, the three-part split, the nine cells, relations as cell conditions |
 | `LeanGeospatial/RCC8.lean` | The eight RCC8 base relations and the proof that exactly one holds |
 | `LeanGeospatial/RCC8Witnesses.lean` | Squares realising each RCC8 relation, used by weak composition |
@@ -938,6 +953,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/Manifold.lean` | The table is complete on the sphere, the open unit disk and the punctured plane |
 | `LeanGeospatial/Examples/Products.lean` | The plane from the line, space, every dimension, and two parallel lines `ℝ × Bool` |
 | `LeanGeospatial/Examples/ConnectedComplete.lean` | The line is complete but not for connected areas; the plane and space are |
+| `LeanGeospatial/Examples/Circle.lean` | The circle is complete for connected areas; the line is not |
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |

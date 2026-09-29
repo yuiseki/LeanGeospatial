@@ -6,7 +6,10 @@ import LeanGeospatial.Euclidean
 `composeConnected α r s` is weak composition with every area required to be
 connected, and `RCC8ConnectedComplete α` says it is the whole table. It is
 stronger than `RCC8Complete` (`RCC8ConnectedComplete.rcc8Complete`), and it
-sees dimension, which plain completeness does not.
+tells apart spaces that plain completeness does not: the line fails it and
+the plane has it. It is not a matter of dimension alone, though: the circle,
+also one-dimensional, has it (`rcc8ConnectedComplete_circle` in
+`Circle.lean`).
 
 - The line is complete but not for connected areas
   (`not_rcc8ConnectedComplete_real`). A connected area of the line is a closed

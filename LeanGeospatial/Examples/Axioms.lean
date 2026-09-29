@@ -13,6 +13,7 @@ import LeanGeospatial.Examples.GenericSpace
 import LeanGeospatial.Examples.Manifold
 import LeanGeospatial.Examples.Products
 import LeanGeospatial.Examples.ConnectedComplete
+import LeanGeospatial.Examples.Circle
 import LeanGeospatial.Composition
 import LeanGeospatial.CompositionTable.Cells
 import LeanGeospatial.Examples.PublishedTable
@@ -794,3 +795,19 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.rcc8ConnectedComplete_euclideanSpace3' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.rcc8ConnectedComplete_euclideanSpace3
+
+/-- info: 'Geospatial.Cyc.cycRel_holds' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Cyc.cycRel_holds
+
+/-- info: 'Geospatial.Cyc.circleWitness_ok' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Cyc.circleWitness_ok
+
+/-- info: 'Geospatial.rcc8ConnectedComplete_angle' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.rcc8ConnectedComplete_angle
+
+/-- info: 'Geospatial.rcc8ConnectedComplete_circle' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.rcc8ConnectedComplete_circle
