@@ -8,6 +8,7 @@ import LeanGeospatial.NineIntersection
 import LeanGeospatial.Examples.NineIntersection
 import LeanGeospatial.RCC8
 import LeanGeospatial.Examples.RCC8
+import LeanGeospatial.Examples.Homeomorph
 import LeanGeospatial.Composition
 import LeanGeospatial.CompositionTable.Cells
 import LeanGeospatial.Examples.PublishedTable
@@ -654,3 +655,11 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.Prover.not_crosses_of_collinearMatrix' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.Prover.not_crosses_of_collinearMatrix
+
+/-- info: 'Geospatial.RegularClosedRegion.touches_map_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RegularClosedRegion.touches_map_iff
+
+/-- info: 'Geospatial.Examples.Homeomorph.slid_squares_touch' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.Homeomorph.slid_squares_touch

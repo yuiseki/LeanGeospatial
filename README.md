@@ -253,6 +253,18 @@ value carries that proof, so theorems about areas do not ask for it again.
 `Region` is expected, but not the other way round. Areas may have several
 parts and holes, and may be unbounded; the whole plane is one.
 
+A homeomorphism of the plane (`e : Point2D ≃ₜ Point2D`, a continuous bijection
+with a continuous inverse) carries areas to areas: `A.map e` is the image
+`e '' A`, again a `RegularClosedRegion`. Such maps cannot change topological
+relations, and the first theorem to say so is
+
+```lean
+theorem touches_map_iff (e : Point2D ≃ₜ Point2D) (A B : RegularClosedRegion) :
+    Touches (A.map e : Region) (B.map e) ↔ Touches (A : Region) B
+```
+
+It rests on `touches_image_iff`, the same statement for arbitrary regions.
+
 ### 4. Nine intersections and DE-9IM patterns
 
 `exterior A` is `interior Aᶜ`, which equals `(closure A)ᶜ`. Interior, boundary
@@ -759,6 +771,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Polygon.lean` | `Polygon` (vertex data, shoelace area), `Rect` (a shape with a defined region) |
 | `LeanGeospatial/Topology.lean` | The plane's topology, `boundary`, `Touches`, interior and boundary of a `Rect` |
 | `LeanGeospatial/RegularClosed.lean` | `RegularClosedRegion`, the type of areas |
+| `LeanGeospatial/Homeomorph.lean` | `RegularClosedRegion.map` and `touches_map_iff`: homeomorphisms preserve touching |
 | `LeanGeospatial/NineIntersection.lean` | `exterior`, the three-part split, the nine cells, relations as cell conditions |
 | `LeanGeospatial/RCC8.lean` | The eight RCC8 base relations and the proof that exactly one holds |
 | `LeanGeospatial/RCC8Witnesses.lean` | Squares realising each RCC8 relation, used by weak composition |
@@ -789,6 +802,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
 | `LeanGeospatial/Examples/Measurement.lean` | Distance and area on concrete coordinates |
 | `LeanGeospatial/Examples/Touches.lean` | Two squares that touch, and two that overlap; their shared edge is not an area |
+| `LeanGeospatial/Examples/Homeomorph.lean` | The touching squares still touch after any homeomorphism, and after a slide of ten units |
 | `LeanGeospatial/Examples/NineIntersection.lean` | Cells of touching, separated and nested squares; two counterexamples |
 | `LeanGeospatial/Examples/RCC8.lean` | All eight relations on squares |
 | `LeanGeospatial/Examples/PublishedTable.lean` | Generated: comparison with the published RCC8 table |

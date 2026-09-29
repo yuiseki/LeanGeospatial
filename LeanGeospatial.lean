@@ -3,6 +3,7 @@ import LeanGeospatial.Region
 import LeanGeospatial.Polygon
 import LeanGeospatial.Topology
 import LeanGeospatial.RegularClosed
+import LeanGeospatial.Homeomorph
 import LeanGeospatial.NineIntersection
 import LeanGeospatial.RCC8
 import LeanGeospatial.RCC8Witnesses
