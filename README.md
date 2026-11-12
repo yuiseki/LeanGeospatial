@@ -137,6 +137,11 @@ conclusion that follows from those facts
 - What Lean guarantees is that the verdict follows logically from the
   premises as given. If a premise is false, the conclusion is unsupported,
   and Lean cannot notice.
+- The decision procedures (`Claim.decide`, the RCC8 composition checks) are
+  the parts that could later be compiled to Rust with lean-rs; the theorems
+  would then describe the Rust functions, and the boundary above would stay
+  where it is. Which definitions qualify, and what blocks the rest, is in
+  [docs/LEAN_RS.md](docs/LEAN_RS.md).
 
 ## Why this repository exists
 
@@ -1012,6 +1017,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/Axioms.lean` | Axiom audit of the main theorems |
 | `Main.lean` | The `lean-geospatial` command (validator) |
 | `ProverMain.lean` | The `lean-geospatial-prover` command |
+| `docs/LEAN_RS.md` | Which definitions lean-rs could compile to Rust, the theorems that would describe them, and what blocks the rest |
 
 The library under `LeanGeospatial/` never imports `LeanGeospatial/Examples/`;
 the examples only use the library. CI checks this.

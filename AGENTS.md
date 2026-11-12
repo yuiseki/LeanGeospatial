@@ -157,6 +157,9 @@ data comes in.
 - `LeanGeospatial/Examples/`: worked examples and the axiom audit.
 - `README.md` is the reference; keep its theorem index and file table in
   step with the code.
+- `docs/LEAN_RS.md`: which computable definitions could be compiled to Rust
+  with lean-rs and which theorems describe them. When you change one of the
+  definitions it lists, update it.
 
 ## Conventions
 
