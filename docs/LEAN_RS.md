@@ -44,8 +44,10 @@ result have a Rust type: `Bool` and `Decidable p` (as `bool`), `Nat` and
 literal, and structures and inductive types built from these. lean-rs skips,
 with a reason, a definition that has no IR (`noncomputable`), takes a proof
 argument, uses a function type, a type variable, `Subtype`, a type family or
-a type that is not an inductive (such as `ℝ`, `Set`, `Finset`, whose
-`Multiset` is a quotient), or takes an argument whose type has proof fields.
+a type that is not an inductive type or holds one that is not (`ℝ` holds a
+quotient of Cauchy sequences, `Set` is a predicate, `Finset` holds a
+`Multiset`, which is a quotient), or takes an argument whose type has proof
+fields.
 By default it exports the public definitions written in a module, but not
 instances.
 
