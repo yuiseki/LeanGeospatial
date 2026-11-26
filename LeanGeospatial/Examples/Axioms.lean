@@ -297,6 +297,10 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.RCC8.Graph.check_possible
 
+/-- info: 'Geospatial.RCC8.Graph.checkList_toVerdict' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Graph.checkList_toVerdict
+
 /-- info: 'Geospatial.RCC8.triangle_realizes' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.RCC8.triangle_realizes

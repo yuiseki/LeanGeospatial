@@ -1,16 +1,11 @@
 # Toward Rust with lean-rs
 
-This note records which definitions of LeanGeospatial could later be compiled
-to Rust with [lean-rs](https://github.com/conao3/lean-rs), which theorems
-would then describe the Rust functions, and what stands in the way. Nothing
-here is generated or built yet: there is no Rust code in this repository, and
-CI does not run lean-rs. The two executables (`lean-geospatial`,
-`lean-geospatial-prover`) are compiled by Lean's own C backend, as before.
-
-It was written against lean-rs at commit `90bdd9c` (generator version 3, Lean
-`v4.35.0`), from its README and its sources (`LeanRust/Marshal.lean`,
-`Main.lean`). lean-rs was not run on this library; every "expected" below is
-read from that code, not observed.
+This note records which definitions of LeanGeospatial are compiled to Rust with
+[lean-rs](https://github.com/conao3/lean-rs), which theorems describe the Rust
+functions, and why the set-theoretic layer stays out. There is no generated
+Rust code inside this repository, and CI does not run lean-rs. The two
+executables (`lean-geospatial`, `lean-geospatial-prover`) are compiled by
+Lean's own C backend, as before.
 
 ## What lean-rs does, and what it guarantees
 
@@ -70,7 +65,7 @@ defined from sets. "As is" means no change to the Lean code is needed.
 | `Claim.decide` | `(c: Claim, k: Kind, k2: Kind, m: Matrix9) -> bool` | `Claim.decide_iff` (exact, given `g.kind = k`, `h.kind = k'`, `Matrix9.of g h = m`), `Claim.decide_kinds_irrel`, `Claim.decide_iff_of_kindFree` | as is |
 | `Geospatial.SF.rank` | `(v: DimValue) -> Int` | used in `SF.Crosses` and `Claim.decide` | as is |
 
-### RCC8 (`RCC8.lean`, `CompositionTable/Abstract.lean`, `Validator.lean`, `ValidatorText.lean`)
+### RCC8 (`RCC8.lean`, `CompositionTable/Abstract.lean`, `Validator.lean`, `ValidatorList.lean`, `ValidatorText.lean`)
 
 | Definition | Expected Rust shape | Theorems that describe it | Status |
 | --- | --- | --- | --- |
@@ -78,9 +73,10 @@ defined from sets. "As is" means no change to the Lean code is needed.
 | `Sig`, `Sig.swap`, `Relation.sigs`, `schema`, `consistent`, `admits` | struct of six `bool`s; `-> bool` | `schema_sigOf`, `consistent_sigOf`, `sigOf_mem_sigs`; `t ∈ table r s` is `admits r s t = true` by the definition of `table`, so `mem_table_of_mem_compose` (sound everywhere) and `compose_eq_table` (exact in the plane) describe it | as is |
 | `Fact`, `Graph`, `lookupFacts`, `Graph.lookup`, `Graph.features` | structs of `String`s and `Relation`; `-> Option<Relation>`; `-> Vec<String>` | `lookupFacts_sound`, `Graph.lookup_sound` | as is |
 | `Graph.conflict` | `(g: Graph) -> bool` | `Graph.no_model_of_conflict` | as is |
+| `VerdictL`, `tableList`, `Graph.allowedList`, `Graph.conflictList`, `Graph.checkList` (`ValidatorList.lean`) | enum (`Entailed`, `Possible(Vec<Relation>)`, `Contradictory`); `-> Vec<Relation>`; `-> bool`; `-> VerdictL` | `mem_tableList`, `mem_allowedList`, `conflictList_eq`, `Graph.checkList_toVerdict` (`(g.checkList a c).toVerdict = g.check a c`), hence `Graph.check_entailed`, `Graph.check_possible`, `Graph.check_contradictory` | exported |
 | `Relation.ofString?`, `Relation.name`, `Input`, `Input.parse` | `-> Option<Relation>`, `-> String`, `-> Result<Input, String>` | none (unproved front end) | as is |
 | `table`, `Relation.all`, `Graph.constrain`, `Graph.derived`, `statedFacts`, `Graph.stated`, `Graph.allowed`, `verdictOf` | | `mem_table_of_mem_compose`, `Graph.mem_constrain`, `Graph.mem_derived`, `mem_statedFacts`, `Graph.mem_stated`, `Graph.mem_allowed` | blocked: return `Finset Relation` |
-| `Verdict`, `Graph.check`, `Verdict.render` | | `Graph.check_entailed`, `Graph.check_possible`, `Graph.check_contradictory`, `triangle_realizes` | blocked: `Verdict.possible` carries a `Finset Relation` |
+| `Verdict`, `Graph.check`, `Verdict.render` | | `Graph.check_entailed`, `Graph.check_possible`, `Graph.check_contradictory`, `triangle_realizes` | blocked: `Verdict.possible` carries a `Finset Relation` (exported via `Graph.checkList`) |
 
 ### Published tables (`GeoSPARQL/Spec.lean`, `GeoSPARQL/Table2/Spec.lean`, `DE9IM.lean`)
 
@@ -116,35 +112,27 @@ the rows mean, not that a Rust program reading them is right about geometry.
   itself and call the proved functions; whether `Lean.Json` crosses lean-rs
   was not checked.
 
-## Why `Finset` stays
+## Why `Finset` stays in `Validator.lean`, and what changed
 
-`table`, `Graph.allowed` and `Verdict.possible` use `Finset Relation`, and
-`check_possible`, `mem_table_of_mem_compose`, `compose_eq_table` and the
-completeness results are stated with it. Changing the type to make
-`Graph.check` exportable would change those statements, so it was not done.
-What is exportable now covers the RCC8 side up to `admits` and `conflict`;
-`Graph.check` itself is not. If it is wanted later, the choice is between a
-lean-rs that accepts `Finset` (its runtime representation is a list) and a
-`List`-valued checker with its own correctness theorems, which is new work.
+`table`, `Graph.allowed` and `Verdict.possible` in `Validator.lean` use
+`Finset Relation`, and `check_possible`, `mem_table_of_mem_compose`,
+`compose_eq_table` and the completeness results are stated with it. Changing
+those types would rewrite those statements, so `Validator.lean` stays as it is.
 
-## Changes made for this
+Instead, `LeanGeospatial/ValidatorList.lean` adds `Graph.checkList`,
+`Graph.allowedList`, `Graph.conflictList`, `tableList` and `VerdictL`, built
+from `Bool` and `List` only, together with
+`Graph.checkList_toVerdict : (g.checkList a c).toVerdict = g.check a c` (and
+`conflictList_eq`, `mem_allowedList`, `mem_tableList`). Every soundness theorem
+for `Graph.check` therefore transfers directly to `Graph.checkList`.
 
-None to the Lean code. The decision procedures were already separate
-definitions with their own theorems; nothing in them depends on `ℝ` or on
-`noncomputable` definitions.
+## Toolchain and module notes
 
-## Open before starting
-
-- Toolchain. lean-rs is pinned to Lean `v4.35.0`, and `lean-rust` reads the IR
-  stored in `.olean` files built by its own Lean version. LeanGeospatial,
-  LeanGeodesy and LeanComputationalGeometry are on Lean `v4.34.0` and Mathlib
-  `v4.34.0`. Generating Rust needs the three upgraded together (see
-  `AGENTS.md`) or a lean-rs for `v4.34.0`; neither was done here.
-- Not tried: running `lean-rust module generate` on
-  `LeanGeospatial.Prover.DE9IMClaim` and `LeanGeospatial.Validator` with
-  `--output json`; whether the runtime has every extern the Mathlib-built IR
-  calls (`List.dedup` in `Graph.features`, for example; exit code 254 means
-  it does not).
+- Upstream lean-rs pins Lean `v4.35.0`, while LeanGeospatial, LeanGeodesy and
+  LeanComputationalGeometry pin Lean `v4.34.0` and Mathlib `v4.34.0` together
+  (see `AGENTS.md`). `lean-rust` builds unchanged under Lean `v4.34.0`
+  (`lake +leanprover/lean4:v4.34.0 build lean-rust`), generating Rust from
+  `LeanGeospatial.Prover.DE9IMClaim` and `LeanGeospatial.ValidatorList`.
 - Each generated module defines its own copies of the types it mentions, so
   `Relation` generated from two modules gives two Rust types unless
   `--type-path` or `uses` links them.

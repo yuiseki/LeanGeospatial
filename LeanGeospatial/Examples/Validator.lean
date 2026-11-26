@@ -1,4 +1,5 @@
 import LeanGeospatial.Validator
+import LeanGeospatial.ValidatorList
 
 /-!
 # Three validator cases
@@ -104,5 +105,23 @@ theorem unrelatedConflict_verdict : unrelatedConflict.check "A" "B" = .contradic
 
 theorem unrelatedConflict_has_no_model : ¬ ∃ M, unrelatedConflict.Satisfies M :=
   Graph.check_contradictory unrelatedConflict_verdict
+
+/-! ## The `List`-valued checker (`ValidatorList`) -/
+
+theorem nested_checkList : nested.checkList "DistrictA" "ProvinceC" = .entailed .ntpp := by
+  decide
+
+theorem touching_checkList :
+    touching.checkList "ParcelA" "ParcelC" = .possible [.dc, .ec, .po, .eq, .tpp, .tppi] := by
+  decide
+
+theorem inconsistent_checkList :
+    inconsistent.checkList "BuildingA" "BlockC" = .contradictory := by
+  decide
+
+example (M : FeatureId → RegularClosedRegion Point2D) (hM : nested.Satisfies M) :
+    NTPP (M "DistrictA") (M "ProvinceC") :=
+  Graph.check_entailed ((Graph.checkList_toVerdict nested "DistrictA" "ProvinceC").symm.trans
+    (congrArg VerdictL.toVerdict nested_checkList)) hM
 
 end Geospatial.Examples.Validator

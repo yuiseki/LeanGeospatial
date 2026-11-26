@@ -933,7 +933,8 @@ For the checker and the prover:
 
 - `Graph.check_entailed`, `Graph.check_possible`, `Graph.check_contradictory`:
   the verdicts of sections 12 and 13. They rest on `Graph.mem_derived`,
-  `Graph.mem_stated` and `Graph.no_model_of_conflict`.
+  `Graph.mem_stated` and `Graph.no_model_of_conflict`. `Graph.checkList_toVerdict`
+  proves that the `List`-valued `Graph.checkList` returns the same verdict.
 - `Claim.decide_iff`: the DE-9IM answers of section 6.
 
 ### 16. Axiom and proof audit
@@ -994,6 +995,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/GeoSPARQL/AreaArea.lean` | The tables compared with the semantics, for areas |
 | `LeanGeospatial/GeoSPARQL/Counterexamples.lean` | Areas where the Table 8 patterns fail |
 | `LeanGeospatial/Validator.lean` | The RCC8 checker (`Graph.check`), with its soundness theorems |
+| `LeanGeospatial/ValidatorList.lean` | `Graph.checkList`, the checker with `Bool` and `List` only (no `Finset`), proved equal to `Graph.check` (`checkList_toVerdict`), so lean-rs can compile it |
 | `LeanGeospatial/ValidatorText.lean` | The validator's plain-text input format |
 | `LeanGeospatial/Prover/DE9IMClaim.lean` | Simple Features claims read off a stated DE-9IM matrix, proved exact |
 | `LeanGeospatial/ProverJSON.lean` | JSON Lines front end for `lean-geospatial-prover` (unproved glue) |
