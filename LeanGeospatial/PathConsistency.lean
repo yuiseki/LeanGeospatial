@@ -26,6 +26,8 @@ namespace Geospatial.RCC8
 
 open Geospatial
 
+/-! ## Relation masks -/
+
 /-- An 8-bit boolean mask of allowed RCC8 base relations between two features. -/
 structure RelMask where
   dc : Bool
@@ -71,10 +73,12 @@ def isEmpty (m : RelMask) : Bool :=
 
 theorem get_eq_false_of_isEmpty {m : RelMask} (h : m.isEmpty = true) (t : Relation) :
     m.get t = false := by
-  rcases m with ⟨d1, d2, d3, d4, d5, d6, d7, d8⟩
+  cases m
   cases t <;> simp_all [isEmpty, get]
 
 end RelMask
+
+/-! ## Constraint networks -/
 
 /-- One entry of an RCC8 constraint network. -/
 structure NetEntry where
@@ -113,6 +117,8 @@ theorem netGet_eq_all_of_forall_ne {net : List NetEntry} {u v : FeatureId}
     split_ifs with hk
     · exact absurd hk (hne hd List.mem_cons_self)
     · exact ih fun e he => hne e (List.mem_cons_of_mem _ he)
+
+/-! ## Propagation and verdicts -/
 
 /-- Initial mask allowed between `u` and `v` by the stated facts and reflexivity. -/
 def pairInitMask (g : Graph) (u v : FeatureId) : RelMask :=
@@ -189,39 +195,41 @@ def Net.Satisfies (net : List NetEntry) (M : FeatureId → RegularClosedRegion P
   (∀ x, (M x : Region).Nonempty) ∧
     ∀ u w t, t.holds (M u) (M w) → (netGet net u w).get t = true
 
-theorem initNet_satisfies {g : Graph} {M : FeatureId → RegularClosedRegion Point2D}
-    (hM : g.Satisfies M) (fs : List FeatureId) :
-    Net.Satisfies (initNet g fs) M := by
-  refine ⟨hM.1, fun u w t ht => ?_⟩
+/-- Lookup in a dense `fs × fs` entry table: returns `val u w` inside `fs × fs`,
+and `RelMask.all` outside, so any predicate holding for `val u w` holds everywhere. -/
+private theorem netGet_pairTable_get (fs : List FeatureId)
+    (val : FeatureId → FeatureId → RelMask) {u w : FeatureId} {t : Relation}
+    (hval : (val u w).get t = true) :
+    (netGet (fs.flatMap fun x => fs.map fun y => ⟨x, y, val x y⟩) u w).get t = true := by
   by_cases huv : u ∈ fs ∧ w ∈ fs
-  · have hget : netGet (initNet g fs) u w = pairInitMask g u w := by
+  · have hget : netGet (fs.flatMap fun x => fs.map fun y => ⟨x, y, val x y⟩) u w = val u w := by
       refine netGet_eq_of_mem ?_ ?_
       · exact List.mem_flatMap.mpr ⟨u, huv.1, List.mem_map.mpr ⟨w, huv.2, rfl⟩⟩
       · intro e he hsrc hdst
-        obtain ⟨x, -, y, -, rfl⟩ := by
-          simpa [initNet] using he
+        obtain ⟨x, -, y, -, rfl⟩ := by simpa using he
         cases hsrc; cases hdst; rfl
-    rw [hget, pairInitMask, RelMask.get_ofPred]
-    have hst : g.statedB u w t = true := (mem_stated_iff g u w t).mp (Graph.mem_stated hM ht)
-    rw [hst, Bool.true_and]
-    by_cases h : u = w
-    · subst h
-      have heq : t = .eq := relation_unique _ _ (hM.1 u) (hM.1 u) ht (rfl : Relation.eq.holds (M u) (M u))
-      simp [heq]
-    · simp [h]
-  · have hall : netGet (initNet g fs) u w = RelMask.all := by
+    rw [hget]
+    exact hval
+  · have hall : netGet (fs.flatMap fun x => fs.map fun y => ⟨x, y, val x y⟩) u w = RelMask.all := by
       refine netGet_eq_all_of_forall_ne ?_
       intro e he ⟨hsrc, hdst⟩
-      have hx : u ∈ fs := by
-        obtain ⟨x, hx, y, -, hxy⟩ := by simpa [initNet] using he
-        cases hxy
-        exact hsrc ▸ hx
-      have hy : w ∈ fs := by
-        obtain ⟨x, -, y, hy, hxy⟩ := by simpa [initNet] using he
-        cases hxy
-        exact hdst ▸ hy
-      exact huv ⟨hx, hy⟩
+      obtain ⟨x, hx, y, hy, rfl⟩ := by simpa using he
+      exact huv ⟨hsrc ▸ hx, hdst ▸ hy⟩
     rw [hall, RelMask.get_all]
+
+theorem initNet_satisfies {g : Graph} {M : FeatureId → RegularClosedRegion Point2D}
+    (hM : g.Satisfies M) (fs : List FeatureId) :
+    Net.Satisfies (initNet g fs) M := by
+  refine ⟨hM.1, fun u w t ht => netGet_pairTable_get fs (pairInitMask g) ?_⟩
+  rw [pairInitMask, RelMask.get_ofPred]
+  have hst : g.statedB u w t = true := (mem_stated_iff g u w t).mp (Graph.mem_stated hM ht)
+  rw [hst, Bool.true_and]
+  by_cases h : u = w
+  · subst h
+    have heq : t = .eq :=
+      relation_unique _ _ (hM.1 u) (hM.1 u) ht (rfl : Relation.eq.holds (M u) (M u))
+    simp [heq]
+  · simp [h]
 
 theorem stepVia_sound {net : List NetEntry} {M : FeatureId → RegularClosedRegion Point2D}
     (hnet : Net.Satisfies net M) {u w b : FeatureId} {t : Relation}
@@ -253,31 +261,9 @@ theorem stepPairFold_sound {net : List NetEntry} {M : FeatureId → RegularClose
 
 theorem stepNet_satisfies {net : List NetEntry} {M : FeatureId → RegularClosedRegion Point2D}
     (hnet : Net.Satisfies net M) (fs : List FeatureId) :
-    Net.Satisfies (stepNet fs net) M := by
-  refine ⟨hnet.1, fun u w t ht => ?_⟩
-  by_cases huv : u ∈ fs ∧ w ∈ fs
-  · have hget : netGet (stepNet fs net) u w = stepPair fs net u w := by
-      refine netGet_eq_of_mem ?_ ?_
-      · exact List.mem_flatMap.mpr ⟨u, huv.1, List.mem_map.mpr ⟨w, huv.2, rfl⟩⟩
-      · intro e he hsrc hdst
-        obtain ⟨x, -, y, -, rfl⟩ := by
-          simpa [stepNet] using he
-        cases hsrc; cases hdst; rfl
-    rw [hget, stepPair]
-    exact stepPairFold_sound hnet ht fs _ (hnet.2 u w t ht)
-  · have hall : netGet (stepNet fs net) u w = RelMask.all := by
-      refine netGet_eq_all_of_forall_ne ?_
-      intro e he ⟨hsrc, hdst⟩
-      have hx : u ∈ fs := by
-        obtain ⟨x, hx, y, -, hxy⟩ := by simpa [stepNet] using he
-        cases hxy
-        exact hsrc ▸ hx
-      have hy : w ∈ fs := by
-        obtain ⟨x, -, y, hy, hxy⟩ := by simpa [stepNet] using he
-        cases hxy
-        exact hdst ▸ hy
-      exact huv ⟨hx, hy⟩
-    rw [hall, RelMask.get_all]
+    Net.Satisfies (stepNet fs net) M :=
+  ⟨hnet.1, fun u w t ht =>
+    netGet_pairTable_get fs (stepPair fs net) (stepPairFold_sound hnet ht fs _ (hnet.2 u w t ht))⟩
 
 theorem propagateLoop_satisfies (fs : List FeatureId)
     {M : FeatureId → RegularClosedRegion Point2D} :
@@ -301,14 +287,20 @@ theorem no_model_of_hasEmptyPair {g : Graph} (fs : List FeatureId)
     ¬ ∃ M, g.Satisfies M := by
   rintro ⟨M, hM⟩
   unfold hasEmptyPair at h
-  rw [List.any_eq_true] at h
-  obtain ⟨u, -, hv⟩ := h
-  rw [List.any_eq_true] at hv
-  obtain ⟨v, -, hempty⟩ := hv
+  obtain ⟨u, -, hv⟩ := List.any_eq_true.mp h
+  obtain ⟨v, -, hempty⟩ := List.any_eq_true.mp hv
   obtain ⟨t, ht⟩ := exists_relation (M u) (M v) (hM.1 u) (hM.1 v)
   have hget := (propagateNet_satisfies hM fs).2 u v t ht
   rw [RelMask.get_eq_false_of_isEmpty hempty t] at hget
   cases hget
+
+private theorem mem_propagateFiltered {g : Graph} {a c : FeatureId}
+    {M : FeatureId → RegularClosedRegion Point2D} (hM : g.Satisfies M)
+    {t : Relation} (ht : t.holds (M a) (M c)) :
+    t ∈ Relation.list.filter fun r =>
+      (netGet (propagateNet g (queryFeatures g a c)) a c).get r :=
+  List.mem_filter.mpr ⟨Relation.mem_list t,
+    (propagateNet_satisfies hM (queryFeatures g a c)).2 a c t ht⟩
 
 /-- If `g.propagateCheck a c = .entailed t`, every model of `g` puts `t`
 between `a` and `c`. -/
@@ -317,22 +309,19 @@ theorem Graph.propagateCheck_entailed {g : Graph} {a c : FeatureId} {t : Relatio
     {M : FeatureId → RegularClosedRegion Point2D} (hM : g.Satisfies M) :
     t.holds (M a) (M c) := by
   obtain ⟨t', ht'⟩ := exists_relation (M a) (M c) (hM.1 a) (hM.1 c)
-  have hget : (netGet (propagateNet g (queryFeatures g a c)) a c).get t' = true :=
-    (propagateNet_satisfies hM (queryFeatures g a c)).2 a c t' ht'
-  have hmem : t' ∈ Relation.list.filter fun r =>
-      (netGet (propagateNet g (queryFeatures g a c)) a c).get r :=
-    List.mem_filter.mpr ⟨Relation.mem_list t', hget⟩
+  have hmem := mem_propagateFiltered hM ht'
   unfold Graph.propagateCheck at h
   dsimp only at h
-  by_cases hc : (g.conflictList || hasEmptyPair (queryFeatures g a c) (propagateNet g (queryFeatures g a c))) = true
+  set fs := queryFeatures g a c
+  set net := propagateNet g fs
+  by_cases hc : (g.conflictList || hasEmptyPair fs net) = true
   · simp [hc] at h
   · simp only [hc, Bool.false_eq_true, ↓reduceIte] at h
-    rcases hfilt : Relation.list.filter (fun r => (netGet (propagateNet g (queryFeatures g a c)) a c).get r) with
+    rcases hfilt : Relation.list.filter (fun r => (netGet net a c).get r) with
       _ | ⟨u, _ | ⟨v, rest⟩⟩
     · rw [hfilt] at h; cases h
-    · rw [hfilt] at h
+    · rw [hfilt] at h hmem
       cases h
-      rw [hfilt] at hmem
       cases List.mem_singleton.mp hmem
       exact ht'
     · rw [hfilt] at h; cases h
@@ -343,17 +332,15 @@ theorem Graph.propagateCheck_possible {g : Graph} {a c : FeatureId} {S : List Re
     {M : FeatureId → RegularClosedRegion Point2D} (hM : g.Satisfies M)
     {t : Relation} (ht : t.holds (M a) (M c)) :
     t ∈ S := by
-  have hget : (netGet (propagateNet g (queryFeatures g a c)) a c).get t = true :=
-    (propagateNet_satisfies hM (queryFeatures g a c)).2 a c t ht
-  have hmem : t ∈ Relation.list.filter fun r =>
-      (netGet (propagateNet g (queryFeatures g a c)) a c).get r :=
-    List.mem_filter.mpr ⟨Relation.mem_list t, hget⟩
+  have hmem := mem_propagateFiltered hM ht
   unfold Graph.propagateCheck at h
   dsimp only at h
-  by_cases hc : (g.conflictList || hasEmptyPair (queryFeatures g a c) (propagateNet g (queryFeatures g a c))) = true
+  set fs := queryFeatures g a c
+  set net := propagateNet g fs
+  by_cases hc : (g.conflictList || hasEmptyPair fs net) = true
   · simp [hc] at h
   · simp only [hc, Bool.false_eq_true, ↓reduceIte] at h
-    rcases hfilt : Relation.list.filter (fun r => (netGet (propagateNet g (queryFeatures g a c)) a c).get r) with
+    rcases hfilt : Relation.list.filter (fun r => (netGet net a c).get r) with
       _ | ⟨u, _ | ⟨v, rest⟩⟩
     · rw [hfilt] at h; cases h
     · rw [hfilt] at h; cases h
@@ -367,20 +354,19 @@ theorem Graph.propagateCheck_contradictory {g : Graph} {a c : FeatureId}
     ¬ ∃ M, g.Satisfies M := by
   unfold Graph.propagateCheck at h
   dsimp only at h
-  by_cases hc : (g.conflictList || hasEmptyPair (queryFeatures g a c) (propagateNet g (queryFeatures g a c))) = true
+  set fs := queryFeatures g a c
+  set net := propagateNet g fs
+  by_cases hc : (g.conflictList || hasEmptyPair fs net) = true
   · rcases Bool.or_eq_true_iff.mp hc with hconf | hemp
     · rw [conflictList_eq] at hconf
       exact Graph.no_model_of_conflict hconf
-    · exact no_model_of_hasEmptyPair (queryFeatures g a c) hemp
+    · exact no_model_of_hasEmptyPair fs hemp
   · simp only [hc, Bool.false_eq_true, ↓reduceIte] at h
-    rcases hfilt : Relation.list.filter (fun r => (netGet (propagateNet g (queryFeatures g a c)) a c).get r) with
+    rcases hfilt : Relation.list.filter (fun r => (netGet net a c).get r) with
       _ | ⟨u, _ | ⟨v, rest⟩⟩
     · rintro ⟨M, hM⟩
       obtain ⟨t, ht⟩ := exists_relation (M a) (M c) (hM.1 a) (hM.1 c)
-      have hget := (propagateNet_satisfies hM (queryFeatures g a c)).2 a c t ht
-      have hmem : t ∈ Relation.list.filter fun r =>
-          (netGet (propagateNet g (queryFeatures g a c)) a c).get r :=
-        List.mem_filter.mpr ⟨Relation.mem_list t, hget⟩
+      have hmem := mem_propagateFiltered hM ht
       rw [hfilt] at hmem
       simp at hmem
     · rw [hfilt] at h; cases h
