@@ -23,6 +23,7 @@ import LeanGeospatial.Circle.Witnesses
 import LeanGeospatial.Circle
 import LeanGeospatial.Validator
 import LeanGeospatial.ValidatorList
+import LeanGeospatial.PathConsistency
 import LeanGeospatial.ValidatorText
 import LeanGeospatial.Connected
 import LeanGeospatial.DE9IM

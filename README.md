@@ -816,14 +816,17 @@ contract in CI (section 18).
 
 ### 14. Known limitations
 
-The RCC8 checker:
+The RCC8 checker (`Graph.check` / `Graph.checkList`):
 
-- It is not an RCC8 satisfiability solver. It finds contradictions only
-  through the composition table along one intermediate feature and between
-  facts stated for the same pair, so a graph with no model can still get
-  `entailed` or `possible` (then vacuously true).
-- `possible` is not always the tightest set: constraints over longer paths
-  are not propagated.
+- It is not a full RCC8 satisfiability solver. `Graph.check` finds
+  contradictions only through the composition table along one intermediate
+  feature and between facts stated for the same pair, so multi-hop chains and
+  longer cycles can still get `entailed` or `possible` (vacuously true) under
+  `Graph.check`. `PathConsistency.lean` (`Graph.propagateCheck`) closes this
+  gap by iterating composition-table propagation across the network to detect
+  multi-hop entailments and longer-cycle contradictions; algebraic closure itself
+  remains incomplete on general non-minimal RCC8 constraint graphs compared to
+  full backtracking CSP solving.
 
 The prover:
 
@@ -935,6 +938,9 @@ For the checker and the prover:
   the verdicts of sections 12 and 13. They rest on `Graph.mem_derived`,
   `Graph.mem_stated` and `Graph.no_model_of_conflict`. `Graph.checkList_toVerdict`
   proves that the `List`-valued `Graph.checkList` returns the same verdict.
+- `Graph.propagateCheck_entailed`, `Graph.propagateCheck_possible`,
+  `Graph.propagateCheck_contradictory` (`PathConsistency.lean`): sound multi-hop
+  algebraic-closure propagation using `Bool` masks (`RelMask`) and `List`s only.
 - `Claim.decide_iff`: the DE-9IM answers of section 6.
 
 ### 16. Axiom and proof audit
@@ -996,6 +1002,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/GeoSPARQL/Counterexamples.lean` | Areas where the Table 8 patterns fail |
 | `LeanGeospatial/Validator.lean` | The RCC8 checker (`Graph.check`), with its soundness theorems |
 | `LeanGeospatial/ValidatorList.lean` | `Graph.checkList`, the checker with `Bool` and `List` only (no `Finset`), proved equal to `Graph.check` (`checkList_toVerdict`), so lean-rs can compile it |
+| `LeanGeospatial/PathConsistency.lean` | `Graph.propagateCheck`, multi-hop RCC8 algebraic-closure solver with `RelMask`/`List` and soundness proofs (`propagateCheck_entailed`, `propagateCheck_possible`, `propagateCheck_contradictory`) |
 | `LeanGeospatial/ValidatorText.lean` | The validator's plain-text input format |
 | `LeanGeospatial/Prover/DE9IMClaim.lean` | Simple Features claims read off a stated DE-9IM matrix, proved exact |
 | `LeanGeospatial/ProverJSON.lean` | JSON Lines front end for `lean-geospatial-prover` (unproved glue) |
@@ -1016,6 +1023,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Examples/DimensionalCells.lean` | One `II` cell of each value |
 | `LeanGeospatial/Examples/Prover.lean` | What the prover's DE-9IM answers mean, as theorems |
 | `LeanGeospatial/Examples/Validator.lean` | The checker's cases, with what each verdict proves |
+| `LeanGeospatial/Examples/PathConsistency.lean` | Multi-hop hierarchy entailment, 4-node cycle contradiction, and indirect tightening under `Graph.propagateCheck` |
 | `LeanGeospatial/Examples/Axioms.lean` | Axiom audit of the main theorems |
 | `Main.lean` | The `lean-geospatial` command (validator) |
 | `ProverMain.lean` | The `lean-geospatial-prover` command |

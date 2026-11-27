@@ -19,6 +19,7 @@ import LeanGeospatial.Composition
 import LeanGeospatial.CompositionTable.Cells
 import LeanGeospatial.Examples.PublishedTable
 import LeanGeospatial.Examples.Validator
+import LeanGeospatial.Examples.PathConsistency
 import LeanGeospatial.GeoSPARQL.Counterexamples
 import LeanGeospatial.Examples.DimensionalCells
 import LeanGeospatial.GeoSPARQL.Table2.Counterexamples
@@ -856,3 +857,23 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.DE9IM.Space3.de9im_ball_ball_II' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.DE9IM.Space3.de9im_ball_ball_II
+
+/-- info: 'Geospatial.RCC8.Graph.propagateCheck_entailed' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Graph.propagateCheck_entailed
+
+/-- info: 'Geospatial.RCC8.Graph.propagateCheck_possible' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Graph.propagateCheck_possible
+
+/-- info: 'Geospatial.RCC8.Graph.propagateCheck_contradictory' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.RCC8.Graph.propagateCheck_contradictory
+
+/-- info: 'Geospatial.Examples.PathConsistency.hierarchy4_entails' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.PathConsistency.hierarchy4_entails
+
+/-- info: 'Geospatial.Examples.PathConsistency.cycle4_unsatisfiable' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.PathConsistency.cycle4_unsatisfiable

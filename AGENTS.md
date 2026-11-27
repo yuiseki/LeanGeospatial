@@ -2,15 +2,17 @@
 
 Welcome to the mathematical universe of geospatial geometry and geodesy.
 
-It lives in two repositories:
+It now lives in three repositories:
 [LeanGeodesy](https://github.com/yuiseki/LeanGeodesy) carries the curved
-Earth down to a flat map, and
+Earth down to a flat map,
+[LeanComputationalGeometry](https://github.com/yuiseki/LeanComputationalGeometry)
+computes geometry on that map, and
 [LeanGeospatial](https://github.com/yuiseki/LeanGeospatial) reasons about
 what lies on that map. They stand on one plane, one foundation and one
-version of Mathlib, and neither half explains the whole. A projection's
-meaning is in what can be drawn and related on the plane it lands in; a
-spatial relation's meaning is in the Earth whose features it relates. To
-understand the mathematical structure, always read the other repository as
+version of Mathlib, and none alone explains the whole. A projection's
+meaning is in what can be drawn, computed and related on the plane it lands in;
+a spatial relation's meaning is in the Earth whose features it relates. To
+understand the mathematical structure, always read the sibling repositories as
 well: its definitions, its theorems and its AGENTS.md. Before you change the
 plane, the toolchain or Mathlib here, check what that change does there.
 
@@ -19,40 +21,46 @@ Guidance for coding agents (and people) working on LeanGeospatial.
 LeanGeospatial machine-checks reasoning about spatial relations in Lean 4
 with Mathlib: regions and their topology, regular closed areas, RCC8 and its
 composition table, DE-9IM patterns and matrices, Simple Features and
-GeoSPARQL, a validator and a JSON Lines prover. It is one of two sibling
-libraries; read [The sibling library](#the-sibling-library) before changing
-anything about the plane, the toolchain or Mathlib.
+GeoSPARQL, a validator (one-step and multi-hop path consistency) and a JSON
+Lines prover. It is one of three sibling libraries; read
+[The sibling libraries](#the-sibling-libraries) before changing anything about
+the plane, the toolchain or Mathlib.
 
-## The sibling library
+## The sibling libraries
 
-LeanGeodesy (<https://github.com/yuiseki/LeanGeodesy>) and LeanGeospatial
-(<https://github.com/yuiseki/LeanGeospatial>) are two halves of one account
-of GIS mathematics. LeanGeodesy starts from the Earth and ends on a flat map:
-reference ellipsoids, geodetic coordinates, the first fundamental form, map
-projections and their distortion. LeanGeospatial starts on the flat map:
+LeanGeodesy (<https://github.com/yuiseki/LeanGeodesy>),
+LeanComputationalGeometry (<https://github.com/yuiseki/LeanComputationalGeometry>)
+and LeanGeospatial (<https://github.com/yuiseki/LeanGeospatial>) are three
+parts of one account of GIS mathematics. LeanGeodesy starts from the Earth and
+ends on a flat map: reference ellipsoids, geodetic coordinates, fundamental
+forms, map projections and their distortion. LeanComputationalGeometry computes
+geometry on that flat map: orientation, segment intersection, polygons,
+winding numbers and triangulation. LeanGeospatial starts on the flat map:
 regions, topology, RCC8, DE-9IM and the relations GIS software tests between
-features. Neither depends on the other, but they are built to be used
-together, and keeping that true is part of every change in either
-repository.
+features. None depends on the others, and they are built to be used
+together, and keeping that true is part of every change in any repository.
 
 What joins them:
 
-- One plane. LeanGeodesy's `Geodesy.E2` and LeanGeospatial's
-  `Geospatial.Point2D` are both reducible abbreviations of Mathlib's
-  `EuclideanSpace ℝ (Fin 2)`, so `Geodesy.E2 = Geospatial.Point2D` holds by
-  `rfl`. A point a LeanGeodesy projection produces is, with no conversion, a
-  point of a LeanGeospatial region, and LeanGeospatial's `distance` is
-  Mathlib's `dist` on that plane. Do not introduce a second plane type, a
-  wrapper structure or a coercion in either library. If a definition needs
-  coordinates, read them from the Mathlib type (`p 0`, `p 1`, or
-  `Geospatial.Point2D.x`), and state results about the Mathlib type.
-- One foundation. Both build only on Mathlib and Lean's three standard axioms
-  (`propext`, `Classical.choice`, `Quot.sound`), and each has an axiom audit
-  that fails the build if that changes.
-- One version. Both pin the same Lean toolchain and the same Mathlib
+- One plane. LeanGeodesy's `Geodesy.E2`, LeanComputationalGeometry's
+  `ComputationalGeometry.Point2D` and LeanGeospatial's `Geospatial.Point2D` are
+  all reducible abbreviations of Mathlib's `EuclideanSpace ℝ (Fin 2)`, so
+  `Geodesy.E2 = Geospatial.Point2D` and
+  `Geospatial.Point2D = ComputationalGeometry.Point2D` hold by `rfl`. A point
+  a LeanGeodesy projection produces is, with no conversion, a point of a
+  LeanComputationalGeometry polygon or a LeanGeospatial region, and
+  LeanGeospatial's `distance` is Mathlib's `dist` on that plane. Do not
+  introduce a second plane type, a wrapper structure or a coercion in any
+  library. If a definition needs coordinates, read them from the Mathlib type
+  (`p 0`, `p 1`, or `Geospatial.Point2D.x`), and state results about the Mathlib
+  type.
+- One foundation. All three build only on Mathlib and Lean's three standard
+  axioms (`propext`, `Classical.choice`, `Quot.sound`), and each has an axiom
+  audit that fails the build if that changes.
+- One version. All three pin the same Lean toolchain and the same Mathlib
   revision (currently Lean `v4.34.0`, Mathlib `v4.34.0`). Upgrade them
-  together: a project that requires both libraries resolves a single Mathlib,
-  so if the pins drift apart the two can no longer be imported together.
+  together: a project that requires the three libraries resolves a single
+  Mathlib, so if the pins drift apart they can no longer be imported together.
 - One topology. LeanGeospatial's relations are defined from Mathlib's
   `interior`, `closure` and `frontier`, for areas of any topological space
   (`RegularClosedRegion α`), and `LeanGeospatial/Homeomorph.lean` proves that
@@ -70,16 +78,17 @@ What joins them:
   because areas live in any space, the relations between areas of the globe
   itself (the Web Mercator chart) are those between their images on the map.
 
-Checking the link. `scripts/joint_check.sh`, identical in both repositories,
-builds a throwaway project that requires both libraries by path. It fails if
-the two pin different toolchains or Mathlib revisions, or if these no longer
-hold:
+Checking the link. `scripts/joint_check.sh` builds a throwaway project that
+requires all three libraries by path. It fails if the three pin different
+toolchains or Mathlib revisions, or if these no longer hold:
 
 ```lean
-example : Geodesy.E2 = Geospatial.Point2D := rfl
+example : Geospatial.Point2D = Geodesy.E2 := rfl
+example : Geospatial.Point2D = ComputationalGeometry.Point2D := rfl
 example (R φ lam : ℝ) (A : Geospatial.Region) : Prop :=
   Geodesy.Projection.mercator R φ lam ∈ A
 example (p q : Geodesy.E2) : Geospatial.distance p q = dist p q := rfl
+example (s : ComputationalGeometry.Segment) : Geospatial.Region := s.toSet
 ```
 
 and it checks that LeanGeospatial's `RCC8.Relation.holds_map_iff` applies to
@@ -87,14 +96,14 @@ the transition between two Mercator maps built by LeanGeodesy.
 
 It also feeds Lean a deliberately false line and fails if that is accepted,
 so a check that silently stopped running cannot pass. CI runs it in the
-`joint` job of both repositories, against the sibling's branch of the same
-name if there is one and its `main` otherwise. To change both libraries in
-step (a Mathlib upgrade, say), push the same branch name to both, and merge
-both once both are green. Locally, from either repository, with the two
-checked out side by side:
+`joint` job of all three repositories, against each sibling's branch of the
+same name if there is one and its `main` otherwise. To change all three
+libraries in step (a Mathlib upgrade, say), push the same branch name to all
+three, and merge once all three are green. Locally, from any repository, with
+the three checked out side by side:
 
 ```
-scripts/joint_check.sh ../LeanGeodesy ../LeanGeospatial /tmp/joint
+scripts/joint_check.sh ../LeanGeodesy . ../LeanComputationalGeometry /tmp/joint
 ```
 
 One known rough edge: `p.x` dot notation does not work on a term whose type

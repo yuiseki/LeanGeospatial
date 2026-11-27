@@ -65,7 +65,7 @@ defined from sets. "As is" means no change to the Lean code is needed.
 | `Claim.decide` | `(c: Claim, k: Kind, k2: Kind, m: Matrix9) -> bool` | `Claim.decide_iff` (exact, given `g.kind = k`, `h.kind = k'`, `Matrix9.of g h = m`), `Claim.decide_kinds_irrel`, `Claim.decide_iff_of_kindFree` | as is |
 | `Geospatial.SF.rank` | `(v: DimValue) -> Int` | used in `SF.Crosses` and `Claim.decide` | as is |
 
-### RCC8 (`RCC8.lean`, `CompositionTable/Abstract.lean`, `Validator.lean`, `ValidatorList.lean`, `ValidatorText.lean`)
+### RCC8 (`RCC8.lean`, `CompositionTable/Abstract.lean`, `Validator.lean`, `ValidatorList.lean`, `PathConsistency.lean`, `ValidatorText.lean`)
 
 | Definition | Expected Rust shape | Theorems that describe it | Status |
 | --- | --- | --- | --- |
@@ -74,6 +74,7 @@ defined from sets. "As is" means no change to the Lean code is needed.
 | `Fact`, `Graph`, `lookupFacts`, `Graph.lookup`, `Graph.features` | structs of `String`s and `Relation`; `-> Option<Relation>`; `-> Vec<String>` | `lookupFacts_sound`, `Graph.lookup_sound` | as is |
 | `Graph.conflict` | `(g: Graph) -> bool` | `Graph.no_model_of_conflict` | as is |
 | `VerdictL`, `tableList`, `Graph.allowedList`, `Graph.conflictList`, `Graph.checkList` (`ValidatorList.lean`) | enum (`Entailed`, `Possible(Vec<Relation>)`, `Contradictory`); `-> Vec<Relation>`; `-> bool`; `-> VerdictL` | `mem_tableList`, `mem_allowedList`, `conflictList_eq`, `Graph.checkList_toVerdict` (`(g.checkList a c).toVerdict = g.check a c`), hence `Graph.check_entailed`, `Graph.check_possible`, `Graph.check_contradictory` | exported |
+| `RelMask`, `NetEntry`, `netGet`, `initNet`, `stepNet`, `propagateNet`, `Graph.propagateAllowed`, `Graph.propagateCheck` (`PathConsistency.lean`) | struct of 8 `bool`s, entry struct, `Vec<NetEntry>`, `-> Vec<Relation>`, `-> VerdictL` | `initNet_satisfies`, `stepNet_satisfies`, `propagateNet_satisfies`, `Graph.propagateCheck_entailed`, `Graph.propagateCheck_possible`, `Graph.propagateCheck_contradictory` | as is |
 | `Relation.ofString?`, `Relation.name`, `Input`, `Input.parse` | `-> Option<Relation>`, `-> String`, `-> Result<Input, String>` | none (unproved front end) | as is |
 | `table`, `Relation.all`, `Graph.constrain`, `Graph.derived`, `statedFacts`, `Graph.stated`, `Graph.allowed`, `verdictOf` | | `mem_table_of_mem_compose`, `Graph.mem_constrain`, `Graph.mem_derived`, `mem_statedFacts`, `Graph.mem_stated`, `Graph.mem_allowed` | blocked: return `Finset Relation` |
 | `Verdict`, `Graph.check`, `Verdict.render` | | `Graph.check_entailed`, `Graph.check_possible`, `Graph.check_contradictory`, `triangle_realizes` | blocked: `Verdict.possible` carries a `Finset Relation` (exported via `Graph.checkList`) |
