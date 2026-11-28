@@ -106,6 +106,19 @@ the three checked out side by side:
 scripts/joint_check.sh ../LeanGeodesy . ../LeanComputationalGeometry /tmp/joint
 ```
 
+## Branches: main first
+
+Day-to-day research and development happens on `main`, in small commits that
+each build, pass the axiom audit and pass the joint check. Do not open a new
+branch for each stage of a piece of work. A branch is for a change that has to
+land in several of the three repositories at once (a Mathlib upgrade, a change
+to the shared plane): give it the same name in each repository, so that the
+joint check tests the siblings together, merge it into each `main` once all are
+green (fast-forward or a merge commit; no squash, no force push, no rewriting
+of history), and delete it once merged. Branches opened by bots (Renovate) are
+left to their pull requests. Never delete a branch that holds commits not on
+`main`; report it instead.
+
 One known rough edge: `p.x` dot notation does not work on a term whose type
 is written `Geodesy.E2`: Lean unfolds `E2` to Mathlib's `WithLp` and looks
 for `WithLp.x`. Write `Geospatial.Point2D.x p`, or give the term the type
