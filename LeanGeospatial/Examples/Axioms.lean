@@ -1107,3 +1107,27 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Spaces.rcc8ConnectedComplete_of_chartedSpace' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Spaces.rcc8ConnectedComplete_of_chartedSpace
+
+/-- info: 'Geospatial.Spaces.interior_inclS2_eq_empty' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.interior_inclS2_eq_empty
+
+/-- info: 'Geospatial.Spaces.ambient_touches_inclS2_iff_intersects' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.ambient_touches_inclS2_iff_intersects
+
+/-- info: 'Geospatial.Spaces.counterexample_radialProj_not_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.counterexample_radialProj_not_disjoint
+
+/-- info: 'Geospatial.Spaces.stereoHomeomorph_rcc8_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.stereoHomeomorph_rcc8_iff
+
+/-- info: 'Geospatial.Spaces.stereoHomeomorph_de9im_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.stereoHomeomorph_de9im_eq
+
+/-- info: 'Geospatial.Spaces.counterexample_stereo_not_isometry' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.counterexample_stereo_not_isometry

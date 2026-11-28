@@ -1030,6 +1030,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/DimensionIndependent3D.lean` | Dimension-independent RCC8 conditions, 3D connected RCC8 completeness, and non-OGC 3D DE-9IM extension (`cubeDim 3`) for 3D solids |
 | `LeanGeospatial/SpatialPartition.lean` | Hierarchical spatial partitions, dimension-unified dyadic Quadtree/Octree, inner/outer cell coverings, boundary overlap, and resolution-loss counterexamples |
 | `LeanGeospatial/Spaces/Unified.lean` | Unified `ℝ²`/`S²`/`ℝ³` semantics, space-generality audit, and connected RCC8 completeness on `S²` and 2-manifolds |
+| `LeanGeospatial/Spaces/Maps.lean` | Map preservation hierarchy (`inclS2`, `radialProj`, `stereoHomeomorph : S² \ {N} ≃ₜ ℝ²`) and metric-vs-topological counterexamples |
 | `LeanGeospatial/Examples/ComputationalPolygon.lean` | Worked GIS-free DE-9IM, RCC8, and segment intersection examples on exact integer geometry |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
