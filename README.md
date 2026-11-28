@@ -1014,6 +1014,8 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/GeoSPARQL/Table2/*.lean` | GeoSPARQL 1.1 Table 2 against those definitions |
 | `LeanGeospatial/SFA/Spec.lean` | OGC SFA 1.2.1 clause 6.1.15, transcribed for comparison |
 | `LeanGeospatial/SFA/Compare.lean` | SFA against LeanGeospatial, against itself, and against GeoSPARQL |
+| `LeanGeospatial/SFA/Geometries.lean` | All 9 OGC SFA 1.2.1 geometry types (`Empty`, `Point`, `MultiPoint`, `LineString`, `MultiLineString` with mod-2 boundary, `LinearRing`, `Polygon` with holes, `MultiPolygon`, `GeometryCollection`), validity/simplicity, strata partition, and spec counterexamples |
+| `LeanGeospatial/Examples/SFGeometries.lean` | Worked examples for all 9 OGC SFA geometry types |
 | `LeanGeospatial/GeoSPARQL/Spec.lean` | GeoSPARQL 1.1 Tables 2, 4, 5, 6, 8, transcribed for comparison |
 | `LeanGeospatial/GeoSPARQL/AreaArea.lean` | The tables compared with the semantics, for areas |
 | `LeanGeospatial/GeoSPARQL/Counterexamples.lean` | Areas where the Table 8 patterns fail |

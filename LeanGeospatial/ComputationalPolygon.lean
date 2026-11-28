@@ -716,7 +716,6 @@ theorem rcc8_holds (r s : IRect) (hr : r.IsProper) (hs : s.IsProper) :
         push_cast
         exact max_lt (hpR.1.trans (lt_min hpR.2.1 hpS.2.1)) (hpS.1.trans (lt_min hpR.2.1 hpS.2.1))
       have hy : (max r.ymin s.ymin : ℝ) < (min r.ymax s.ymax : ℝ) := by
-        push_cast
         exact max_lt (hpR.2.2.1.trans (lt_min hpR.2.2.2 hpS.2.2.2))
           (hpS.2.2.1.trans (lt_min hpR.2.2.2 hpS.2.2.2))
       exact ⟨Int.cast_lt.mp (by exact_mod_cast hx), Int.cast_lt.mp (by exact_mod_cast hy)⟩

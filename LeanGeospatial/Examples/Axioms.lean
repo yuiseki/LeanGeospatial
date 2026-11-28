@@ -26,6 +26,7 @@ import LeanGeospatial.GeoSPARQL.Table2.Counterexamples
 import LeanGeospatial.SFA.Compare
 import LeanGeospatial.Examples.Prover
 import LeanGeospatial.Examples.ComputationalPolygon
+import LeanGeospatial.Examples.SFGeometries
 
 /-!
 # Axiom audit
@@ -922,3 +923,27 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.ComputationalPolygon.rectA_ec_rectB' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.ComputationalPolygon.rectA_ec_rectB
+
+/-- info: 'Geospatial.SFA.SFGeometry.existsUnique_stratum' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.SFGeometry.existsUnique_stratum
+
+/-- info: 'Geospatial.SFA.SFPolygon.boundary_subset_carrier' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.SFPolygon.boundary_subset_carrier
+
+/-- info: 'Geospatial.SFA.SFGeometry.empty_not_matches_jtsEquals' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.SFGeometry.empty_not_matches_jtsEquals
+
+/-- info: 'Geospatial.SFA.SFGeometry.mod2_shared_endpoint_cancels' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.SFGeometry.mod2_shared_endpoint_cancels
+
+/-- info: 'Geospatial.SFA.SFGeometry.multiPoint_dup_valid_not_simple' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.SFGeometry.multiPoint_dup_valid_not_simple
+
+/-- info: 'Geospatial.SFA.SFGeometry.collection_naive_strata_overlap' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SFA.SFGeometry.collection_naive_strata_overlap
