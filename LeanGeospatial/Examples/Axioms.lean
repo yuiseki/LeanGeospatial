@@ -1151,3 +1151,15 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Spaces.intrinsic_po_but_ambient_touches_E2' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Spaces.intrinsic_po_but_ambient_touches_E2
+
+/-- info: 'Geospatial.Spaces.counterexample_underground_structure' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.counterexample_underground_structure
+
+/-- info: 'Geospatial.Spaces.local_projection_topology_vs_metric' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.local_projection_topology_vs_metric
+
+/-- info: 'Geospatial.Spaces.terrain25D_justification' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.terrain25D_justification
