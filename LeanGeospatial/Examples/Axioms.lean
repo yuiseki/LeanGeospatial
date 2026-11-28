@@ -1095,3 +1095,15 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Partition.counterexample_outerCover_subset_not_within' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Partition.counterexample_outerCover_subset_not_within
+
+/-- info: 'Geospatial.Spaces.rcc8Complete_S2' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.rcc8Complete_S2
+
+/-- info: 'Geospatial.Spaces.rcc8ConnectedComplete_S2' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.rcc8ConnectedComplete_S2
+
+/-- info: 'Geospatial.Spaces.rcc8ConnectedComplete_of_chartedSpace' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.rcc8ConnectedComplete_of_chartedSpace
