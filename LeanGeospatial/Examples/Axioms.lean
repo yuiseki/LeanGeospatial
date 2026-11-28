@@ -1007,3 +1007,39 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Space2D3D.counterexample_projection_loses_topology' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Space2D3D.counterexample_projection_loses_topology
+
+/-- info: 'Geospatial.DE9IM3D.rcc8_existsUnique_any_space' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM3D.rcc8_existsUnique_any_space
+
+/-- info: 'Geospatial.DE9IM3D.rcc8_compose_eq_table_E3' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM3D.rcc8_compose_eq_table_E3
+
+/-- info: 'Geospatial.DE9IM3D.rcc8ConnectedComplete_E3' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM3D.rcc8ConnectedComplete_E3
+
+/-- info: 'Geospatial.DE9IM3D.solid3D_II_cases' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM3D.solid3D_II_cases
+
+/-- info: 'Geospatial.DE9IM3D.dc_iff_de9im3D' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM3D.dc_iff_de9im3D
+
+/-- info: 'Geospatial.DE9IM3D.ec_iff_de9im3D' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM3D.ec_iff_de9im3D
+
+/-- info: 'Geospatial.DE9IM3D.po_iff_de9im3D' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM3D.po_iff_de9im3D
+
+/-- info: 'Geospatial.DE9IM3D.solid3D_ec_face_BB_eq_two' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM3D.solid3D_ec_face_BB_eq_two
+
+/-- info: 'Geospatial.DE9IM3D.solid3D_ec_vertex_BB_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.DE9IM3D.solid3D_ec_vertex_BB_eq_zero
