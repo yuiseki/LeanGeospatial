@@ -48,3 +48,4 @@ import LeanGeospatial.Prover.DE9IMClaim
 import LeanGeospatial.ProverJSON
 import LeanGeospatial.ComputationalPolygon
 import LeanGeospatial.SFA.Geometries
+import LeanGeospatial.Approximation2D3D

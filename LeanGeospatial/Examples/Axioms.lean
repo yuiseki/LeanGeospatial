@@ -947,3 +947,63 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.SFA.SFGeometry.collection_naive_strata_overlap' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.SFA.SFGeometry.collection_naive_strata_overlap
+
+/-- info: 'Geospatial.Space2D3D.dist_embedPlane' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.dist_embedPlane
+
+/-- info: 'Geospatial.Space2D3D.embedPlaneHomeomorph_rcc8_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.embedPlaneHomeomorph_rcc8_iff
+
+/-- info: 'Geospatial.Space2D3D.interior_embedPlane_eq_empty' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.interior_embedPlane_eq_empty
+
+/-- info: 'Geospatial.Space2D3D.ambient_touches_embedPlane_iff_intersects' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.ambient_touches_embedPlane_iff_intersects
+
+/-- info: 'Geospatial.Space2D3D.disjoint_of_projXY_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.disjoint_of_projXY_disjoint
+
+/-- info: 'Geospatial.Space2D3D.dist_embedGraph_le_of_lipschitz' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.dist_embedGraph_le_of_lipschitz
+
+/-- info: 'Geospatial.Space2D3D.embedGraphHomeomorph_rcc8_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.embedGraphHomeomorph_rcc8_iff
+
+/-- info: 'Geospatial.Space2D3D.extrude_dc_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.extrude_dc_iff
+
+/-- info: 'Geospatial.Space2D3D.extrude_ec_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.extrude_ec_iff
+
+/-- info: 'Geospatial.Space2D3D.extrude_tpp_of_ntpp' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.extrude_tpp_of_ntpp
+
+/-- info: 'Geospatial.Space2D3D.extrude_ntpp_of_strict_heights' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.extrude_ntpp_of_strict_heights
+
+/-- info: 'Geospatial.Space2D3D.counterexample_overpass_roads' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.counterexample_overpass_roads
+
+/-- info: 'Geospatial.Space2D3D.counterexample_building_floors' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.counterexample_building_floors
+
+/-- info: 'Geospatial.Space2D3D.counterexample_adjacent_2d_disjoint_3d' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.counterexample_adjacent_2d_disjoint_3d
+
+/-- info: 'Geospatial.Space2D3D.counterexample_projection_loses_topology' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Space2D3D.counterexample_projection_loses_topology

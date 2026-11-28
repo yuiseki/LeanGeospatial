@@ -1026,6 +1026,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Prover/DE9IMClaim.lean` | Simple Features claims read off a stated DE-9IM matrix, proved exact |
 | `LeanGeospatial/ProverJSON.lean` | JSON Lines front end for `lean-geospatial-prover` (unproved glue) |
 | `LeanGeospatial/ComputationalPolygon.lean` | Connection to `LeanComputationalGeometry`: `SimplePolygon` ↔ `RegularClosedRegion`, `Polygon` point-set semantics, and GIS-free DE-9IM / RCC8 verification |
+| `LeanGeospatial/Approximation2D3D.lean` | 2D–3D maps (`embedPlane`, `projXY`, `embedGraph`, `extrude`), subspace vs ambient 3D interior, metric/RCC8 preservation bounds, and minimal 3D counterexamples |
 | `LeanGeospatial/Examples/ComputationalPolygon.lean` | Worked GIS-free DE-9IM, RCC8, and segment intersection examples on exact integer geometry |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |

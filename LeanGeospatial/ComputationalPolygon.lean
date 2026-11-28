@@ -687,9 +687,8 @@ theorem rcc8_holds (r s : IRect) (hr : r.IsProper) (hs : s.IsProper) :
     constructor
     · rintro ⟨p, hpR, hpS⟩
       simp only [Rect.toRegion, toRect, mem_ofPred_eq] at hpR hpS
-      have hx : (max r.xmin s.xmin : ℝ) ≤ (min r.xmax s.xmax : ℝ) := by
-        push_cast; exact max_le (le_min hpR.2.1 hpS.2.1) (le_min hpR.2.1 hpS.2.1) |>.trans_eq rfl |>
-          fun _ => max_le (hpR.1.trans (le_min hpR.2.1 hpS.2.1)) (hpS.1.trans (le_min hpR.2.1 hpS.2.1))
+      have hx : (max r.xmin s.xmin : ℝ) ≤ (min r.xmax s.xmax : ℝ) :=
+        max_le (hpR.1.trans (le_min hpR.2.1 hpS.2.1)) (hpS.1.trans (le_min hpR.2.1 hpS.2.1))
       have hy : (max r.ymin s.ymin : ℝ) ≤ (min r.ymax s.ymax : ℝ) :=
         max_le (hpR.2.2.1.trans (le_min hpR.2.2.2 hpS.2.2.2))
           (hpS.2.2.1.trans (le_min hpR.2.2.2 hpS.2.2.2))
@@ -712,9 +711,8 @@ theorem rcc8_holds (r s : IRect) (hr : r.IsProper) (hs : s.IsProper) :
     constructor
     · rintro ⟨p, hpR, hpS⟩
       simp only [Rect.openRegion, toRect, mem_ofPred_eq] at hpR hpS
-      have hx : (max r.xmin s.xmin : ℝ) < (min r.xmax s.xmax : ℝ) := by
-        push_cast
-        exact max_lt (hpR.1.trans (lt_min hpR.2.1 hpS.2.1)) (hpS.1.trans (lt_min hpR.2.1 hpS.2.1))
+      have hx : (max r.xmin s.xmin : ℝ) < (min r.xmax s.xmax : ℝ) :=
+        max_lt (hpR.1.trans (lt_min hpR.2.1 hpS.2.1)) (hpS.1.trans (lt_min hpR.2.1 hpS.2.1))
       have hy : (max r.ymin s.ymin : ℝ) < (min r.ymax s.ymax : ℝ) := by
         exact max_lt (hpR.2.2.1.trans (lt_min hpR.2.2.2 hpS.2.2.2))
           (hpS.2.2.1.trans (lt_min hpR.2.2.2 hpS.2.2.2))
