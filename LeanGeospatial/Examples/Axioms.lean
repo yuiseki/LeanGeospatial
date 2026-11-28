@@ -27,6 +27,7 @@ import LeanGeospatial.SFA.Compare
 import LeanGeospatial.Examples.Prover
 import LeanGeospatial.Examples.ComputationalPolygon
 import LeanGeospatial.Examples.SFGeometries
+import LeanGeospatial.Examples.ThreeSpaces
 
 /-!
 # Axiom audit
@@ -1183,3 +1184,27 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Spaces.counterexample_spherical_same_cell_not_intersects' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Spaces.counterexample_spherical_same_cell_not_intersects
+
+/-- info: 'Geospatial.IRect.rcc8_holds_S2' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.IRect.rcc8_holds_S2
+
+/-- info: 'Geospatial.Spaces.IBox3.intersectsB_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.IBox3.intersectsB_iff
+
+/-- info: 'Geospatial.Spaces.IBox3.rcc8_holds' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.IBox3.rcc8_holds
+
+/-- info: 'Geospatial.Examples.ThreeSpaces.sphere_west_ec_east' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.ThreeSpaces.sphere_west_ec_east
+
+/-- info: 'Geospatial.Examples.ThreeSpaces.space3_floor1_ec_floor2' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.ThreeSpaces.space3_floor1_ec_floor2
+
+/-- info: 'Geospatial.Examples.ThreeSpaces.space3_vault_ntpp_floor1' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.ThreeSpaces.space3_vault_ntpp_floor1

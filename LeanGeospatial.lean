@@ -56,3 +56,4 @@ import LeanGeospatial.Spaces.Maps
 import LeanGeospatial.Spaces.IntrinsicVsAmbient
 import LeanGeospatial.Spaces.ApproximationSummary
 import LeanGeospatial.Spaces.SphericalPartition
+import LeanGeospatial.Spaces.Exact3D
