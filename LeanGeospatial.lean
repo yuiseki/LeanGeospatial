@@ -53,3 +53,4 @@ import LeanGeospatial.DimensionIndependent3D
 import LeanGeospatial.SpatialPartition
 import LeanGeospatial.Spaces.Unified
 import LeanGeospatial.Spaces.Maps
+import LeanGeospatial.Spaces.IntrinsicVsAmbient

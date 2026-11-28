@@ -1131,3 +1131,23 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Spaces.counterexample_stereo_not_isometry' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Spaces.counterexample_stereo_not_isometry
+
+/-- info: 'Geospatial.Spaces.isOpenEmbedding_stereoEmbed' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.isOpenEmbedding_stereoEmbed
+
+/-- info: 'Geospatial.Spaces.intrinsic_dim_S2_eq_two' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.intrinsic_dim_S2_eq_two
+
+/-- info: 'Geospatial.Spaces.ambient_dim_S2_eq_two' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.ambient_dim_S2_eq_two
+
+/-- info: 'Geospatial.Spaces.intrinsic_po_but_ambient_touches_S2' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.intrinsic_po_but_ambient_touches_S2
+
+/-- info: 'Geospatial.Spaces.intrinsic_po_but_ambient_touches_E2' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.intrinsic_po_but_ambient_touches_E2
