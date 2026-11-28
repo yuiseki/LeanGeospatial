@@ -55,3 +55,4 @@ import LeanGeospatial.Spaces.Unified
 import LeanGeospatial.Spaces.Maps
 import LeanGeospatial.Spaces.IntrinsicVsAmbient
 import LeanGeospatial.Spaces.ApproximationSummary
+import LeanGeospatial.Spaces.SphericalPartition

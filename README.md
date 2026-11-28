@@ -1033,6 +1033,7 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/Spaces/Maps.lean` | Map preservation hierarchy (`inclS2`, `radialProj`, `stereoHomeomorph : S² \ {N} ≃ₜ ℝ²`) and metric-vs-topological counterexamples |
 | `LeanGeospatial/Spaces/IntrinsicVsAmbient.lean` | Intrinsic vs ambient space separation on `S²`/`ℝ²` inside `ℝ³`, intrinsic vs ambient dimension, and `PO` vs ambient `Touches` flips |
 | `LeanGeospatial/Spaces/ApproximationSummary.lean` | Mathematical justification of 2D approximation (local map projection topology vs metric, 2.5D terrain, footprint extrusion, underground structure counterexample) |
+| `LeanGeospatial/Spaces/SphericalPartition.lean` | Pullback & face-indexed `HierarchicalPartition`s and 6-face gnomonic `sphericalHierarchy` on `S²` with resolution-loss and same-cell counterexamples |
 | `LeanGeospatial/Examples/ComputationalPolygon.lean` | Worked GIS-free DE-9IM, RCC8, and segment intersection examples on exact integer geometry |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |

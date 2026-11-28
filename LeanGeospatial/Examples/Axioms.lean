@@ -1163,3 +1163,23 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Spaces.terrain25D_justification' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Spaces.terrain25D_justification
+
+/-- info: 'Geospatial.Spaces.spherical_existsUnique_cell' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.spherical_existsUnique_cell
+
+/-- info: 'Geospatial.Spaces.spherical_disjoint_of_outerCover_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.spherical_disjoint_of_outerCover_disjoint
+
+/-- info: 'Geospatial.Spaces.spherical_outerApprox_antitone' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.spherical_outerApprox_antitone
+
+/-- info: 'Geospatial.Spaces.counterexample_spherical_resolution_loss' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.counterexample_spherical_resolution_loss
+
+/-- info: 'Geospatial.Spaces.counterexample_spherical_same_cell_not_intersects' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Spaces.counterexample_spherical_same_cell_not_intersects
