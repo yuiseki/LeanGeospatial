@@ -25,6 +25,7 @@ import LeanGeospatial.Examples.DimensionalCells
 import LeanGeospatial.GeoSPARQL.Table2.Counterexamples
 import LeanGeospatial.SFA.Compare
 import LeanGeospatial.Examples.Prover
+import LeanGeospatial.Examples.ComputationalPolygon
 
 /-!
 # Axiom audit
@@ -877,3 +878,47 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.Examples.PathConsistency.cycle4_unsatisfiable' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.Examples.PathConsistency.cycle4_unsatisfiable
+
+/-- info: 'Geospatial.SimplePolygonBridge.interior_toRegion' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SimplePolygonBridge.interior_toRegion
+
+/-- info: 'Geospatial.SimplePolygonBridge.closure_interior_toRegion' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SimplePolygonBridge.closure_interior_toRegion
+
+/-- info: 'Geospatial.SimplePolygonBridge.boundary_toRegion' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SimplePolygonBridge.boundary_toRegion
+
+/-- info: 'Geospatial.SimplePolygonBridge.exterior_toRegion' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.SimplePolygonBridge.exterior_toRegion
+
+/-- info: 'Geospatial.pointPolygonMatrixI_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.pointPolygonMatrixI_eq
+
+/-- info: 'Geospatial.pointPolygonClaimI_iff' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.pointPolygonClaimI_iff
+
+/-- info: 'Geospatial.IRect.rcc8_holds' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.IRect.rcc8_holds
+
+/-- info: 'Geospatial.intersectTestI_iff_intersects' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.intersectTestI_iff_intersects
+
+/-- info: 'Geospatial.Examples.ComputationalPolygon.point_1_1_matrix' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.ComputationalPolygon.point_1_1_matrix
+
+/-- info: 'Geospatial.Examples.ComputationalPolygon.point_2_0_touches' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.ComputationalPolygon.point_2_0_touches
+
+/-- info: 'Geospatial.Examples.ComputationalPolygon.rectA_ec_rectB' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Examples.ComputationalPolygon.rectA_ec_rectB

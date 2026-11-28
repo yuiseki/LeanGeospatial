@@ -844,16 +844,17 @@ Not verified, because it needs multi geometries:
 
 Not modelled:
 
-- Which set of points a general polygon encloses. Only `Rect` has a region,
-  and so only `Rect` has a computed interior and boundary.
-- Whether a real place is an area. Building a `RegularClosedRegion` needs a
-  proof of `closure (interior A) = A`, which Lean can give for a `Rect` but not
-  for a boundary loaded from outside. For such data it is an assumption, made
-  once when the value is built.
 - Coordinate reference systems. Coordinates are plain real numbers in a flat
   plane, and `distance` is Euclidean, not a distance on the Earth.
 - Reading real data, and GIS input and output.
 - The Egenhofer relations.
+
+(For simple polygons from `LeanComputationalGeometry`, `ComputationalPolygon.lean`
+now defines point-set semantics, proves `closure (interior P.toRegion) = P.toRegion`
+for every simple polygon regardless of orientation, constructs
+`RegularClosedRegion Point2D`, and computes exact DE-9IM matrices for integer
+points against simple polygons and exact RCC8 relations for integer rectangles
+without an external GIS engine.)
 
 ### 15. What Lean proves
 
@@ -943,6 +944,22 @@ For the checker and the prover:
   algebraic-closure propagation using `Bool` masks (`RelMask`) and `List`s only.
 - `Claim.decide_iff`: the DE-9IM answers of section 6.
 
+For the `LeanComputationalGeometry` connection (`ComputationalPolygon.lean`):
+
+- `SimplePolygonBridge.interior_toRegion`, `closure_toOpenRegion`,
+  `closure_interior_toRegion`, `boundary_toRegion`, `exterior_toRegion`: for
+  every simple polygon (CCW or CW), its closed winding region is a
+  `RegularClosedRegion Point2D` whose topological interior is `toOpenRegion`
+  and whose frontier is `boundary`.
+- `Polygon.toRegion`, `Polygon.toOpenRegion`, `Polygon.toBoundary`,
+  `Polygon.toExterior`, `Polygon.toRegularClosedRegion`: point-set semantics
+  for `Geospatial.Polygon`.
+- `pointPolygonMatrixI_eq` and `pointPolygonClaimI_iff`: GIS-free computation
+  and verification of the full 9-cell DE-9IM matrix and all eight Simple
+  Features predicates for an integer point against any simple integer polygon.
+- `IRect.rcc8_holds` and `intersectTestI_iff_intersects`: GIS-free exact RCC8
+  classification for integer rectangles and segment intersection equivalence.
+
 ### 16. Axiom and proof audit
 
 `lake build` checks every theorem, including the examples. The repository
@@ -1006,6 +1023,8 @@ makes the build fail. CI also greps for `sorry` and `admit`.
 | `LeanGeospatial/ValidatorText.lean` | The validator's plain-text input format |
 | `LeanGeospatial/Prover/DE9IMClaim.lean` | Simple Features claims read off a stated DE-9IM matrix, proved exact |
 | `LeanGeospatial/ProverJSON.lean` | JSON Lines front end for `lean-geospatial-prover` (unproved glue) |
+| `LeanGeospatial/ComputationalPolygon.lean` | Connection to `LeanComputationalGeometry`: `SimplePolygon` ↔ `RegularClosedRegion`, `Polygon` point-set semantics, and GIS-free DE-9IM / RCC8 verification |
+| `LeanGeospatial/Examples/ComputationalPolygon.lean` | Worked GIS-free DE-9IM, RCC8, and segment intersection examples on exact integer geometry |
 | `LeanGeospatial/Examples/Administrative.lean` | District A / City B / Province C |
 | `LeanGeospatial/Examples/Intersects.lean` | Three rectangles showing `Intersects` is not transitive |
 | `LeanGeospatial/Examples/Measurement.lean` | Distance and area on concrete coordinates |

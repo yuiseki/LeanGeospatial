@@ -18,3 +18,8 @@ root = "ProverMain"
 name = "mathlib"
 scope = "leanprover-community"
 rev = "v4.34.0"
+
+[[require]]
+name = "lean-computational-geometry"
+git = "https://github.com/yuiseki/LeanComputationalGeometry"
+rev = "3e7966ae5586dcc77c54d93755e1454601b166ce"

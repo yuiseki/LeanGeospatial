@@ -46,3 +46,4 @@ import LeanGeospatial.SFA.Spec
 import LeanGeospatial.SFA.Compare
 import LeanGeospatial.Prover.DE9IMClaim
 import LeanGeospatial.ProverJSON
+import LeanGeospatial.ComputationalPolygon
