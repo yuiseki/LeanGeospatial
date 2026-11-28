@@ -1043,3 +1043,55 @@ project adds an `axiom` or leaves a proof unfinished (which shows up as
 /-- info: 'Geospatial.DE9IM3D.solid3D_ec_vertex_BB_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Geospatial.DE9IM3D.solid3D_ec_vertex_BB_eq_zero
+
+/-- info: 'Geospatial.Partition.SpatialPartition.existsUnique_cell' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.SpatialPartition.existsUnique_cell
+
+/-- info: 'Geospatial.Partition.SpatialPartition.innerApprox_subset' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.SpatialPartition.innerApprox_subset
+
+/-- info: 'Geospatial.Partition.SpatialPartition.subset_outerApprox' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.SpatialPartition.subset_outerApprox
+
+/-- info: 'Geospatial.Partition.SpatialPartition.disjoint_of_outerCover_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.SpatialPartition.disjoint_of_outerCover_disjoint
+
+/-- info: 'Geospatial.Partition.SpatialPartition.within_of_outerCover_subset_innerCover' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.SpatialPartition.within_of_outerCover_subset_innerCover
+
+/-- info: 'Geospatial.Partition.HierarchicalPartition.parent_eq_iUnion_children' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.HierarchicalPartition.parent_eq_iUnion_children
+
+/-- info: 'Geospatial.Partition.HierarchicalPartition.outerApprox_antitone' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.HierarchicalPartition.outerApprox_antitone
+
+/-- info: 'Geospatial.Partition.HierarchicalPartition.innerApprox_monotone' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.HierarchicalPartition.innerApprox_monotone
+
+/-- info: 'Geospatial.Partition.dyadicHierarchy' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.dyadicHierarchy
+
+/-- info: 'Geospatial.Partition.closedCell_adjacent_overlap' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.closedCell_adjacent_overlap
+
+/-- info: 'Geospatial.Partition.counterexample_resolution_information_loss' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.counterexample_resolution_information_loss
+
+/-- info: 'Geospatial.Partition.counterexample_same_cell_not_intersects' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.counterexample_same_cell_not_intersects
+
+/-- info: 'Geospatial.Partition.counterexample_outerCover_subset_not_within' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Geospatial.Partition.counterexample_outerCover_subset_not_within

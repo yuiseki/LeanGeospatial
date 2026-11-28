@@ -50,3 +50,4 @@ import LeanGeospatial.ComputationalPolygon
 import LeanGeospatial.SFA.Geometries
 import LeanGeospatial.Approximation2D3D
 import LeanGeospatial.DimensionIndependent3D
+import LeanGeospatial.SpatialPartition
